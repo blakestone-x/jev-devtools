@@ -162,7 +162,10 @@ for (let round = 0; round < rounds; round++) {
                 s
                   ?.querySelector(".detail-header .eyebrow")
                   ?.textContent.includes("success") &&
-                s?.querySelectorAll(".lab-output").length === count
+                (s?.querySelectorAll(".lab-output").length === count ||
+                  [...s.querySelectorAll("button")].some(
+                    (b) => b.textContent === `All probabilities (${count})`,
+                  ))
               );
             },
             {

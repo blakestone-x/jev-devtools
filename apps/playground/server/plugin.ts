@@ -4,6 +4,7 @@ import type { Plugin } from "vite";
 import { createJevDevtools } from "jev-devtools/server";
 import { makeRequest, sampleTransport } from "./scenarios.ts";
 import { sampleProfiles, type SampleProfile } from "../src/sample-profiles.js";
+import { validStress, type StressOptions } from "../src/stress-options.js";
 import type { Scenario } from "./scenarios.ts";
 
 const send = (res: ServerResponse, status: number, data: unknown) => {
@@ -74,6 +75,7 @@ export function jevInspectorServer(apiKey?: string): Plugin {
             message?: string;
             runId?: string;
             profile?: SampleProfile;
+            stress?: StressOptions;
           };
           try {
             let text = "";
@@ -102,13 +104,14 @@ export function jevInspectorServer(apiKey?: string): Plugin {
             return;
           }
           if (
-            !["triage", "image", "retry", "error"].includes(
+            !["triage", "image", "retry", "error", "stress"].includes(
               body.scenario || "",
             ) ||
             !["sample", "live"].includes(body.mode || "") ||
             !validSession(body.runId) ||
             typeof body.message !== "string" ||
             body.message.length > 8000 ||
+            (body.scenario === "stress" && !validStress(body.stress)) ||
             (body.profile !== undefined &&
               (typeof body.profile !== "string" ||
                 !Object.hasOwn(sampleProfiles, body.profile)))
@@ -126,10 +129,11 @@ export function jevInspectorServer(apiKey?: string): Plugin {
           }
           if (
             body.mode === "live" &&
-            ["retry", "error"].includes(body.scenario!)
+            ["retry", "error", "stress"].includes(body.scenario!)
           ) {
             send(res, 400, {
-              error: "Error scenarios use the sample transport only.",
+              error:
+                "Error and sandbox scenarios use the sample transport only.",
             });
             return;
           }
@@ -141,14 +145,22 @@ export function jevInspectorServer(apiKey?: string): Plugin {
             id = body.runId;
           running.set(id, { session, controller });
           try {
-            const request = await makeRequest(body.scenario!, body.message);
+            const request = await makeRequest(
+              body.scenario!,
+              body.message,
+              body.stress,
+            );
             const client = inspector.createClient(
               {
                 apiKey: body.mode === "live" ? apiKey : "sample-not-a-real-key",
                 fetch:
                   body.mode === "live"
                     ? globalThis.fetch
-                    : sampleTransport(body.scenario!, body.profile),
+                    : sampleTransport(
+                        body.scenario!,
+                        body.profile,
+                        body.stress,
+                      ),
                 logLevel: "off",
                 retry: { maxRetries: body.scenario === "retry" ? 1 : 0 },
                 defaultHeaders:
@@ -158,13 +170,15 @@ export function jevInspectorServer(apiKey?: string): Plugin {
               },
               {
                 label:
-                  body.scenario === "image"
-                    ? "Locate a mug"
-                    : body.scenario === "retry"
-                      ? "Recover from rate limit"
-                      : body.scenario === "error"
-                        ? "Inspect a failed request"
-                        : "Triage a support message",
+                  body.scenario === "stress"
+                    ? `Sandbox · ${body.stress!.choices} choices`
+                    : body.scenario === "image"
+                      ? "Locate a mug"
+                      : body.scenario === "retry"
+                        ? "Recover from rate limit"
+                        : body.scenario === "error"
+                          ? "Inspect a failed request"
+                          : "Triage a support message",
                 source: body.mode as "sample" | "live",
               },
             );

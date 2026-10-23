@@ -136,6 +136,15 @@ $("scenario").innerHTML = cases
       `<option value="${c.id}">${c.id} (${c.history} requests, ${c.choices} categories, ${c.questions} questions)</option>`,
   )
   .join("");
+function choiceReady(s, count) {
+  return (
+    s?.querySelectorAll(".lab-output").length === count ||
+    (s?.querySelectorAll(".lab-output").length > 0 &&
+      [...s.querySelectorAll("button")].some(
+        (b) => b.textContent === `All probabilities (${count})`,
+      ))
+  );
+}
 async function load(id, closed = false) {
   current = id;
   const spec = cases.find((s) => s.id === id);
@@ -183,7 +192,7 @@ async function load(id, closed = false) {
       closed
         ? s?.querySelector(".jev-drawer-trigger")?.hidden === false
         : s?.querySelectorAll(".request-row").length === spec.history &&
-          s.querySelectorAll(".lab-output").length === spec.choices &&
+          choiceReady(s, spec.choices) &&
           s.querySelector(".detail-header h2")?.textContent ===
             `Sample ${spec.history}`
     ) {
@@ -331,8 +340,7 @@ $("reopen").onclick = () =>
         s
           .querySelector(".detail-header .eyebrow")
           ?.textContent.includes("success") &&
-        s.querySelectorAll(".lab-output").length ===
-          cases.find((c) => c.id === current).choices
+        choiceReady(s, cases.find((c) => c.id === current).choices)
       ) {
         ready = true;
         break;

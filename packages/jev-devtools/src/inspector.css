@@ -1117,3 +1117,119 @@
 .jev-devtools .question-scroll-preview p {
   margin-top: 16px;
 }
+
+/* The full distribution stays at reading size, outside the zoomable canvas. */
+.jev-devtools .lab-flow-viewport[hidden] {
+  display: none;
+}
+.jev-devtools .lab-choice-browser {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  padding: 8px 16px;
+  gap: 10px;
+}
+.jev-devtools .lab-choice-controls {
+  display: flex;
+  gap: 12px;
+  align-items: end;
+  flex-wrap: wrap;
+  font-size: 12px;
+}
+.jev-devtools .lab-choice-controls label {
+  display: grid;
+  gap: 5px;
+}
+.jev-devtools .lab-choice-table-scroll {
+  overflow: auto;
+  min-height: 0;
+  flex: 1;
+}
+.jev-devtools .lab-choice-browser table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+.jev-devtools .lab-choice-browser caption {
+  text-align: left;
+  padding: 8px 0;
+  color: #aaa0af;
+}
+.jev-devtools .lab-choice-browser th,
+.jev-devtools .lab-choice-browser td {
+  padding: 9px 12px;
+  border-bottom: 1px solid #302634;
+  text-align: left;
+}
+.jev-devtools .lab-choice-browser th {
+  overflow-wrap: anywhere;
+  max-width: 320px;
+}
+.jev-devtools .lab-choice-browser td {
+  font-variant-numeric: tabular-nums;
+}
+.jev-devtools .lab-choice-browser code {
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+.jev-devtools .lab-choice-returned {
+  display: block;
+  font-size: 10px;
+  color: #e551ba;
+}
+.jev-devtools .lab-choice-pagination {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  justify-content: space-between;
+  font-size: 12px;
+}
+.jev-devtools .lab-choice-remainder button {
+  margin-top: 7px;
+}
+
+.jev-devtools .lab-flow-compact .lab-output {
+  padding: 12px;
+  height: 104px;
+}
+.jev-devtools .lab-flow-compact .lab-output .lab-eyebrow {
+  margin-bottom: 6px;
+}
+.jev-devtools .lab-flow-compact .lab-output h3 {
+  font-size: 16px;
+  margin-bottom: 8px;
+}
+.jev-devtools .lab-flow-compact .lab-output p {
+  font-size: 12px;
+  margin: 4px 0;
+}
+.jev-devtools .lab-flow-compact .lab-result {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+}
+.jev-devtools .lab-choice-remainder {
+  padding: 12px;
+}
+.jev-devtools .lab-choice-remainder .lab-small {
+  margin: 8px 0 0;
+  font-size: 11px;
+}
+
+.jev-devtools .detail-body.detail-body-flow {
+  flex-direction: column;
+}
+.jev-devtools .detail-body-flow > .warning,
+.jev-devtools .detail-body-flow > .error-banner {
+  flex-shrink: 0;
+  margin: 6px 16px;
+}
+.jev-devtools .lab-choice-browser {
+  overflow: auto;
+}
+.jev-devtools .lab-choice-table-scroll {
+  flex: 1 0 110px;
+}

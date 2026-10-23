@@ -1,43 +1,58 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useDiagramViewport } from "./useDiagramViewport.js";
 import type { AnswerView, Trace } from "./protocol.js";
 import { findImage, flowAnswer, stateText } from "./flow-model.js";
+import { ChoiceProbabilities } from "./ChoiceProbabilities.js";
 const pct = (v: number) => `${Math.round(v * 100)}%`;
-function Result({ answer, image }: { answer?: AnswerView; image?: string }) {
+function Result({
+  answer,
+  image,
+  probabilities,
+}: {
+  answer?: AnswerView;
+  image?: string;
+  probabilities?: [string, number][];
+}) {
   if (!answer) return <p className="lab-copy">No answer received.</p>;
   return (
     <>
       {answer.probabilities &&
-        Object.entries(answer.probabilities).map(([key, value]) => (
-          <div className="lab-probability" key={key}>
-            <div>
-              <span
-                title={
-                  typeof answer.legend?.[key] === "string"
-                    ? (answer.legend[key] as string)
-                    : key
-                }
-              >
-                {answer.type === "score" && answer.legend?.[key]
-                  ? `${key} · ${answer.legend[key]}`
-                  : key}
-              </span>
-              <code>{pct(value)}</code>
+        (probabilities ?? Object.entries(answer.probabilities)).map(
+          ([key, value]) => (
+            <div className="lab-probability" key={key}>
+              <div>
+                <span
+                  title={
+                    typeof answer.legend?.[key] === "string"
+                      ? (answer.legend[key] as string)
+                      : key
+                  }
+                >
+                  {answer.type === "score" && answer.legend?.[key]
+                    ? `${key} · ${answer.legend[key]}`
+                    : key}
+                </span>
+                <code title={`Exact probability: ${value}`}>
+                  {Number((value * 100).toPrecision(6))}%
+                </code>
+              </div>
+              <div className="lab-track">
+                <i
+                  className={
+                    answer.type === "choice" && answer.choice !== key
+                      ? "lab-alternative"
+                      : ""
+                  }
+                  style={{ width: pct(Math.max(0, Math.min(1, value))) }}
+                />
+              </div>
             </div>
-            <div className="lab-track">
-              <i
-                className={
-                  answer.type === "choice" && answer.choice !== key
-                    ? "lab-alternative"
-                    : ""
-                }
-                style={{ width: pct(Math.max(0, Math.min(1, value))) }}
-              />
-            </div>
-          </div>
-        ))}
+          ),
+        )}
       {answer.choice !== undefined && (
-        <p className="lab-result">Selected: {answer.choice}</p>
+        <p className="lab-result" title={`Selected: ${answer.choice}`}>
+          Selected: {answer.choice}
+        </p>
       )}
       {answer.score !== undefined && (
         <>
@@ -115,7 +130,8 @@ function Result({ answer, image }: { answer?: AnswerView; image?: string }) {
 }
 export function TraceDiagram({ trace }: { trace: Trace }) {
   const [selected, setSelected] = useState(""),
-    [flow, setFlow] = useState(true);
+    [flow, setFlow] = useState(true),
+    [probabilityView, setProbabilityView] = useState<string | null>(null);
   const entries = Object.entries(trace.request.questions ?? {}).filter(
       ([, q]) => q && typeof q === "object" && typeof q.type === "string",
     ),
@@ -125,15 +141,51 @@ export function TraceDiagram({ trace }: { trace: Trace }) {
     image =
       findImage(trace.request.state) ||
       (trace.request.assets ? findImage(trace.request.assets) : undefined),
-    outputs = flowAnswer(answer);
+    allProbabilities = useMemo(
+      () =>
+        Object.entries(answer?.probabilities ?? {}).sort((a, b) => b[1] - a[1]),
+      [answer?.probabilities],
+    );
+  const compact = answer?.type === "choice" && allProbabilities.length > 6;
+  const shownProbabilities = compact
+    ? allProbabilities.slice(0, 3)
+    : allProbabilities;
+  if (
+    compact &&
+    answer.choice &&
+    !shownProbabilities.some(([label]) => label === answer.choice)
+  ) {
+    const returned = allProbabilities.find(
+      ([label]) => label === answer.choice,
+    );
+    if (returned) shownProbabilities.push(returned);
+  }
+  const outputs = flowAnswer(
+    compact
+      ? { ...answer, probabilities: Object.fromEntries(shownProbabilities) }
+      : answer,
+  );
+  const remaining = compact
+    ? allProbabilities.length - shownProbabilities.length
+    : 0;
+  const spacing = compact ? 112 : 136;
+  const showProbabilities =
+    probabilityView === key && answer?.type === "choice";
   const resultHeight = Math.max(
     280,
-    166 +
-      Object.keys(answer?.probabilities ?? {}).length * 44 +
+    (compact ? 230 : 166) +
+      (compact
+        ? shownProbabilities.length
+        : Object.keys(answer?.probabilities ?? {}).length) *
+        44 +
       (answer?.score !== undefined ? 50 : 0),
     answer?.box ? 390 : 0,
   );
-  const height = Math.max(520, resultHeight + 90, outputs.length * 136 + 60),
+  const height = Math.max(
+      520,
+      resultHeight + 90,
+      (outputs.length + (remaining ? 1 : 0)) * spacing + 60,
+    ),
     ry = Math.max(40, (height - resultHeight) / 2),
     mid = ry + resultHeight / 2;
   const { viewport, canvas, zoom, zoomBy, fit } = useDiagramViewport(
@@ -149,12 +201,12 @@ export function TraceDiagram({ trace }: { trace: Trace }) {
     { id: "question", d: sourcePath(378), active: true },
     ...outputs.map((output, i) => ({
       id: `output-${i}`,
-      d: `M710 ${mid} C790 ${mid},790 ${92 + i * 136},870 ${92 + i * 136}`,
+      d: `M710 ${mid} C790 ${mid},790 ${92 + i * spacing},870 ${92 + i * spacing}`,
       active: output.active,
     })),
   ];
   return (
-    <div className="lab-flow">
+    <div className={`lab-flow ${compact ? "lab-flow-compact" : ""}`}>
       <div className="lab-flow-toolbar">
         <label>
           Question
@@ -171,28 +223,46 @@ export function TraceDiagram({ trace }: { trace: Trace }) {
           </select>
         </label>
         <div>
-          <button
-            aria-label="Zoom diagram out"
-            disabled={zoom <= 10}
-            onClick={() => zoomBy(1 / 1.2)}
-          >
-            −
-          </button>
-          <output aria-label="Diagram zoom">{zoom}%</output>
-          <button
-            aria-label="Zoom diagram in"
-            disabled={zoom >= 400}
-            onClick={() => zoomBy(1.2)}
-          >
-            +
-          </button>
-          <button onClick={fit}>Fit</button>
-          <button aria-pressed={flow} onClick={() => setFlow(!flow)}>
-            {flow ? "Pause flow" : "Play flow"}
-          </button>
+          {answer?.type === "choice" && (
+            <button
+              aria-pressed={showProbabilities}
+              onClick={() => setProbabilityView(showProbabilities ? null : key)}
+            >
+              {showProbabilities
+                ? "Back to overview"
+                : `All probabilities (${allProbabilities.length})`}
+            </button>
+          )}
+          {!showProbabilities && (
+            <>
+              <button
+                aria-label="Zoom diagram out"
+                disabled={zoom <= 10}
+                onClick={() => zoomBy(1 / 1.2)}
+              >
+                −
+              </button>
+              <output aria-label="Diagram zoom">{zoom}%</output>
+              <button
+                aria-label="Zoom diagram in"
+                disabled={zoom >= 400}
+                onClick={() => zoomBy(1.2)}
+              >
+                +
+              </button>
+              <button onClick={fit}>Fit</button>
+              <button aria-pressed={flow} onClick={() => setFlow(!flow)}>
+                {flow ? "Pause flow" : "Play flow"}
+              </button>
+            </>
+          )}
         </div>
       </div>
+      {showProbabilities && answer && (
+        <ChoiceProbabilities key={key} answer={answer} />
+      )}
       <div
+        hidden={showProbabilities}
         className="lab-flow-viewport"
         ref={viewport}
         tabIndex={0}
@@ -214,6 +284,7 @@ export function TraceDiagram({ trace }: { trace: Trace }) {
               <g key={path.id}>
                 <path d={path.d} className={path.active ? "active" : ""} />
                 {flow &&
+                  !showProbabilities &&
                   path.active &&
                   !["error", "cancelled"].includes(trace.status) && (
                     <circle r="3" className="lab-flow-dot">
@@ -285,7 +356,19 @@ export function TraceDiagram({ trace }: { trace: Trace }) {
               JEV · {question.type.toUpperCase()}
             </span>
             <h3 title={key}>{key}</h3>
-            <Result answer={answer} image={image} />
+            {compact && (
+              <p className="lab-small">
+                Top 3 probabilities
+                {shownProbabilities.length > 3
+                  ? " + returned choice"
+                  : ""} · {allProbabilities.length} total
+              </p>
+            )}
+            <Result
+              answer={answer}
+              image={image}
+              probabilities={compact ? shownProbabilities : undefined}
+            />
           </article>
           {outputs.map((output, i) => (
             <article
@@ -293,9 +376,9 @@ export function TraceDiagram({ trace }: { trace: Trace }) {
               className={`lab-card lab-output ${output.active ? "" : "lab-idle"}`}
               style={{
                 left: 870,
-                top: 40 + i * 136,
+                top: 40 + i * spacing,
                 width: 230,
-                minHeight: 104,
+                minHeight: compact ? 96 : 104,
               }}
             >
               <span className="lab-eyebrow">{output.eyebrow}</span>
@@ -303,17 +386,36 @@ export function TraceDiagram({ trace }: { trace: Trace }) {
               <p>{output.detail}</p>
             </article>
           ))}
+          {remaining > 0 && (
+            <article
+              className="lab-card lab-choice-remainder"
+              style={{
+                left: 870,
+                top: 40 + outputs.length * spacing,
+                width: 230,
+                minHeight: 96,
+              }}
+            >
+              <span className="lab-eyebrow">MORE CATEGORIES</span>
+              <button onClick={() => setProbabilityView(key)}>
+                View {remaining} more
+              </button>
+              <p className="lab-small">See every exact value.</p>
+            </article>
+          )}
         </div>
       </div>
-      <p className="muted lab-flow-caption">
-        <span className="lab-gesture-hint">
-          Drag to pan · Scroll or pinch to zoom · 0 to fit
-        </span>
-        {entries.length} parallel question{entries.length === 1 ? "" : "s"} in
-        one request. Connections show data flow, not model timing. Application
-        routes and thresholds are not captured. Full inputs and criteria are in
-        Questions and Context.
-      </p>
+      {!showProbabilities && (
+        <p className="muted lab-flow-caption">
+          <span className="lab-gesture-hint">
+            Drag to pan · Scroll or pinch to zoom · 0 to fit
+          </span>
+          {entries.length} parallel question{entries.length === 1 ? "" : "s"} in
+          one request. Connections show data flow, not model timing. Application
+          routes and thresholds are not captured. Full inputs and criteria are
+          in Questions and Context.
+        </p>
+      )}
     </div>
   );
 }

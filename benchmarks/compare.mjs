@@ -7,6 +7,7 @@ import { once } from "node:events";
 
 const root = resolve(import.meta.dirname, "..");
 const refs = process.argv.slice(2);
+const choices = process.env.BENCH_SUITE === "choices";
 const questions = process.env.BENCH_SUITE === "questions";
 const profileRounds = Number(process.env.BENCH_PROFILE_ROUNDS ?? 2);
 if (!Number.isSafeInteger(profileRounds) || profileRounds < 0)
@@ -171,9 +172,11 @@ try {
     const runner = spawn(
       process.execPath,
       [
-        questions
-          ? "benchmarks/questions-isolated.mjs"
-          : "benchmarks/isolated.mjs",
+        choices
+          ? "benchmarks/choices-isolated.mjs"
+          : questions
+            ? "benchmarks/questions-isolated.mjs"
+            : "benchmarks/isolated.mjs",
         ...variants.map((v) => `http://127.0.0.1:${v.port}`),
       ],
       {
@@ -185,11 +188,13 @@ try {
           BENCH_ROUNDS: profiling
             ? String(profileRounds)
             : process.env.BENCH_ROUNDS || "4",
-          BENCH_SCENARIOS: questions
-            ? process.env.BENCH_SCENARIOS || "small,many-questions"
-            : profiling
-              ? "combined"
-              : process.env.BENCH_SCENARIOS || "max-history,combined",
+          BENCH_SCENARIOS: choices
+            ? process.env.BENCH_SCENARIOS || "small,wide-choice,combined"
+            : questions
+              ? process.env.BENCH_SCENARIOS || "small,many-questions"
+              : profiling
+                ? "combined"
+                : process.env.BENCH_SCENARIOS || "max-history,combined",
           BENCH_OUTPUT: join(output, profiling ? "profiles" : "timing"),
         },
       },
