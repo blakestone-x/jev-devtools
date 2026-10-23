@@ -22,8 +22,6 @@ npm run pack:devtools
 npm install /absolute/path/to/jev-devtools-0.1.0.tgz
 ```
 
-If migrating from the extracted prototype, replace `@diagram-motion-lab/jev-devtools` with `jev-devtools` in dependencies and imports, including `/server` and `/styles.css`. Component props and server APIs are unchanged; restart the dev server after upgrading.
-
 Mount once:
 
 ```tsx

@@ -13,10 +13,6 @@ First public npm release as **[`jev-devtools`](https://www.npmjs.com/package/jev
 - Next.js App Router integration for Route Handlers, Server Actions, and Server Components, including shared history across server module reloads.
 - Independent packed-package examples and verification for React 18/19, Node 22.12+/24, and Next.js.
 
-### Migration from the extracted prototype
-
-Change the dependency and imports from `@diagram-motion-lab/jev-devtools` to `jev-devtools`. The public subpaths are `jev-devtools/server` and `jev-devtools/styles.css`. The archive is now `jev-devtools-0.1.0.tgz`. The React component and server APIs are unchanged. Restart your dev server so the renamed adapter registry initializes cleanly.
-
 ### Limits and validation
 
 This release targets React and a Node server. Capture is limited to instrumented clients in one Node realm/process; there is no edge runtime support, distributed/serverless aggregation, persistence, or automatic interception of unrelated clients. Diagrams show captured data, not hidden model reasoning or inferred application policies.

@@ -1,4 +1,4 @@
-# Architecture and migration
+# Architecture
 
 The package has three public entry points: the SSR-safe React component, scoped CSS, and a Node server adapter. Browser-safe trace types are exported from the React entry. Server modules and the TypeSafe SDK must never enter the browser bundle.
 
@@ -14,11 +14,7 @@ The package has three public entry points: the SSR-safe React component, scoped 
 
 ## Provenance
 
-Imported from `diegoag64/diagram-motion-lab`, main commit `100189b73c9a5cf043946e4efa1956c7eda0b4d6` after PR #3. `git subtree split --prefix=devtools` produced `c6612cb96e4b9e44bc513c5e0c6dc7212cfa3d7c`. The split history is merged into the extraction branch, preserving the DevTools commits without unrelated lab files or ignored local data.
-
-The initial `main` commit is empty; all source arrives through the extraction PR. After that PR is merged, the separate Diagram Motion Lab cleanup PR can remove the old copy. Until then the old repo's main retains a working copy.
-
-The original lab, `/docs/`, Mermaid replica, SVG editor, and static-site deployment remain in Diagram Motion Lab. This repo owns the DevTools library and its sample playground. The React diagrams retain the existing styling and animation behavior; extraction does not redesign them.
+The animated diagrams use the visual style developed in [Diagram Motion Lab](https://github.com/diegoag64/diagram-motion-lab). This repository owns the reusable DevTools library and its sample playground. See [third-party notices](../THIRD_PARTY_NOTICES.txt) for design attribution and branding.
 
 ## Limits
 
