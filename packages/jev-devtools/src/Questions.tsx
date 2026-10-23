@@ -116,15 +116,18 @@ export function Questions({ trace }: { trace: Trace }) {
     },
   });
   const items = virtualizer.getVirtualItems();
-  const goTo = (index: number, focus = false) => {
-    const next = Math.max(0, Math.min(entries.length - 1, index));
-    setDestination(next);
-    if (focus) {
-      pendingFocus.current = next;
-      setFocused(next);
-    }
-    virtualizer.scrollToIndex(next, { align: "start" });
-  };
+  const goTo = useCallback(
+    (index: number, focus = false) => {
+      const next = Math.max(0, Math.min(entries.length - 1, index));
+      setDestination(next);
+      if (focus) {
+        pendingFocus.current = next;
+        setFocused(next);
+      }
+      virtualizer.scrollToIndex(next, { align: "start" });
+    },
+    [entries.length, virtualizer],
+  );
   useLayoutEffect(() => {
     if (pendingFocus.current === null) return;
     const card = viewport.current?.querySelector<HTMLElement>(
@@ -135,47 +138,56 @@ export function Questions({ trace }: { trace: Trace }) {
       pendingFocus.current = null;
     }
   });
+  // Scroll-range updates must not rebuild the full question picker.
+  const navigation = useMemo(
+    () => (
+      <>
+        <div className="questions-navigation">
+          <label>
+            Jump to question
+            <select
+              aria-label="Jump to question"
+              value={Math.min(destination, entries.length - 1)}
+              onChange={(event) => goTo(Number(event.target.value))}
+            >
+              {entries.map(([name, q], index) => (
+                <option key={name} value={index}>
+                  {index + 1}. {name} · {q.type}
+                </option>
+              ))}
+            </select>
+          </label>
+          <button
+            aria-label="Previous question"
+            disabled={destination === 0}
+            onClick={() => goTo(destination - 1)}
+          >
+            Previous
+          </button>
+          <button
+            aria-label="Next question"
+            disabled={destination >= entries.length - 1}
+            onClick={() => goTo(destination + 1)}
+          >
+            Next
+          </button>
+          <span>
+            {entries.length} question{entries.length === 1 ? "" : "s"}
+          </span>
+        </div>
+        <p className="questions-help muted" id={helpId}>
+          ↑ / ↓ previous / next · Home / End first / last when the list is
+          focused.
+        </p>
+      </>
+    ),
+    [entries, destination, goTo, helpId],
+  );
   if (!entries.length)
     return <p className="muted">No questions available in this capture.</p>;
   return (
     <div className="questions-list">
-      <div className="questions-navigation">
-        <label>
-          Jump to question
-          <select
-            aria-label="Jump to question"
-            value={Math.min(destination, entries.length - 1)}
-            onChange={(event) => goTo(Number(event.target.value))}
-          >
-            {entries.map(([name, q], index) => (
-              <option key={name} value={index}>
-                {index + 1}. {name} · {q.type}
-              </option>
-            ))}
-          </select>
-        </label>
-        <button
-          aria-label="Previous question"
-          disabled={destination === 0}
-          onClick={() => goTo(destination - 1)}
-        >
-          Previous
-        </button>
-        <button
-          aria-label="Next question"
-          disabled={destination >= entries.length - 1}
-          onClick={() => goTo(destination + 1)}
-        >
-          Next
-        </button>
-        <span>
-          {entries.length} question{entries.length === 1 ? "" : "s"}
-        </span>
-      </div>
-      <p className="questions-help muted" id={helpId}>
-        ↑ / ↓ previous / next · Home / End first / last when the list is
-        focused.
-      </p>
+      {navigation}
       <div
         className="questions-viewport"
         ref={viewport}
