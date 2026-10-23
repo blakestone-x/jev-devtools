@@ -173,12 +173,12 @@ export function JevPanel({
             </p>
           )}
         </div>
-        <footer>
-          <span
-            className={`status-dot ${connection === "connected" ? "success" : "pending"}`}
-          />
-          {connection} · memory only{error && <p role="alert">{error}</p>}
-        </footer>
+        {(connection !== "connected" || error) && (
+          <footer>
+            {connection !== "connected" && <span role="status">{connection}</span>}
+            {error && <p role="alert">{error}</p>}
+          </footer>
+        )}
       </aside>
       <section className="request-detail">
         {trace ? (

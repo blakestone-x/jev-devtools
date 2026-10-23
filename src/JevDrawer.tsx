@@ -1,4 +1,5 @@
 import { useEffect, useId, useRef, useState, type ReactNode } from "react";
+import { TypeSafeMark } from "./TypeSafeMark.js";
 import { createPortal } from "react-dom";
 
 const heightKey = "jev-inspector-drawer-height";
@@ -79,19 +80,19 @@ export function JevDrawer({
         ref={trigger}
         className="jev-devtools jev-drawer-trigger"
         hidden={open}
-        aria-label="Open Jev inspector"
+        aria-label="Open Jev DevTools"
         aria-expanded={open}
         aria-controls={id}
         onClick={() => toggle(true)}
       >
-        <span aria-hidden="true">↳</span> Jev
+        <TypeSafeMark /> Jev DevTools
       </button>
       <section
         ref={panel}
         id={id}
         className="jev-devtools jev-drawer"
         hidden={!open}
-        aria-label="Jev inspector"
+        aria-label="Jev DevTools"
         style={{ height: visibleHeight }}
         onKeyDown={(event) => {
           if (event.key === "Escape" && !event.defaultPrevented) {
@@ -104,7 +105,7 @@ export function JevDrawer({
           className="jev-drawer-resize"
           role="separator"
           tabIndex={0}
-          aria-label="Resize Jev inspector"
+          aria-label="Resize Jev DevTools"
           aria-orientation="horizontal"
           aria-valuemin={Math.round(min)}
           aria-valuemax={Math.round(max)}
@@ -158,10 +159,8 @@ export function JevDrawer({
         </div>
         <header className="jev-drawer-header">
           <strong>
-            <span className="jev-mark" aria-hidden="true">
-              ↳
-            </span>{" "}
-            Jev Inspector
+            <TypeSafeMark />
+            Jev DevTools
           </strong>
           <div>
             <button
@@ -174,7 +173,7 @@ export function JevDrawer({
             <button
               ref={closeButton}
               className="jev-drawer-close"
-              aria-label="Close Jev inspector"
+              aria-label="Close Jev DevTools"
               title="Close (Esc)"
               onClick={() => toggle(false)}
             >

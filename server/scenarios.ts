@@ -1,6 +1,7 @@
 import { readFile } from "node:fs/promises";
 import { choice, score, noul, box, image } from "@typesafe-ai/sdk";
 import type { Fetch, Questions, SystemOneRequest } from "@typesafe-ai/sdk";
+import { sampleProfiles, type SampleProfile } from "../src/sample-profiles.js";
 export type Scenario = "triage" | "image" | "retry" | "error";
 export const defaultMessage =
   "I was charged twice for my order. Checkout is now blocked, and I need a person to help me.";
@@ -51,7 +52,11 @@ export async function makeRequest(
 }
 // Fixtures pass through the real SDK transport, including retry and abort logic.
 // They never pretend to infer an answer from edited input.
-export function sampleTransport(scenario: Scenario): Fetch {
+export function sampleTransport(
+  scenario: Scenario,
+  profile: SampleProfile = "billing",
+): Fetch {
+  const fixture = sampleProfiles[profile];
   let attempt = 0;
   return async (_url, init) => {
     attempt++;
@@ -104,22 +109,22 @@ export function sampleTransport(scenario: Scenario): Fetch {
         : {
             category: {
               type: "choice",
-              choice: "billing",
-              probabilities: { billing: 0.76, delivery: 0.14, other: 0.1 },
+              choice: profile,
+              probabilities: fixture.probabilities,
               confidence: 0.64,
             },
             severity: {
               type: "score",
-              score: 1.65,
+              score: fixture.severity,
               legend: {
                 0: "Cosmetic inconvenience.",
                 1: "A workaround is available.",
                 2: "The customer is blocked.",
               },
-              probabilities: { 0: 0.05, 1: 0.25, 2: 0.7 },
+              probabilities: fixture.severityProbabilities,
               confidence: 0.475,
             },
-            human: { type: "noul", noul: 0.86 },
+            human: { type: "noul", noul: fixture.human },
           };
     return Response.json(
       {

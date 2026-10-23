@@ -3,6 +3,7 @@ import type { Plugin } from "vite";
 
 import { createJevDevtools } from "./index.js";
 import { makeRequest, sampleTransport } from "./scenarios.ts";
+import { sampleProfiles, type SampleProfile } from "../src/sample-profiles.js";
 import type { Scenario } from "./scenarios.ts";
 
 const send = (res: ServerResponse, status: number, data: unknown) => {
@@ -72,6 +73,7 @@ export function jevInspectorServer(apiKey?: string): Plugin {
             mode?: string;
             message?: string;
             runId?: string;
+            profile?: SampleProfile;
           };
           try {
             let text = "";
@@ -106,7 +108,10 @@ export function jevInspectorServer(apiKey?: string): Plugin {
             !["sample", "live"].includes(body.mode || "") ||
             !validSession(body.runId) ||
             typeof body.message !== "string" ||
-            body.message.length > 8000
+            body.message.length > 8000 ||
+            (body.profile !== undefined &&
+              (typeof body.profile !== "string" ||
+                !Object.hasOwn(sampleProfiles, body.profile)))
           ) {
             send(res, 400, {
               error: "Invalid scenario, mode, message, or run ID.",
@@ -143,7 +148,7 @@ export function jevInspectorServer(apiKey?: string): Plugin {
                 fetch:
                   body.mode === "live"
                     ? globalThis.fetch
-                    : sampleTransport(body.scenario!),
+                    : sampleTransport(body.scenario!, body.profile),
                 logLevel: "off",
                 retry: { maxRetries: body.scenario === "retry" ? 1 : 0 },
                 defaultHeaders:
@@ -169,11 +174,13 @@ export function jevInspectorServer(apiKey?: string): Plugin {
             send(res, 200, {
               ok: true,
               answerCount: Object.keys(response.answers).length,
+              result: { model: response.model, answers: response.answers },
             });
           } catch (error) {
             send(res, 502, {
               error: error instanceof Error ? error.name : "RequestError",
               detail: "Inspect the captured request for details.",
+              cancelled: controller.signal.aborted,
             });
           } finally {
             running.delete(id);

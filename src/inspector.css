@@ -976,3 +976,18 @@
     display: none;
   }
 }
+/* The public TypeSafe mark travels with the package, independent of host assets. */
+.jev-devtools .typesafe-mark {
+  display: inline-block;
+  flex: 0 0 23px;
+  width: 23px;
+  height: 32px;
+  overflow: hidden;
+  line-height: 0;
+}
+.jev-devtools .typesafe-mark img {
+  display: block;
+  height: 32px;
+  width: auto;
+  max-width: none;
+}
