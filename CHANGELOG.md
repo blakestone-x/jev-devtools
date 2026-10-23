@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.1.3 — October 23, 2026 (experimental)
+
+- Isolate the drawer in a custom Shadow DOM host so application styles cannot add padding or alter the inspector. Host-page CSS overrides no longer reach internal elements.
+- Add a diagram canvas with pointer-centered wheel zoom, drag-to-pan, pinch gestures, keyboard controls, and fit-to-view.
+- Keep README npm badges and links aligned with the package version, using exact-version URLs.
+- Clarify the main README feature heading and keep prepack diagnostics out of machine-readable npm output.
+- Public component props and server APIs are unchanged.
+
 ## 0.1.2 — October 23, 2026 (experimental)
 
 - Remove the MP4 download link from the npm README; retain the complete inline GIF.
