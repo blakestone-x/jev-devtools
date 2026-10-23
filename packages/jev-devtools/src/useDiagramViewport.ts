@@ -110,7 +110,7 @@ export function useDiagramViewport(
         event.button !== 0 ||
         pointers.size >= 2 ||
         (event.target as Element).closest(
-          "button, input, select, textarea, a, summary",
+          "button, input, select, textarea, a, summary, [data-diagram-scroll]",
         )
       )
         return;
@@ -152,6 +152,7 @@ export function useDiagramViewport(
       if (!pointers.size) delete el.dataset.panning;
     };
     const wheel = (event: WheelEvent) => {
+      if ((event.target as Element).closest("[data-diagram-scroll]")) return;
       event.preventDefault();
       const units =
         event.deltaMode === 1

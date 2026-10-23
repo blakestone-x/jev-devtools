@@ -1143,6 +1143,7 @@
 }
 .jev-devtools .lab-choice-table-scroll {
   overflow: auto;
+  overscroll-behavior: contain;
   min-height: 0;
   flex: 1;
 }

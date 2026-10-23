@@ -20,6 +20,7 @@ export function ChoiceProbabilities({ answer }: { answer: AnswerView }) {
       className="lab-choice-browser"
       role="region"
       aria-label="All Choice probabilities"
+      data-diagram-scroll=""
     >
       <div className="lab-choice-controls">
         <label>

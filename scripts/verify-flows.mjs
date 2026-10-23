@@ -217,6 +217,28 @@ try {
   await classify
     .getByRole("button", { name: "All probabilities (150)", exact: true })
     .click();
+  const probabilityTable = classify.getByLabel("Probability table", {
+    exact: true,
+  });
+  await page.waitForTimeout(150);
+  const beforeTableScroll = await cameraTransform();
+  const tableBounds = await probabilityTable.boundingBox();
+  assert.ok(tableBounds);
+  await page.mouse.move(
+    tableBounds.x + tableBounds.width / 2,
+    tableBounds.y + Math.min(150, tableBounds.height / 2),
+  );
+  await page.mouse.wheel(0, 300);
+  await page.waitForTimeout(150);
+  assert.ok(
+    await probabilityTable.evaluate((el) => el.scrollTop > 0),
+    "Probability table must scroll independently",
+  );
+  assert.equal(
+    await cameraTransform(),
+    beforeTableScroll,
+    "Scrolling a probability table must not zoom the flow",
+  );
   await classify
     .getByRole("searchbox", { name: "Search categories" })
     .fill("category-150");
