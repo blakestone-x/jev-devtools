@@ -131,6 +131,9 @@ function Result({
 export function TraceDiagram({ trace }: { trace: Trace }) {
   const [selected, setSelected] = useState(""),
     [flow, setFlow] = useState(true),
+    [extraCategories, setExtraCategories] = useState<Record<string, number>>(
+      {},
+    ),
     [probabilityView, setProbabilityView] = useState<string | null>(null);
   const entries = Object.entries(trace.request.questions ?? {}).filter(
       ([, q]) => q && typeof q === "object" && typeof q.type === "string",
@@ -152,13 +155,21 @@ export function TraceDiagram({ trace }: { trace: Trace }) {
     : allProbabilities;
   if (
     compact &&
-    answer.choice &&
+    answer.choice !== undefined &&
     !shownProbabilities.some(([label]) => label === answer.choice)
   ) {
     const returned = allProbabilities.find(
       ([label]) => label === answer.choice,
     );
     if (returned) shownProbabilities.push(returned);
+  }
+  if (compact) {
+    const initialLabels = new Set(shownProbabilities.map(([label]) => label));
+    shownProbabilities.push(
+      ...allProbabilities
+        .filter(([label]) => !initialLabels.has(label))
+        .slice(0, extraCategories[key] ?? 0),
+    );
   }
   const outputs = flowAnswer(
     compact
@@ -235,6 +246,15 @@ export function TraceDiagram({ trace }: { trace: Trace }) {
           )}
           {!showProbabilities && (
             <>
+              {compact && (extraCategories[key] ?? 0) > 0 && (
+                <button
+                  onClick={() =>
+                    setExtraCategories((counts) => ({ ...counts, [key]: 0 }))
+                  }
+                >
+                  Show fewer
+                </button>
+              )}
               <button
                 aria-label="Zoom diagram out"
                 disabled={zoom <= 10}
@@ -358,10 +378,8 @@ export function TraceDiagram({ trace }: { trace: Trace }) {
             <h3 title={key}>{key}</h3>
             {compact && (
               <p className="lab-small">
-                Top 3 probabilities
-                {shownProbabilities.length > 3
-                  ? " + returned choice"
-                  : ""} · {allProbabilities.length} total
+                Showing {shownProbabilities.length} of {allProbabilities.length}{" "}
+                probabilities
               </p>
             )}
             <Result
@@ -397,10 +415,19 @@ export function TraceDiagram({ trace }: { trace: Trace }) {
               }}
             >
               <span className="lab-eyebrow">MORE CATEGORIES</span>
-              <button onClick={() => setProbabilityView(key)}>
-                View {remaining} more
+              <button
+                onClick={() =>
+                  setExtraCategories((counts) => ({
+                    ...counts,
+                    [key]: (counts[key] ?? 0) + 3,
+                  }))
+                }
+              >
+                Show More
               </button>
-              <p className="lab-small">See every exact value.</p>
+              <p className="lab-small">
+                {remaining} remaining · Add {Math.min(3, remaining)}
+              </p>
             </article>
           )}
         </div>

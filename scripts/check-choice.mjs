@@ -68,16 +68,34 @@ export async function checkChoice({ page, load }) {
     .getByRole("button", { name: "Back to overview", exact: true })
     .click();
   assert.equal(await page.locator(".lab-flow-viewport").isVisible(), true);
-  await page
-    .getByRole("button", { name: "View 147 more", exact: true })
-    .focus();
+  const more = page.getByRole("button", { name: "Show More", exact: true });
+  await more.focus();
   await page.keyboard.press("Enter");
-  assert.equal(await search.isVisible(), true);
+  assert.equal(
+    await page.locator(".lab-output").count(),
+    6,
+    "Show More adds three branches in place using the keyboard",
+  );
+  assert.equal(await search.isVisible(), false);
+  await more.click();
+  assert.equal(await page.locator(".lab-output").count(), 9);
+  await page
+    .getByRole("button", { name: "All probabilities (150)", exact: true })
+    .click();
   assert.equal(
     await search.evaluate((el) => el.getRootNode().activeElement === el),
     true,
-    "Opening full distribution moves keyboard focus into its search",
   );
+  await page
+    .getByRole("button", { name: "Back to overview", exact: true })
+    .click();
+  assert.equal(
+    await page.locator(".lab-output").count(),
+    9,
+    "Opening the full table preserves expanded branches",
+  );
+  await page.getByRole("button", { name: "Show fewer", exact: true }).click();
+  assert.equal(await page.locator(".lab-output").count(), 3);
   await load("choice-edge");
   assert.equal(
     await page.locator(".lab-output").count(),
@@ -89,11 +107,54 @@ export async function checkChoice({ page, load }) {
       "category_149",
     ),
   );
+  await more.click();
+  const expandedLabels = await page.locator(".lab-output h3").allTextContents();
+  assert.deepEqual(
+    expandedLabels,
+    [
+      "category_0",
+      "category_1",
+      "category_2",
+      "category_149",
+      "category_3",
+      "category_4",
+      "category_5",
+    ],
+    "Expansion adds three new categories without duplicating or displacing the returned choice",
+  );
   await page
     .getByRole("button", { name: "All probabilities (150)", exact: true })
     .click();
   await search.fill("category_149");
   assert.equal(await rows.locator("code").textContent(), String(1 / 150));
+  await load("choice-seven");
+  await more.click();
+  assert.equal(await page.locator(".lab-output").count(), 6);
+  await page
+    .getByRole("combobox", { name: "Diagram question" })
+    .selectOption("question_1");
+  assert.equal(await page.locator(".lab-output").count(), 3);
+  await page
+    .getByRole("combobox", { name: "Diagram question" })
+    .selectOption("question_0");
+  assert.equal(
+    await page.locator(".lab-output").count(),
+    6,
+    "Each question retains its own expansion",
+  );
+  await more.click();
+  assert.equal(
+    await page.locator(".lab-output").count(),
+    7,
+    "The final click adds only the remaining category",
+  );
+  assert.equal(
+    await more.count(),
+    0,
+    "Show More disappears when all categories are visible",
+  );
+  await page.getByRole("button", { name: "Show fewer", exact: true }).click();
+  assert.equal(await page.locator(".lab-output").count(), 3);
   await load("small");
   assert.equal(
     await page.locator(".lab-output").count(),
@@ -102,6 +163,6 @@ export async function checkChoice({ page, load }) {
   );
   assert.equal(await page.locator(".lab-choice-remainder").count(), 0);
   console.log(
-    "Choice verified: bounded overview, all 150 exact values, paging, search, keyboard access, ties, returned branch and request switching.",
+    "Choice verified: bounded overview, all 150 exact values, paging, search, keyboard expansion, final partial batch, per-question expansion, ties, returned branch and request switching.",
   );
 }

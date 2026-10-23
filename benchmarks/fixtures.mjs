@@ -4,6 +4,7 @@ import { setImmediate as tick } from "node:timers/promises";
 
 // Synthetic, deterministic local transport: no credentials, network inference, or customer data.
 export const scenarios = [
+  { id: "choice-seven", history: 1, choices: 7, questions: 2, stateChars: 120 },
   {
     id: "choice-edge",
     history: 1,
