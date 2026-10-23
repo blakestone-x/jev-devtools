@@ -66,7 +66,15 @@ export function Questions({ trace }: { trace: Trace }) {
   );
   const viewport = useRef<HTMLDivElement>(null);
   const sizes = useRef(new Map<string, number>());
-  const [seeking, setSeeking] = useState(false);
+  const [seeking, setSeekingState] = useState(false);
+  const seekingValue = useRef(false);
+  const setSeeking = useCallback((next: boolean) => {
+    // A range update may already be queued by the virtualizer. Avoid enqueuing
+    // the same preview state on every scroll event alongside that React work.
+    if (seekingValue.current === next) return;
+    seekingValue.current = next;
+    setSeekingState(next);
+  }, []);
   const scrollSample = useRef<{ offset: number; time: number } | null>(null);
   const scrollIdle = useRef<ReturnType<typeof setTimeout> | undefined>(
     undefined,
@@ -141,7 +149,7 @@ export function Questions({ trace }: { trace: Trace }) {
       }
       virtualizer.scrollToIndex(next, { align: "start" });
     },
-    [entries.length, virtualizer],
+    [entries.length, virtualizer, setSeeking],
   );
   useLayoutEffect(() => {
     if (pendingFocus.current === null) return;
