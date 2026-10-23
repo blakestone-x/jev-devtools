@@ -14,7 +14,7 @@ Follow the context, explore each question, and see the answers come together.
 [![MIT license](https://img.shields.io/badge/License-MIT-E551BA?labelColor=0D0A0F)](LICENSE)
 [![Status: experimental](https://img.shields.io/badge/Status-experimental-E551BA?labelColor=0D0A0F)](#install-in-another-react-app)
 
-[Demo](#see-it-in-motion) · [Quick start](#run-the-playground) · [Install](#install-in-another-react-app) · [AI setup](#set-up-with-your-coding-agent) · [Next.js](docs/nextjs.md) · [Contributing](CONTRIBUTING.md)
+[Demo](#see-it-in-motion) · [Quick start](#run-the-playground) · [Install](#install-in-another-react-app) · [AI setup](#set-up-with-your-coding-agent) · [Next.js](docs/nextjs.md) · [Changelog](CHANGELOG.md) · [Contributing](CONTRIBUTING.md)
 
 </div>
 
