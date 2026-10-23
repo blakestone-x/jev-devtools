@@ -23,7 +23,6 @@ Follow the context, explore each question, and see the answers come together.
 ![Full 28-second Jev DevTools demo showing sample results, the request drawer, inspection tabs, and animated diagrams.](docs/assets/jev-devtools-preview.gif)
 
 <p align="center">
-  <a href="docs/assets/jev-devtools-demo.mp4?raw=1"><strong>Download the MP4 · 530 KB</strong></a><br />
   <sub>The complete 28-second sample demo plays above and loops automatically.</sub>
 </p>
 

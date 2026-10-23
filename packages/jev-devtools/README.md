@@ -10,7 +10,7 @@ A React drawer and Node adapter for inspecting TypeSafe Jev requests with animat
 
 ![Full 28-second Jev DevTools demo showing sample results, the request drawer, and animated diagrams.](https://raw.githubusercontent.com/diegoag64/jev-devtools/main/docs/assets/jev-devtools-preview.gif)
 
-The full sample recording loops above. [Download the MP4 (530 KB)](https://github.com/diegoag64/jev-devtools/raw/refs/heads/main/docs/assets/jev-devtools-demo.mp4).
+The full sample recording loops above.
 
 ## Install
 
