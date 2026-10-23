@@ -69,6 +69,20 @@ export async function checkChoice({ page, load }) {
     .click();
   assert.equal(await page.locator(".lab-flow-viewport").isVisible(), true);
   const more = page.getByRole("button", { name: "Show More", exact: true });
+  const viewport = page.locator(".lab-flow-viewport");
+  const settleCamera = () =>
+    page.evaluate(
+      () =>
+        new Promise((resolve) =>
+          requestAnimationFrame(() => requestAnimationFrame(resolve)),
+        ),
+    );
+  const cameraTransform = () => graph.evaluate((el) => el.style.transform);
+  await viewport.focus();
+  await page.keyboard.press("ArrowLeft");
+  await page.keyboard.press("+");
+  await settleCamera();
+  const beforeExpansion = await cameraTransform();
   await more.focus();
   await page.keyboard.press("Enter");
   assert.equal(
@@ -76,8 +90,65 @@ export async function checkChoice({ page, load }) {
     6,
     "Show More adds three branches in place using the keyboard",
   );
+  await settleCamera();
+  assert.equal(
+    await cameraTransform(),
+    beforeExpansion,
+    "Show More preserves a manually panned and zoomed camera",
+  );
+  const entrances = await page
+    .locator(".lab-output")
+    .evaluateAll((nodes) => nodes.map((node) => node.getAnimations().length));
+  assert.deepEqual(
+    entrances,
+    [0, 0, 0, 1, 1, 1],
+    "Only the three new cards animate in",
+  );
+  assert.equal(
+    await page
+      .locator(".lab-connections path")
+      .evaluateAll(
+        (nodes) =>
+          nodes.filter((node) => node.getAnimations().length > 0).length,
+      ),
+    3,
+    "New connections animate with their cards",
+  );
+  await page
+    .locator(".lab-output")
+    .evaluateAll(async (nodes) =>
+      Promise.all(
+        nodes.flatMap((node) =>
+          node.getAnimations().map((animation) => animation.finished),
+        ),
+      ),
+    );
   assert.equal(await search.isVisible(), false);
+  await page.getByRole("button", { name: "Fit", exact: true }).click();
+  await settleCamera();
+  const fittedBeforeExpansion = await cameraTransform();
+  await page.emulateMedia({ reducedMotion: "reduce" });
   await more.click();
+  await settleCamera();
+  assert.equal(
+    await cameraTransform(),
+    fittedBeforeExpansion,
+    "Show More also preserves the camera after Fit",
+  );
+  assert.equal(
+    await page
+      .locator(".lab-output")
+      .evaluateAll((nodes) =>
+        nodes.every(
+          (node) =>
+            node.getAnimations().length === 0 &&
+            Number(getComputedStyle(node).opacity) > 0,
+        ),
+      ),
+    true,
+    "Reduced motion reveals every new card without animation",
+  );
+  await page.emulateMedia({ reducedMotion: "no-preference" });
   assert.equal(await page.locator(".lab-output").count(), 9);
   await page
     .getByRole("button", { name: "All probabilities (150)", exact: true })
@@ -94,7 +165,14 @@ export async function checkChoice({ page, load }) {
     9,
     "Opening the full table preserves expanded branches",
   );
+  const beforeCollapse = await cameraTransform();
   await page.getByRole("button", { name: "Show fewer", exact: true }).click();
+  await settleCamera();
+  assert.equal(
+    await cameraTransform(),
+    beforeCollapse,
+    "Show fewer preserves the camera too",
+  );
   assert.equal(await page.locator(".lab-output").count(), 3);
   await load("choice-edge");
   assert.equal(

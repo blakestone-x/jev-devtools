@@ -1,4 +1,10 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 import {
   fitCamera,
   zoomCamera,
@@ -17,6 +23,10 @@ export function useDiagramViewport(
   const camera = useRef<Camera>({ x: 0, y: 0, scale: 1 });
   const size = useRef({ width: 0, height: 0 });
   const fitted = useRef(true);
+  const bounds = useRef({ width, height });
+  useLayoutEffect(() => {
+    bounds.current = { width, height };
+  }, [width, height]);
   const frame = useRef<number | null>(null);
   const [zoom, setZoom] = useState(100);
   const paint = useCallback(() => {
@@ -36,9 +46,15 @@ export function useDiagramViewport(
   const fit = useCallback(() => {
     fitted.current = true;
     if (size.current.width <= 0 || size.current.height <= 0) return;
-    camera.current = fitCamera(size.current, { width, height });
+    camera.current = fitCamera(size.current, bounds.current);
     paint();
-  }, [width, height, paint]);
+  }, [paint]);
+  const preserveCamera = useCallback(() => {
+    fitted.current = false;
+  }, []);
+  useEffect(() => {
+    if (fitted.current) fit();
+  }, [width, height, fit]);
   const zoomBy = useCallback(
     (factor: number, point?: Point) => {
       fitted.current = false;
@@ -184,5 +200,5 @@ export function useDiagramViewport(
       frame.current = null;
     };
   }, [fit, zoomBy, paint, scene]);
-  return { viewport, canvas, zoom, zoomBy, fit };
+  return { viewport, canvas, zoom, zoomBy, fit, preserveCamera };
 }

@@ -134,6 +134,11 @@ export function TraceDiagram({ trace }: { trace: Trace }) {
     [extraCategories, setExtraCategories] = useState<Record<string, number>>(
       {},
     ),
+    [entering, setEntering] = useState<{
+      question: string;
+      from: number;
+      to: number;
+    } | null>(null),
     [probabilityView, setProbabilityView] = useState<string | null>(null);
   const entries = Object.entries(trace.request.questions ?? {}).filter(
       ([, q]) => q && typeof q === "object" && typeof q.type === "string",
@@ -163,7 +168,7 @@ export function TraceDiagram({ trace }: { trace: Trace }) {
     );
     if (returned) shownProbabilities.push(returned);
   }
-  if (compact) {
+  if (compact && (extraCategories[key] ?? 0) > 0) {
     const initialLabels = new Set(shownProbabilities.map(([label]) => label));
     shownProbabilities.push(
       ...allProbabilities
@@ -197,21 +202,23 @@ export function TraceDiagram({ trace }: { trace: Trace }) {
       resultHeight + 90,
       (outputs.length + (remaining ? 1 : 0)) * spacing + 60,
     ),
-    ry = Math.max(40, (height - resultHeight) / 2),
+    ry = compact ? 40 : Math.max(40, (height - resultHeight) / 2),
     mid = ry + resultHeight / 2;
-  const { viewport, canvas, zoom, zoomBy, fit } = useDiagramViewport(
-    1120,
-    height,
-    key,
-  );
+  const { viewport, canvas, zoom, zoomBy, fit, preserveCamera } =
+    useDiagramViewport(1120, height, key);
   if (!question)
     return <p className="muted">No questions available in this capture.</p>;
   const sourcePath = (y: number) => `M260 ${y} C325 ${y},325 ${mid},390 ${mid}`;
+  const enteringDelay = (index: number) =>
+    entering?.question === key && index >= entering.from && index < entering.to
+      ? `${(index - entering.from) * 55}ms`
+      : undefined;
   const paths = [
     { id: "state", d: sourcePath(122), active: true },
     { id: "question", d: sourcePath(378), active: true },
     ...outputs.map((output, i) => ({
-      id: `output-${i}`,
+      id: `output-${key}-${output.label}`,
+      delay: enteringDelay(i),
       d: `M710 ${mid} C790 ${mid},790 ${92 + i * spacing},870 ${92 + i * spacing}`,
       active: output.active,
     })),
@@ -224,7 +231,10 @@ export function TraceDiagram({ trace }: { trace: Trace }) {
           <select
             aria-label="Diagram question"
             value={key}
-            onChange={(event) => setSelected(event.target.value)}
+            onChange={(event) => {
+              setEntering(null);
+              setSelected(event.target.value);
+            }}
           >
             {entries.map(([name, q]) => (
               <option key={name} value={name}>
@@ -237,7 +247,10 @@ export function TraceDiagram({ trace }: { trace: Trace }) {
           {answer?.type === "choice" && (
             <button
               aria-pressed={showProbabilities}
-              onClick={() => setProbabilityView(showProbabilities ? null : key)}
+              onClick={() => {
+                setEntering(null);
+                setProbabilityView(showProbabilities ? null : key);
+              }}
             >
               {showProbabilities
                 ? "Back to overview"
@@ -246,11 +259,14 @@ export function TraceDiagram({ trace }: { trace: Trace }) {
           )}
           {!showProbabilities && (
             <>
-              {compact && (extraCategories[key] ?? 0) > 0 && (
+              {compact && (
                 <button
-                  onClick={() =>
-                    setExtraCategories((counts) => ({ ...counts, [key]: 0 }))
-                  }
+                  disabled={(extraCategories[key] ?? 0) === 0}
+                  onClick={() => {
+                    preserveCamera();
+                    setEntering(null);
+                    setExtraCategories((counts) => ({ ...counts, [key]: 0 }));
+                  }}
                 >
                   Show fewer
                 </button>
@@ -302,7 +318,14 @@ export function TraceDiagram({ trace }: { trace: Trace }) {
           >
             {paths.map((path) => (
               <g key={path.id}>
-                <path d={path.d} className={path.active ? "active" : ""} />
+                <path
+                  d={path.d}
+                  pathLength={1}
+                  className={`${path.active ? "active" : ""} ${"delay" in path && path.delay !== undefined ? "lab-branch-enter" : ""}`}
+                  style={{
+                    animationDelay: "delay" in path ? path.delay : undefined,
+                  }}
+                />
                 {flow &&
                   !showProbabilities &&
                   path.active &&
@@ -390,13 +413,18 @@ export function TraceDiagram({ trace }: { trace: Trace }) {
           </article>
           {outputs.map((output, i) => (
             <article
-              key={i}
-              className={`lab-card lab-output ${output.active ? "" : "lab-idle"}`}
+              key={`${key}-${output.label}`}
+              className={`lab-card lab-output ${output.active ? "" : "lab-idle"} ${enteringDelay(i) !== undefined ? "lab-card-enter" : ""}`}
+              onAnimationEnd={() => {
+                if (entering?.question === key && i === entering.to - 1)
+                  setEntering(null);
+              }}
               style={{
                 left: 870,
                 top: 40 + i * spacing,
                 width: 230,
                 minHeight: compact ? 96 : 104,
+                animationDelay: enteringDelay(i),
               }}
             >
               <span className="lab-eyebrow">{output.eyebrow}</span>
@@ -416,12 +444,18 @@ export function TraceDiagram({ trace }: { trace: Trace }) {
             >
               <span className="lab-eyebrow">MORE CATEGORIES</span>
               <button
-                onClick={() =>
+                onClick={() => {
+                  preserveCamera();
+                  setEntering({
+                    question: key,
+                    from: outputs.length,
+                    to: outputs.length + Math.min(3, remaining),
+                  });
                   setExtraCategories((counts) => ({
                     ...counts,
                     [key]: (counts[key] ?? 0) + 3,
-                  }))
-                }
+                  }));
+                }}
               >
                 Show More
               </button>
