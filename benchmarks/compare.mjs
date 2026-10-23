@@ -6,16 +6,26 @@ import { resolve, join } from "node:path";
 import { once } from "node:events";
 
 const root = resolve(import.meta.dirname, "..");
-const ref = process.argv[2];
+const refs = process.argv.slice(2);
 const questions = process.env.BENCH_SUITE === "questions";
 const profileRounds = Number(process.env.BENCH_PROFILE_ROUNDS ?? 2);
 if (!Number.isSafeInteger(profileRounds) || profileRounds < 0)
   throw new Error("Invalid BENCH_PROFILE_ROUNDS");
-if (!ref) throw new Error("Usage: npm run bench:compare -- BASE_REF");
-const base = execFileSync("git", ["rev-parse", "--verify", `${ref}^{commit}`], {
-  cwd: root,
-  encoding: "utf8",
-}).trim();
+if (!refs.length)
+  throw new Error(
+    "Usage: npm run bench:compare -- BASE_REF [OTHER_BASE_REF ...]",
+  );
+const bases = [
+  ...new Set(
+    refs.map((ref) =>
+      execFileSync("git", ["rev-parse", "--verify", `${ref}^{commit}`], {
+        cwd: root,
+        encoding: "utf8",
+      }).trim(),
+    ),
+  ),
+];
+const base = bases[0];
 const head = execFileSync("git", ["rev-parse", "HEAD"], {
   cwd: root,
   encoding: "utf8",
@@ -63,6 +73,7 @@ try {
     JSON.stringify(
       {
         base,
+        comparisonBases: bases,
         head,
         dirty,
         candidateLabel,
@@ -75,31 +86,37 @@ try {
     ) + "\n",
   );
   await writeFile(join(output, "candidate.patch"), sourceDiff);
-  const archive = execFileSync(
-    "git",
-    ["archive", base, "packages/jev-devtools", "tsconfig.base.json"],
-    { cwd: root },
-  );
-  execFileSync("tar", ["-xf", "-", "-C", temp], { input: archive });
-  await symlink(join(root, "node_modules"), join(temp, "node_modules"), "dir");
-  const baseline = join(temp, "packages/jev-devtools");
-  run(process.execPath, [
-    "node_modules/typescript/bin/tsc",
-    "-p",
-    join(baseline, "tsconfig.lib.json"),
-  ]);
-  run(process.execPath, [join(baseline, "scripts/copy-styles.mjs")]);
+  const baselines = [];
+  for (const revision of bases) {
+    const checkout = join(temp, revision);
+    await mkdir(checkout);
+    const archive = execFileSync(
+      "git",
+      ["archive", revision, "packages/jev-devtools", "tsconfig.base.json"],
+      { cwd: root },
+    );
+    execFileSync("tar", ["-xf", "-", "-C", checkout], { input: archive });
+    await symlink(
+      join(root, "node_modules"),
+      join(checkout, "node_modules"),
+      "dir",
+    );
+    const entry = join(checkout, "packages/jev-devtools");
+    run(process.execPath, [
+      "node_modules/typescript/bin/tsc",
+      "-p",
+      join(entry, "tsconfig.lib.json"),
+    ]);
+    run(process.execPath, [join(entry, "scripts/copy-styles.mjs")]);
+    baselines.push({ revision: `base-${revision.slice(0, 7)}`, entry });
+  }
   run("npm", ["run", "build:package"]);
   for (const profiling of profileRounds ? [false, true] : [false]) {
     const port = Number(process.env.BENCH_BASE_PORT || 4211);
     const variants = [
-      { port, revision: `base-${base.slice(0, 7)}`, entry: baseline },
-      {
-        port: port + 1,
-        revision: candidateLabel,
-        entry: join(root, "packages/jev-devtools"),
-      },
-    ];
+      ...baselines,
+      { revision: candidateLabel, entry: join(root, "packages/jev-devtools") },
+    ].map((variant, index) => ({ ...variant, port: port + index }));
     for (const variant of variants) {
       const log = await open(
         join(

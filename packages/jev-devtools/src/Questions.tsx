@@ -244,13 +244,14 @@ export function Questions({ trace }: { trace: Trace }) {
           // A jump across most of the list is a destination change, not a
           // scan. Measurement corrections around its endpoints can otherwise
           // look like additional high-speed samples.
+          // Read cached geometry; querying scrollHeight here can force layout
+          // immediately after the virtualizer has mounted a new row.
+          const viewportHeight = virtualizer.scrollRect?.height || 0;
           const jump =
             Math.abs(offset - previous.offset) >
             Math.max(
-              event.currentTarget.clientHeight,
-              (event.currentTarget.scrollHeight -
-                event.currentTarget.clientHeight) /
-                2,
+              viewportHeight,
+              (virtualizer.getTotalSize() - viewportHeight) / 2,
             );
           const fastDirection =
             !jump && velocity > 4000 ? Math.sign(offset - previous.offset) : 0;
