@@ -1,0 +1,993 @@
+.jev-devtools {
+  color-scheme: dark;
+  font:
+    12px system-ui,
+    sans-serif;
+  color: #eee8ed;
+}
+.jev-devtools,
+.jev-devtools * {
+  box-sizing: border-box;
+}
+.jev-devtools button,
+.jev-devtools input,
+.jev-devtools select,
+.jev-devtools textarea {
+  font: inherit;
+  color: inherit;
+  border: 1px solid #3b303d;
+  border-radius: 5px;
+  background: #17121b;
+}
+.jev-devtools button {
+  padding: 7px 11px;
+  cursor: pointer;
+}
+.jev-devtools button:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+.jev-devtools input,
+.jev-devtools select {
+  padding: 8px;
+  width: 100%;
+}
+.jev-devtools button:hover:not(:disabled) {
+  border-color: #e551ba;
+}
+.jev-devtools :is(button, input, select, textarea, summary):focus-visible {
+  outline: 2px solid #e551ba;
+  outline-offset: 3px;
+}
+.jev-devtools .eyebrow {
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  color: #bc9db5;
+  text-transform: uppercase;
+}
+.jev-devtools .jev-inspector {
+  height: 100%;
+  display: flex;
+  color: #eee8ed;
+  background: #0d0a0f;
+  font:
+    12px "DM Sans",
+    sans-serif;
+  min-height: 0;
+  overflow: hidden;
+}
+.jev-devtools .jev-inspector h2 {
+  font-size: 15px;
+  margin: 0;
+  font-weight: 600;
+}
+.jev-devtools .jev-inspector h3 {
+  font-size: 13px;
+  margin: 0 0 8px;
+}
+.jev-devtools .jev-inspector code,
+.jev-devtools .jev-inspector pre {
+  font:
+    11px "JetBrains Mono",
+    monospace;
+}
+.jev-devtools .jev-inspector pre {
+  line-height: 1.7;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  max-height: 460px;
+  overflow: auto;
+  background: #100d13;
+  padding: 16px;
+  border: 1px solid #2e2533;
+  border-radius: 5px;
+}
+.jev-devtools .jev-inspector .muted {
+  color: #a89bac;
+  font-size: 11px;
+  line-height: 1.6;
+}
+.jev-devtools .request-list {
+  flex: 0 0 300px;
+  border-right: 1px solid #302634;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+.jev-devtools .request-list > header {
+  padding: 17px 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.jev-devtools .request-list h2 span {
+  font-size: 11px;
+  color: #b796ad;
+  margin-left: 5px;
+}
+.jev-devtools .request-list button {
+  font-size: 11px;
+}
+.jev-devtools .list-filters {
+  display: flex;
+  gap: 7px;
+  padding: 0 12px 12px;
+}
+.jev-devtools .list-filters input {
+  min-width: 0;
+}
+.jev-devtools .list-filters select {
+  width: 86px;
+  font-size: 11px;
+}
+.jev-devtools .request-items {
+  overflow: auto;
+  flex: 1;
+}
+.jev-devtools .request-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  text-align: left;
+  border: 0;
+  border-top: 1px solid #251d2a;
+  border-radius: 0;
+  background: transparent;
+  padding: 16px 12px;
+}
+.jev-devtools .request-row.selected {
+  background: #251423;
+  box-shadow: inset 2px 0 #e551ba;
+}
+.jev-devtools .request-row strong {
+  display: block;
+  font-size: 12px;
+  font-weight: 500;
+}
+.jev-devtools .request-row small {
+  display: block;
+  font-size: 10px;
+  color: #a99aac;
+  margin-top: 6px;
+}
+.jev-devtools .row-status {
+  font-size: 9px;
+  color: #ad9bb0;
+  margin-left: auto;
+}
+.jev-devtools .status-dot {
+  width: 6px;
+  height: 6px;
+  display: inline-block;
+  border-radius: 50%;
+  background: #b09ab7;
+  flex-shrink: 0;
+}
+.jev-devtools .status-dot.success {
+  background: #b3c79c;
+}
+.jev-devtools .status-dot.pending {
+  background: #e551ba;
+}
+.jev-devtools .status-dot.error {
+  background: #ee8e85;
+}
+.jev-devtools .request-list footer {
+  padding: 12px;
+  color: #9e8ea5;
+  border-top: 1px solid #302634;
+  font-size: 10px;
+  display: flex;
+  gap: 7px;
+}
+.jev-devtools .request-detail {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+.jev-devtools .detail-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 18px 24px 10px;
+}
+.jev-devtools .detail-header h2 {
+  margin-top: 6px;
+}
+.jev-devtools .metrics {
+  display: flex;
+  gap: 24px;
+  font:
+    12px "JetBrains Mono",
+    monospace;
+  white-space: nowrap;
+}
+.jev-devtools .metrics small {
+  display: block;
+  font:
+    9px "DM Sans",
+    sans-serif;
+  color: #97879f;
+  margin-top: 6px;
+}
+.jev-devtools .detail-meta {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  padding: 0 24px 14px;
+  color: #a08aa5;
+}
+.jev-devtools .detail-meta code {
+  font-size: 10px;
+}
+.jev-devtools .detail-tabs {
+  display: flex;
+  gap: 20px;
+  border-bottom: 1px solid #302634;
+  padding: 0 24px;
+}
+.jev-devtools .detail-tabs button {
+  border: 0;
+  border-radius: 0;
+  background: none;
+  padding: 10px 0;
+  color: #a89bac;
+  font-size: 11px;
+}
+.jev-devtools .detail-tabs button[aria-pressed="true"] {
+  box-shadow: inset 0 -2px #e551ba;
+  color: #f5c1e6;
+}
+.jev-devtools .detail-body {
+  overflow: auto;
+  flex: 1;
+  min-height: 0;
+  padding: 16px 24px 28px;
+  background-image: radial-gradient(#342337 0.6px, transparent 0.6px);
+  background-size: 16px 16px;
+}
+.jev-devtools .request-flow {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+  padding: 14px 0 20px;
+}
+.jev-devtools .state-node {
+  position: relative;
+  flex: 0 0 160px;
+  border: 1px solid #e551ba;
+  padding: 20px 15px;
+  background: #1f1320;
+  border-radius: 6px;
+}
+.jev-devtools .state-node h3 {
+  margin-top: 12px;
+}
+.jev-devtools .state-node p {
+  color: #b69db3;
+  line-height: 1.5;
+}
+.jev-devtools .state-node code {
+  font-size: 10px;
+}
+.jev-devtools .state-node:after {
+  content: "";
+  position: absolute;
+  left: 100%;
+  top: 50%;
+  width: 20px;
+  border-top: 1px solid #7f416d;
+}
+.jev-devtools .question-branches {
+  border-left: 1px solid #7f416d;
+  padding-left: 20px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(160px, 1fr));
+  gap: 12px;
+  flex: 1;
+  position: relative;
+}
+.jev-devtools .question-node {
+  position: relative;
+  border: 1px solid #75516c;
+  border-radius: 6px;
+  padding: 15px;
+  background: #110d14;
+  min-width: 0;
+}
+.jev-devtools .question-node:before {
+  content: "";
+  position: absolute;
+  right: 100%;
+  top: 50%;
+  width: 21px;
+  border-top: 1px solid #7f416d;
+}
+.jev-devtools .question-branches .question-node:not(:first-child):before {
+  display: none;
+}
+.jev-devtools .question-node header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.jev-devtools .question-node header h3 {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+.jev-devtools .type {
+  font:
+    9px "JetBrains Mono",
+    monospace;
+  color: #e59acc;
+  border: 1px solid #5e3654;
+  border-radius: 3px;
+  padding: 3px 5px;
+}
+.jev-devtools .instructions {
+  font-size: 11px;
+  color: #b8a6bc;
+  line-height: 1.5;
+}
+.jev-devtools .answer-value {
+  display: block;
+  font-size: 20px;
+  font-weight: 500;
+  margin: 15px 0;
+  color: #f0c7e5;
+}
+.jev-devtools .answer-value small {
+  font-size: 10px;
+  color: #b5a1ba;
+}
+.jev-devtools .probability {
+  margin: 10px 0;
+  font-size: 10px;
+}
+.jev-devtools .probability > div:first-child {
+  display: flex;
+  justify-content: space-between;
+  gap: 5px;
+  margin-bottom: 5px;
+}
+.jev-devtools .probability b {
+  font-weight: 400;
+  color: #d8abc9;
+}
+.jev-devtools .bar {
+  height: 4px;
+  background: #302033;
+  border-radius: 2px;
+  overflow: hidden;
+}
+.jev-devtools .bar i {
+  display: block;
+  height: 100%;
+  background: #e551ba;
+}
+.jev-devtools .confidence {
+  font-size: 10px;
+  color: #a68cac;
+  border-top: 1px solid #302634;
+  padding-top: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+.jev-devtools .confidence b {
+  color: #d1bad2;
+  font-weight: 400;
+}
+.jev-devtools details {
+  margin-top: 12px;
+  font-size: 10px;
+  color: #b7a0bd;
+}
+.jev-devtools summary {
+  cursor: pointer;
+}
+.jev-devtools .standalone {
+  margin-bottom: 14px;
+  max-width: 750px;
+}
+.jev-devtools .standalone:before {
+  display: none;
+}
+.jev-devtools .standalone .answer {
+  max-width: 450px;
+}
+.jev-devtools .box-preview {
+  position: relative;
+  margin-top: 14px;
+  min-height: 80px;
+  background: #19121c;
+}
+.jev-devtools .box-preview img {
+  width: 100%;
+  display: block;
+}
+.jev-devtools .bounding-box {
+  position: absolute;
+  border: 1.5px solid #e551ba;
+  background: #e551ba15;
+}
+.jev-devtools .coordinates {
+  display: block;
+  font-size: 9px !important;
+  line-height: 1.5;
+  margin-top: 8px;
+  color: #ac93b0;
+}
+.jev-devtools .context-image {
+  max-width: 400px;
+  width: 100%;
+  border: 1px solid #75516c;
+  border-radius: 6px;
+}
+.jev-devtools .empty {
+  padding: 20px;
+  color: #a294a8;
+  line-height: 1.7;
+}
+.jev-devtools .empty-detail {
+  margin: auto;
+  padding: 40px;
+  text-align: center;
+  color: #b2a0ba;
+}
+.jev-devtools .empty-symbol {
+  font-size: 36px;
+  color: #e551ba;
+  display: block;
+  margin-bottom: 20px;
+}
+.jev-devtools .empty-detail p {
+  font-size: 12px;
+  line-height: 1.8;
+}
+.jev-devtools .error-banner {
+  border: 1px solid #874b50;
+  background: #31191e;
+  padding: 12px;
+  line-height: 1.5;
+  margin-bottom: 16px;
+}
+.jev-devtools .warning {
+  color: #e2b97d;
+}
+.jev-devtools .jev-inspector table {
+  border-collapse: collapse;
+  width: 100%;
+  text-align: left;
+}
+.jev-devtools .jev-inspector th,
+.jev-devtools .jev-inspector td {
+  border-bottom: 1px solid #302634;
+  padding: 14px;
+}
+.jev-devtools .flow-dot {
+  display: none;
+}
+.jev-devtools .pending .flow-dot {
+  display: block;
+  position: absolute;
+  right: -23px;
+  top: calc(50% - 3px);
+  width: 6px;
+  height: 6px;
+  background: #e551ba;
+  border-radius: 50%;
+  animation: jev-inspector-pulse 1s infinite;
+}
+@keyframes jev-inspector-pulse {
+  50% {
+    opacity: 0.2;
+    transform: scale(0.7);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .jev-devtools .pending .flow-dot {
+    animation: none;
+  }
+}
+@media (max-width: 1100px) {
+  .jev-devtools .question-branches {
+    grid-template-columns: 1fr;
+  }
+  .jev-devtools .question-branches .question-node:not(:first-child):before {
+    display: block;
+  }
+  .jev-devtools .request-flow {
+    align-items: flex-start;
+  }
+  .jev-devtools .state-node {
+    margin-top: 45px;
+  }
+  .jev-devtools .metrics {
+    gap: 12px;
+  }
+  .jev-devtools .request-list {
+    flex-basis: 250px;
+  }
+}
+@media (max-width: 700px) {
+  .jev-devtools .jev-inspector {
+    flex-direction: column;
+  }
+  .jev-devtools .request-list {
+    flex-basis: 140px;
+    flex-shrink: 0;
+    border-right: 0;
+    border-bottom: 1px solid #302634;
+  }
+  .jev-devtools .request-list > header {
+    padding: 6px 12px;
+  }
+  .jev-devtools .request-list footer {
+    display: none;
+  }
+  .jev-devtools .list-filters {
+    padding-bottom: 6px;
+  }
+  .jev-devtools .request-items {
+    display: flex;
+  }
+  .jev-devtools .request-row {
+    min-width: 240px;
+    padding: 8px 12px;
+  }
+  .jev-devtools .request-detail {
+    min-height: 0;
+  }
+  .jev-devtools .detail-header {
+    padding: 12px;
+  }
+  .jev-devtools .detail-meta,
+  .jev-devtools .detail-tabs {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+  .jev-devtools .detail-body {
+    padding: 12px;
+  }
+  .jev-devtools .metrics {
+    display: none;
+  }
+  .jev-devtools .state-node {
+    flex-basis: 115px;
+    padding: 12px;
+  }
+  .jev-devtools .request-flow {
+    gap: 25px;
+  }
+  .jev-devtools .state-node:after {
+    width: 12px;
+  }
+  .jev-devtools .question-branches {
+    padding-left: 12px;
+  }
+  .jev-devtools .question-node:before {
+    width: 13px;
+  }
+  .jev-devtools .question-node {
+    padding: 12px;
+  }
+}
+
+.jev-devtools .request-flow {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 24px;
+}
+.jev-devtools .state-node {
+  flex: auto;
+  width: fit-content;
+  align-self: center;
+  padding: 12px 24px;
+  text-align: center;
+  margin: 0;
+}
+.jev-devtools .state-node h3 {
+  display: inline-block;
+  margin: 0 12px;
+}
+.jev-devtools .state-node p {
+  display: inline-block;
+  margin: 0 12px 0 0;
+  font-size: 11px;
+}
+.jev-devtools .state-node .eyebrow {
+  display: none;
+}
+.jev-devtools .state-node:after {
+  left: 50%;
+  top: 100%;
+  width: 0;
+  height: 24px;
+  border-top: 0;
+  border-left: 1px solid #7f416d;
+}
+.jev-devtools .question-branches {
+  border-left: 0;
+  border-top: 1px solid #7f416d;
+  padding: 20px 0 0;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+}
+.jev-devtools .question-node:before,
+.jev-devtools .question-branches .question-node:not(:first-child):before {
+  display: block;
+  right: auto;
+  left: 50%;
+  top: -21px;
+  width: 0;
+  height: 20px;
+  border-top: 0;
+  border-left: 1px solid #7f416d;
+}
+.jev-devtools .standalone:before {
+  display: none;
+}
+.jev-devtools .flow-caption {
+  margin-top: 0;
+}
+.jev-devtools .pending .flow-dot {
+  right: auto;
+  left: calc(50% - 3px);
+  top: calc(100% + 10px);
+}
+@media (max-width: 900px) {
+  .jev-devtools .question-branches {
+    grid-template-columns: 1fr;
+  }
+  .jev-devtools .question-node:before,
+  .jev-devtools .question-branches .question-node:not(:first-child):before {
+    height: 12px;
+    top: -13px;
+  }
+  .jev-devtools .question-branches .question-node:first-child:before {
+    height: 20px;
+    top: -21px;
+  }
+  .jev-devtools .state-node {
+    padding: 10px;
+  }
+  .jev-devtools .state-node p {
+    display: block;
+    margin: 6px 0;
+  }
+  .jev-devtools .state-node h3 {
+    font-size: 12px;
+  }
+}
+
+.jev-devtools.jev-drawer {
+  position: fixed;
+  z-index: 1000;
+  inset: auto 0 0;
+  display: flex;
+  flex-direction: column;
+  background: #0d0a0f;
+  color: #eee8ed;
+  border-top: 1px solid #604058;
+  box-shadow: 0 -12px 48px #0005;
+  font:
+    12px "DM Sans",
+    sans-serif;
+}
+.jev-devtools.jev-drawer[hidden],
+.jev-devtools.jev-drawer-trigger[hidden] {
+  display: none;
+}
+.jev-devtools .jev-drawer-resize {
+  position: absolute;
+  z-index: 1;
+  top: -6px;
+  width: 100%;
+  height: 12px;
+  cursor: ns-resize;
+  touch-action: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.jev-devtools .jev-drawer-resize span {
+  width: 42px;
+  height: 3px;
+  border-radius: 3px;
+  background: #79506f;
+}
+.jev-devtools .jev-drawer-resize:hover span,
+.jev-devtools .jev-drawer-resize:focus-visible span {
+  background: #e551ba;
+}
+.jev-devtools .jev-drawer-resize:focus-visible {
+  outline: 2px solid #e551ba;
+  outline-offset: -2px;
+}
+.jev-devtools .jev-drawer-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex: 0 0 46px;
+  padding: 0 16px;
+  border-bottom: 1px solid #302634;
+}
+.jev-devtools .jev-drawer-header strong {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-weight: 600;
+}
+.jev-devtools .jev-mark {
+  color: #e551ba;
+  font-size: 21px;
+}
+.jev-devtools .jev-drawer-header > div {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.jev-devtools .jev-drawer-header button {
+  background: transparent;
+  border-color: transparent;
+  font-size: 11px;
+  color: #c4afc8;
+}
+.jev-devtools .jev-drawer-header .jev-drawer-close {
+  font-size: 22px;
+  line-height: 1;
+  padding: 4px 8px;
+}
+.jev-devtools .jev-drawer-content {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+.jev-devtools.jev-drawer-trigger {
+  position: fixed;
+  bottom: 18px;
+  right: 18px;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 10px 16px;
+  border: 1px solid #a24487;
+  background: #211321;
+  color: #f1cbe6;
+  font:
+    600 13px "DM Sans",
+    sans-serif;
+  box-shadow: 0 4px 20px #0005;
+}
+.jev-devtools.jev-drawer-trigger span {
+  color: #e551ba;
+  font-size: 20px;
+}
+/* Baseline cards and authored left-to-right composition from the lab's Jev presets. */
+.jev-devtools .lab-flow-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+}
+.jev-devtools .lab-flow-toolbar label {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  font-size: 11px;
+  min-width: 0;
+}
+.jev-devtools .lab-flow-toolbar select {
+  width: auto;
+  max-width: 240px;
+  font-size: 11px;
+}
+.jev-devtools .lab-flow-toolbar > div {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.jev-devtools .lab-flow-toolbar button {
+  font-size: 11px;
+}
+.jev-devtools .lab-flow-toolbar output {
+  font-size: 11px;
+  min-width: 35px;
+  text-align: center;
+}
+.jev-devtools .lab-flow-viewport {
+  overflow: auto;
+  max-height: 65vh;
+  background: #0d0a0f;
+  border: 1px solid #302634;
+  border-radius: 8px;
+}
+.jev-devtools .lab-flow-canvas {
+  position: relative;
+  transform-origin: top left;
+  font-family: system-ui, sans-serif;
+  color: #f5f3f6;
+}
+.jev-devtools .lab-connections {
+  position: absolute;
+  inset: 0;
+  overflow: visible;
+}
+.jev-devtools .lab-connections path {
+  fill: none;
+  stroke: #645a68;
+  stroke-width: 1;
+}
+.jev-devtools .lab-connections path.active {
+  stroke: #968592;
+}
+.jev-devtools .lab-connections text {
+  fill: #b7b1bc;
+  font:
+    12px ui-monospace,
+    monospace;
+}
+.jev-devtools .lab-flow-dot {
+  fill: #e551ba;
+}
+.jev-devtools .lab-card {
+  position: absolute;
+  border: 1.3px solid #f5f3f6;
+  border-radius: 14px;
+  padding: 20px;
+  background: #0d0a0f;
+  overflow: hidden;
+}
+.jev-devtools .lab-eyebrow {
+  display: block;
+  color: #e551ba;
+  font:
+    500 10px ui-monospace,
+    monospace;
+  letter-spacing: 1px;
+  margin: 0 0 10px;
+}
+.jev-devtools .lab-card h3 {
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 1.25;
+  margin: 0 0 16px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.jev-devtools .lab-card p {
+  font-size: 15px;
+  line-height: 1.4;
+  margin: 10px 0;
+}
+.jev-devtools .lab-copy {
+  display: -webkit-box;
+  -webkit-line-clamp: 5;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+}
+.jev-devtools .lab-probability {
+  margin: 17px 0;
+}
+.jev-devtools .lab-probability > div:first-child {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 9px;
+  font-size: 15px;
+}
+.jev-devtools .lab-probability span {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.jev-devtools .lab-probability code {
+  font:
+    13px ui-monospace,
+    monospace;
+}
+.jev-devtools .lab-track {
+  height: 7px;
+  border-radius: 4px;
+  background: #f5f3f61a;
+  overflow: hidden;
+}
+.jev-devtools .lab-track i {
+  display: block;
+  height: 100%;
+  border-radius: 4px;
+  background: #e551ba;
+}
+.jev-devtools .lab-track i.lab-alternative {
+  opacity: 0.35;
+}
+.jev-devtools .lab-card .lab-result {
+  font-size: 14px;
+  margin-top: 24px;
+}
+.jev-devtools .lab-card .lab-small {
+  font-size: 12px;
+  color: #b7b1bc;
+  margin-top: 20px;
+}
+.jev-devtools .lab-idle {
+  opacity: 0.65;
+}
+.jev-devtools .lab-scale {
+  position: relative;
+  margin-top: 18px;
+  border-top: 1px solid #b7b1bc;
+  display: flex;
+  justify-content: space-between;
+  padding-top: 9px;
+}
+.jev-devtools .lab-scale > span {
+  position: absolute;
+  top: -5px;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #e551ba;
+  transform: translateX(-50%);
+}
+.jev-devtools .lab-big {
+  display: block;
+  font-size: 36px;
+  font-weight: 500;
+  margin-top: 26px;
+}
+.jev-devtools .lab-endpoints {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: #b7b1bc;
+  margin-top: 10px;
+}
+.jev-devtools .lab-image {
+  position: relative;
+}
+.jev-devtools .lab-image img {
+  display: block;
+  width: 100%;
+}
+.jev-devtools .lab-box {
+  position: absolute;
+  border: 1.5px solid #e551ba;
+  background: #e551ba15;
+}
+.jev-devtools .lab-source-image {
+  width: 100%;
+  max-height: 105px;
+  object-fit: contain;
+}
+.jev-devtools .lab-coordinates {
+  font-family: ui-monospace, monospace;
+}
+@media (prefers-reduced-motion: reduce) {
+  .jev-devtools .lab-flow-dot {
+    display: none;
+  }
+}
+/* The public TypeSafe mark travels with the package, independent of host assets. */
+.jev-devtools .typesafe-mark {
+  display: inline-block;
+  flex: 0 0 23px;
+  width: 23px;
+  height: 32px;
+  overflow: hidden;
+  line-height: 0;
+}
+.jev-devtools .typesafe-mark img {
+  display: block;
+  height: 32px;
+  width: auto;
+  max-width: none;
+}

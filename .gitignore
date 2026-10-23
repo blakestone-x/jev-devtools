@@ -1,0 +1,9 @@
+node_modules/
+**/lib/
+!apps/playground/src/lib/
+**/dist/
+*.tgz
+.env
+.env.*
+!.env.example
+.DS_Store

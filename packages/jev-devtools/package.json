@@ -1,0 +1,51 @@
+{
+  "name": "@diagram-motion-lab/jev-devtools",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.12"
+  },
+  "dependencies": {
+    "@typesafe-ai/sdk": "0.7.0"
+  },
+  "description": "A React drawer and Node server adapter for inspecting TypeSafe Jev requests.",
+  "exports": {
+    ".": {
+      "types": "./lib/src/index.d.ts",
+      "import": "./lib/src/index.js"
+    },
+    "./server": {
+      "types": "./lib/server/index.d.ts",
+      "import": "./lib/server/index.js"
+    },
+    "./styles.css": "./lib/src/inspector.css"
+  },
+  "files": [
+    "lib",
+    "README.md",
+    "LICENSE",
+    "THIRD_PARTY_NOTICES.txt"
+  ],
+  "sideEffects": [
+    "**/*.css"
+  ],
+  "peerDependencies": {
+    "react": ">=18 <20",
+    "react-dom": ">=18 <20"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/diegoag64/jev-devtools.git",
+    "directory": "packages/jev-devtools"
+  },
+  "homepage": "https://github.com/diegoag64/jev-devtools#readme",
+  "bugs": "https://github.com/diegoag64/jev-devtools/issues",
+  "scripts": {
+    "check": "tsc --noEmit",
+    "test": "node --import tsx --test tests/*.test.ts",
+    "build": "tsc -p tsconfig.lib.json && node scripts/copy-styles.mjs",
+    "prepack": "npm run build"
+  }
+}
