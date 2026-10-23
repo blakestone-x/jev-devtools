@@ -2,7 +2,7 @@
 
 A reusable React inspector with one root component and a Node server adapter. It uses Diagram Motion Lab's rounded outline cards, curved connections, pink flowing dots, and probability bars. The drawer contains searchable request history and Flow, Questions, Context, Transport, and Raw views.
 
-The **experimental 0.1.0 release** is [available on npm](https://www.npmjs.com/package/jev-devtools). Verified with sample responses through the real TypeSafe SDK; no live inference was used for verification.
+The **experimental 0.1.x package** is [available on npm](https://www.npmjs.com/package/jev-devtools). Verified with sample responses through the real TypeSafe SDK; no live inference was used for verification.
 
 ## Install in another React project
 
@@ -24,7 +24,7 @@ npm run pack:devtools
 From your React project, install the generated archive:
 
 ```sh
-npm install /absolute/path/to/jev-devtools/jev-devtools-0.1.1.tgz
+npm install /absolute/path/to/jev-devtools/jev-devtools-0.1.2.tgz
 ```
 
 Mount once near the root. No provider, client object, trace props, or application hook is needed:

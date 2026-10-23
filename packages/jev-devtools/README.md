@@ -12,6 +12,21 @@ A React drawer and Node adapter for inspecting TypeSafe Jev requests with animat
 
 The full sample recording loops above.
 
+## Set up with your coding agent
+
+In your application's coding-agent chat, paste:
+
+```text
+Set up jev-devtools in this React app. Read and follow:
+https://raw.githubusercontent.com/diegoag64/jev-devtools/main/packages/jev-devtools/skills/setup-jev-devtools/SKILL.md
+Choose the recipe for this app's framework, wire the server capture and root
+drawer, and verify with a labeled sample request. Preserve existing app behavior.
+```
+
+After installing, the version-matched instructions are available locally at `node_modules/jev-devtools/skills/setup-jev-devtools/SKILL.md` with all references included. In a workspace, read the package installed for the consuming app. Agents can follow these files without web access. Tools with skill support can install/copy the entire `setup-jev-devtools` folder into their supported skills location; npm does not register it automatically.
+
+The [setup skill](https://github.com/diegoag64/jev-devtools/blob/main/packages/jev-devtools/skills/setup-jev-devtools/SKILL.md) covers React/Node/Vite and Next.js App Router, with no-key sample verification and troubleshooting. A Node backend is required for live calls; browser-only apps can use a local Vite sample server. [Agent documentation index](https://raw.githubusercontent.com/diegoag64/jev-devtools/main/llms.txt).
+
 ## Install
 
 Install from npm:
@@ -27,7 +42,7 @@ To try unpublished local changes instead:
 npm ci
 npm run pack:devtools
 # From the consuming app:
-npm install /absolute/path/to/jev-devtools-0.1.1.tgz
+npm install /absolute/path/to/jev-devtools-0.1.2.tgz
 ```
 
 Mount once:

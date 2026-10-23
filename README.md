@@ -14,7 +14,7 @@ Follow the context, explore each question, and see the answers come together.
 [![MIT license](https://img.shields.io/badge/License-MIT-E551BA?labelColor=0D0A0F)](LICENSE)
 [![Status: experimental](https://img.shields.io/badge/Status-experimental-E551BA?labelColor=0D0A0F)](#install-in-another-react-app)
 
-[Demo](#see-it-in-motion) · [Quick start](#run-the-playground) · [Install](#install-in-another-react-app) · [Next.js](docs/nextjs.md) · [Contributing](CONTRIBUTING.md)
+[Demo](#see-it-in-motion) · [Quick start](#run-the-playground) · [Install](#install-in-another-react-app) · [AI setup](#set-up-with-your-coding-agent) · [Next.js](docs/nextjs.md) · [Contributing](CONTRIBUTING.md)
 
 </div>
 
@@ -77,6 +77,23 @@ Open http://127.0.0.1:4182/. Sample mode needs no API key. Run a scenario to see
 
 For optional live mode, copy `apps/playground/.env.example` to `apps/playground/.env.local`, set `TYPESAFE_API_KEY`, and restart. Keys stay on the server. Verification uses sample responses; live inference has not been verified.
 
+## Set up with your coding agent
+
+Copy this into your coding agent while it has your app open:
+
+```text
+Set up jev-devtools in this React app. Read and follow:
+https://raw.githubusercontent.com/diegoag64/jev-devtools/main/packages/jev-devtools/skills/setup-jev-devtools/SKILL.md
+Choose the recipe for this app's framework, wire the server capture and root
+drawer, and verify with a labeled sample request. Preserve existing app behavior.
+```
+
+The [setup skill](packages/jev-devtools/skills/setup-jev-devtools/SKILL.md) covers React with Node/Vite and Next.js App Router, server-only keys, same-origin routing, shared capture, and verification. It ships with the npm package: after installing, ask your agent to read `node_modules/jev-devtools/skills/setup-jev-devtools/SKILL.md` for version-matched, offline instructions. With pnpm or workspaces, use the package directory visible to the consuming workspace.
+
+For tools that support installed skills, copy the **whole** `setup-jev-devtools` folder (including `references/`) into that tool's supported skills directory. Otherwise, the prompt above is enough to supply the instructions. npm does not register a skill in your coding tool automatically. [llms.txt](llms.txt) is a compact documentation index for agents that accept one.
+
+A Node backend is required for live Jev calls. The guide includes a local Vite sample option when an app has no backend, and checks a captured request rather than just mounting an empty drawer. Actual setup depends on your app and the agent's file/terminal access; no API key is needed for sample verification.
+
 ## Install in another React app
 
 **[Jev DevTools is available on npm](https://www.npmjs.com/package/jev-devtools).** This is an experimental release; APIs may change before 1.0.
@@ -96,7 +113,7 @@ npm ci
 npm run pack:devtools
 
 # In your React application:
-npm install /absolute/path/to/jev-devtools/jev-devtools-0.1.1.tgz
+npm install /absolute/path/to/jev-devtools/jev-devtools-0.1.2.tgz
 ```
 
 </details>
