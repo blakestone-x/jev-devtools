@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.1.2 — October 23, 2026 (experimental)
+
+- Remove the MP4 download link from the npm README; retain the complete inline GIF.
+- Bundle a `setup-jev-devtools` agent skill with React/Node/Vite and Next.js recipes, no-key sample verification, and troubleshooting.
+- Add copyable setup prompts and a repository `llms.txt` documentation index; clarify installation versus contributor instructions.
+- Verify that the published archive includes the complete skill and its references. No runtime or public API changes.
+
 ## 0.1.1 — October 23, 2026 (experimental)
 
 - Refresh the npm README with the published installation command and npm badge; remove obsolete migration guidance.

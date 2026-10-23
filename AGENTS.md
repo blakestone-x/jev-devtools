@@ -1,5 +1,7 @@
 # Project workflow
 
+These instructions apply to contributing to this repository. For installing the published package into another app, read [the setup skill](packages/jev-devtools/skills/setup-jev-devtools/SKILL.md) and follow that app's own workflow. The skill and its references ship with npm; keep them aligned with public APIs and the independent examples. [llms.txt](llms.txt) indexes the consumer documentation.
+
 - Work on a feature branch and open a PR targeting `main` for every change unless the user explicitly requests otherwise.
 - Do not commit or push changes directly to `main`. Do not merge, publish to npm, or deploy without an explicit request.
 - Push completed feature work with verification details, and leave the PR open for review.

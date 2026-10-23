@@ -1,0 +1,24 @@
+# Jev DevTools
+
+> React request inspector for TypeSafe Jev, with a Node server adapter. Development-only opt-in; React 18/19, Node 22.12+. No TanStack dependency.
+
+## Set up in an existing app
+
+- [Setup skill](https://raw.githubusercontent.com/diegoag64/jev-devtools/main/packages/jev-devtools/skills/setup-jev-devtools/SKILL.md): Start here; selects the framework and defines a complete integration.
+- [React / Node / Vite](https://raw.githubusercontent.com/diegoag64/jev-devtools/main/packages/jev-devtools/skills/setup-jev-devtools/references/react-node.md): Root drawer, middleware, proxy, local Vite option.
+- [Next.js App Router](https://raw.githubusercontent.com/diegoag64/jev-devtools/main/packages/jev-devtools/skills/setup-jev-devtools/references/nextjs.md): Shared server adapter, optional catch-all route, client boundary.
+- [Verification and troubleshooting](https://raw.githubusercontent.com/diegoag64/jev-devtools/main/packages/jev-devtools/skills/setup-jev-devtools/references/verify.md): No-key sample, captured request, SSE, production behavior.
+
+The skill and references ship in npm at `node_modules/jev-devtools/skills/setup-jev-devtools/`. Prefer the installed version's guidance and declaration files when it differs from main. These are explicit entry points, not a promise of automatic discovery by every AI tool.
+
+## Details and examples
+
+- [Integration API and access controls](https://raw.githubusercontent.com/diegoag64/jev-devtools/main/docs/integration.md)
+- [Next.js details](https://raw.githubusercontent.com/diegoag64/jev-devtools/main/docs/nextjs.md)
+- [Vite sample app](https://github.com/diegoag64/jev-devtools/tree/main/examples/react-vite)
+- [Next.js sample app](https://github.com/diegoag64/jev-devtools/tree/main/examples/nextjs-app)
+
+## Contributing to this repository
+
+- [Repository workflow](https://raw.githubusercontent.com/diegoag64/jev-devtools/main/AGENTS.md): For package contributors, not installation into a consumer app.
+- [Release process](https://raw.githubusercontent.com/diegoag64/jev-devtools/main/docs/releases.md)

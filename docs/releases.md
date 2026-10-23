@@ -1,8 +1,8 @@
 # Packaging and releases
 
-## Patch release 0.1.1
+## Patch release 0.1.2
 
-The 0.1.1 patch refreshes the npm README and full-length demo media without runtime changes. Follow the verification and explicit publishing approval process below. Use `jev-devtools-0.1.1.tgz` for this patch; the first-publish commands are historical.
+The 0.1.2 patch removes the MP4 download link from the npm README and bundles an agent setup skill with framework recipes and verification instructions, without runtime changes. Follow the verification and explicit publishing approval process below. Use `jev-devtools-0.1.2.tgz` for this patch; the first-publish commands are historical.
 
 ## First published release
 
@@ -25,16 +25,16 @@ npm run verify:nextjs
 git diff --check
 npm pack --dry-run --json -w jev-devtools
 npm run pack:devtools
-tar -tzf jev-devtools-0.1.1.tgz
-shasum -a 256 jev-devtools-0.1.1.tgz
+tar -tzf jev-devtools-0.1.2.tgz
+shasum -a 256 jev-devtools-0.1.2.tgz
 ```
 
-The archive must contain only `package.json`, the package README, MIT license, third-party notices, and compiled JavaScript, declaration files, and scoped CSS under `lib/src` and `lib/server`. It must not contain playground code, tests, fixtures, source TypeScript, demo media, environment files, or credentials. `verify:package` checks the actual pack file list before installing into an independent React app. `verify:nextjs` checks a separate packed installation with real development and production Next.js servers. Both use sample responses; neither makes live inference calls.
+The archive must contain only `package.json`, the package README, MIT license, third-party notices, the setup skill and its three Markdown references under `skills/setup-jev-devtools`, and compiled JavaScript, declaration files, and scoped CSS under `lib/src` and `lib/server`. It must not contain playground code, tests, fixtures, source TypeScript, demo media, environment files, or credentials. `verify:package` checks the actual pack file list before installing into an independent React app. `verify:nextjs` checks a separate packed installation with real development and production Next.js servers. Both use sample responses; neither makes live inference calls.
 
 Inspect the packed manifest too:
 
 ```sh
-tar -xOf jev-devtools-0.1.1.tgz package/package.json
+tar -xOf jev-devtools-0.1.2.tgz package/package.json
 ```
 
 Confirm the name/version, public access, Node engine, React peers, three public exports, and absence of `private: true`. Save the release commit SHA and archive checksum with the release evidence. Keep the archive unchanged between final inspection and publication. Do not publish from a dirty checkout or use a wildcard that could select an old archive.

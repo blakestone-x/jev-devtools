@@ -17,11 +17,18 @@ const tarball = join(temp, packed[0].filename);
 // Guard the shipped archive, not just the source manifest's intended allowlist.
 // A widened files list or stale build output must not ship fixtures or secrets.
 const shipped = new Set(packed[0].files.map(({ path }) => path));
+const setupDocs = new Set([
+  "skills/setup-jev-devtools/SKILL.md",
+  "skills/setup-jev-devtools/references/react-node.md",
+  "skills/setup-jev-devtools/references/nextjs.md",
+  "skills/setup-jev-devtools/references/verify.md",
+]);
 for (const path of shipped) {
   assert.ok(
-    /^(?:package\.json|README\.md|LICENSE|THIRD_PARTY_NOTICES\.txt|lib\/(?:src|server)\/[\w-]+\.(?:js|d\.ts|css))$/.test(
-      path,
-    ),
+    setupDocs.has(path) ||
+      /^(?:package\.json|README\.md|LICENSE|THIRD_PARTY_NOTICES\.txt|lib\/(?:src|server)\/[\w-]+\.(?:js|d\.ts|css))$/.test(
+        path,
+      ),
     `Unexpected file in npm archive: ${path}`,
   );
 }
@@ -30,6 +37,7 @@ for (const path of [
   "README.md",
   "LICENSE",
   "THIRD_PARTY_NOTICES.txt",
+  ...setupDocs,
 ]) {
   assert.ok(shipped.has(path), `Missing package documentation: ${path}`);
 }
