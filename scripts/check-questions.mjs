@@ -39,6 +39,24 @@ export async function checkQuestions({
   // Virtualization must settle with a real answer in view in both directions.
   const scroller = page.locator(".questions-viewport");
   await scroller.hover({ position: { x: 4, y: 4 } });
+  const immediateJumpAnswer = await scroller.evaluate(async (viewport) => {
+    viewport.scrollTop = viewport.scrollHeight;
+    await new Promise(requestAnimationFrame);
+    await new Promise(requestAnimationFrame);
+    viewport.scrollTop = 0;
+    await new Promise(requestAnimationFrame);
+    await new Promise(requestAnimationFrame);
+    return {
+      busy: !!viewport.querySelector('[aria-busy="true"]'),
+      answer: !!viewport.querySelector(
+        '.questions-row[data-index="0"] .answer',
+      ),
+    };
+  });
+  assert.ok(
+    !immediateJumpAnswer.busy && immediateJumpAnswer.answer,
+    "An isolated end-to-start jump must not wait for scroll previews to settle",
+  );
   let previousOffset = await scroller.evaluate((el) => el.scrollTop);
   for (const delta of [180, 180, 600, 600, -600, -600, -180, -180]) {
     await page.mouse.wheel(0, delta);

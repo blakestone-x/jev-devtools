@@ -75,7 +75,11 @@ export function Questions({ trace }: { trace: Trace }) {
     seekingValue.current = next;
     setSeekingState(next);
   }, []);
-  const scrollSample = useRef<{ offset: number; time: number } | null>(null);
+  const scrollSample = useRef<{
+    offset: number;
+    time: number;
+    fastDirection: number;
+  } | null>(null);
   const scrollIdle = useRef<ReturnType<typeof setTimeout> | undefined>(
     undefined,
   );
@@ -222,22 +226,41 @@ export function Questions({ trace }: { trace: Trace }) {
           const offset = event.currentTarget.scrollTop;
           const time = performance.now();
           const previous = scrollSample.current;
-          if (!previous || time - previous.time >= 8)
-            scrollSample.current = { offset, time };
           clearTimeout(scrollIdle.current);
           scrollIdle.current = setTimeout(() => {
             scrollSample.current = null;
             explicitJump.current = false;
             setSeeking(false);
           }, 120);
-          if (explicitJump.current || !previous) return;
+          if (explicitJump.current) return;
+          if (!previous) {
+            scrollSample.current = { offset, time, fastDirection: 0 };
+            return;
+          }
           const elapsed = time - previous.time;
           if (elapsed < 8) return;
           const velocity =
             (Math.abs(offset - previous.offset) / elapsed) * 1000;
-          // Hysteresis avoids flickering near the threshold. Ordinary reading
-          // stays fully rendered; rapid scanning defers expensive answer DOM.
-          if (velocity > 4000) setSeeking(true);
+          // A jump across most of the list is a destination change, not a
+          // scan. Measurement corrections around its endpoints can otherwise
+          // look like additional high-speed samples.
+          const jump =
+            Math.abs(offset - previous.offset) >
+            Math.max(
+              event.currentTarget.clientHeight,
+              (event.currentTarget.scrollHeight -
+                event.currentTarget.clientHeight) /
+                2,
+            );
+          const fastDirection =
+            !jump && velocity > 4000 ? Math.sign(offset - previous.offset) : 0;
+          scrollSample.current = { offset, time, fastDirection };
+          // Two fast samples in the same direction distinguish continuous
+          // scanning from an isolated jump. A lower exit threshold prevents
+          // flickering as the reader slows down.
+          if (jump) setSeeking(false);
+          else if (fastDirection && fastDirection === previous.fastDirection)
+            setSeeking(true);
           else if (velocity < 1800) setSeeking(false);
         }}
         onFocusCapture={(event) => {
