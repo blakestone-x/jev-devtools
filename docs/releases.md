@@ -11,6 +11,7 @@ npm test
 npm run build
 npm run check:playground
 npm run verify:package
+npm run verify:nextjs
 npm run pack:devtools
 ```
 

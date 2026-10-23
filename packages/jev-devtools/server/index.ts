@@ -177,6 +177,20 @@ export function createJevDevtools(options: JevDevtoolsServerOptions) {
   }
   return {
     handle,
+    /**
+     * For Node framework routes whose Request URL uses an internal hostname.
+     * Require the actual Host header to match the configured public authority;
+     * never trust forwarded host/protocol headers. Origin checks still apply.
+     */
+    handleNodeRoute(request: Request): Promise<Response> {
+      if (!enabled()) return handle(request);
+      if (request.headers.get("host") !== new URL(origin).host)
+        return Promise.resolve(
+          json({ error: "Same-origin requests required" }, 403),
+        );
+      const url = new URL(request.url);
+      return handle(new Request(origin + url.pathname + url.search, request));
+    },
     middleware,
     createClient(
       clientOptions: ConstructorParameters<typeof TypeSafeClient>[0],
@@ -203,4 +217,36 @@ export function createJevDevtools(options: JevDevtoolsServerOptions) {
       for (const close of [...streams]) close();
     },
   };
+}
+
+const sharedAdaptersKey = Symbol.for(
+  "@diagram-motion-lab/jev-devtools/adapters/v1",
+);
+type Adapter = ReturnType<typeof createJevDevtools>;
+
+/**
+ * Reuse one adapter across server module reloads in the same Node realm.
+ * Use a stable app-specific key. The first options factory wins until dispose
+ * or process restart; restart after editing configuration/auth/redaction callbacks.
+ * This does not share history between workers or serverless instances.
+ */
+export function getJevDevtools(
+  key: string,
+  createOptions: () => JevDevtoolsServerOptions,
+): Adapter {
+  if (!key.trim()) throw new Error("A non-empty application key is required");
+  const shared = globalThis as typeof globalThis & {
+    [sharedAdaptersKey]?: Map<string, Adapter>;
+  };
+  const adapters = (shared[sharedAdaptersKey] ??= new Map());
+  const existing = adapters.get(key);
+  if (existing) return existing;
+  const adapter = createJevDevtools(createOptions());
+  const dispose = adapter.dispose;
+  adapter.dispose = () => {
+    dispose();
+    if (adapters.get(key) === adapter) adapters.delete(key);
+  };
+  adapters.set(key, adapter);
+  return adapter;
 }

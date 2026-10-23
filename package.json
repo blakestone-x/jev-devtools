@@ -18,7 +18,8 @@
     "test": "npm run build:package && npm test --workspaces",
     "verify:package": "node scripts/verify-package.mjs",
     "check:playground": "node scripts/check-playground.mjs",
-    "pack:devtools": "npm pack -w @diagram-motion-lab/jev-devtools --pack-destination ."
+    "pack:devtools": "npm pack -w @diagram-motion-lab/jev-devtools --pack-destination .",
+    "verify:nextjs": "node scripts/verify-nextjs.mjs"
   },
   "devDependencies": {
     "@types/node": "26.6.5",
