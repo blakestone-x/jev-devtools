@@ -1,8 +1,10 @@
 # Packaging and releases
 
-## Patch release 0.1.3
+## Release 0.2.0 — pending publication
 
-The 0.1.3 patch isolates the drawer from host-page CSS, improves diagram pan and zoom, and synchronizes README npm links with the package version. Host-page CSS overrides no longer reach the inspector inside its Shadow DOM; public component props and server APIs are unchanged. Follow the verification and explicit publishing approval process below. Use `jev-devtools-0.1.3.tgz` for this patch; the first-publish commands are historical.
+This minor release adds compact Choice diagrams with progressive branch reveal and a complete probability table, virtualizes Questions, and reduces repeated work in transport and rendering. It includes batching, changed-trace streaming, frame-coalesced browser updates, suspended rendering while closed, and memoized unchanged views. Public component props and server setup APIs are unchanged; no integration migration is required. See the [0.2.0 changelog](../CHANGELOG.md#020--pending-publication) for behavior and tradeoffs.
+
+Version 0.2.0 is prepared but **not published**. Use `jev-devtools-0.2.0.tgz` for this release and follow the verification and explicit publishing approval process below. The first-publish commands are historical. After approval, publish the inspected 0.2.0 archive with the `latest` tag, verify the registry version and timestamp, then record the publication date in the changelog.
 
 ## First published release
 
@@ -22,11 +24,12 @@ npm run build
 npm run check:playground
 npm run verify:package
 npm run verify:nextjs
+npm run verify:drawer
 git diff --check
 npm pack --dry-run --json -w jev-devtools
 npm run pack:devtools
-tar -tzf jev-devtools-0.1.3.tgz
-shasum -a 256 jev-devtools-0.1.3.tgz
+tar -tzf jev-devtools-0.2.0.tgz
+shasum -a 256 jev-devtools-0.2.0.tgz
 ```
 
 The archive must contain only `package.json`, the package README, MIT license, third-party notices, the setup skill and its three Markdown references under `skills/setup-jev-devtools`, and compiled JavaScript, declaration files, and scoped CSS under `lib/src` and `lib/server`. It must not contain playground code, tests, fixtures, source TypeScript, demo media, environment files, or credentials. `verify:package` checks the actual pack file list before installing into an independent React app. `verify:nextjs` checks a separate packed installation with real development and production Next.js servers. Both use sample responses; neither makes live inference calls.
@@ -34,7 +37,7 @@ The archive must contain only `package.json`, the package README, MIT license, t
 Inspect the packed manifest too:
 
 ```sh
-tar -xOf jev-devtools-0.1.3.tgz package/package.json
+tar -xOf jev-devtools-0.2.0.tgz package/package.json
 ```
 
 Confirm the name/version, public access, Node engine, React peers, three public exports, and absence of `private: true`. Save the release commit SHA and archive checksum with the release evidence. Keep the archive unchanged between final inspection and publication. Do not publish from a dirty checkout or use a wildcard that could select an old archive.
