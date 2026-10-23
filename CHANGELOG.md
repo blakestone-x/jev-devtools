@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.1.1 — October 23, 2026 (experimental)
+
+- Refresh the npm README with the published installation command and npm badge; remove obsolete migration guidance.
+- Show the complete 28-second demo inline in the GitHub and npm READMEs as an optimized GIF.
+- Reduce the optional MP4 to 1280 × 716 at 30 fps and link directly to the download instead of GitHub’s file viewer.
+- Documentation and media only; no changes to the React component, server APIs, or runtime behavior.
+
 ## 0.1.0 — October 23, 2026 (experimental)
 
 First public npm release as **[`jev-devtools`](https://www.npmjs.com/package/jev-devtools/v/0.1.0)**. This is a development tool with APIs that may change before 1.0.
