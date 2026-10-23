@@ -28,9 +28,9 @@ Follow the context, explore each question, and see the answers come together.
 
 ## Why Jev DevTools?
 
-I got tired of drawing a new diagram for every Jev idea. This turns the requests your app already makes into something you can explore: one root component, a server adapter, and a drawer that follows along as you build.
+Stop drawing a new diagram for every Jev flow you build. Jev DevTools turns your app's requests into interactive diagrams: add one root component and a server adapter to explore context, questions, and returned values as you develop.
 
-Inspired by the TanStack Query DevTools workflow, built with a custom Jev drawer and the visual language of [Diagram Motion Lab](https://github.com/diegoag64/diagram-motion-lab). **TanStack is not a dependency.**
+Inspired by the TanStack Query DevTools workflow, built with a custom Jev drawer. **TanStack is not a dependency.**
 
 ### Inspect Jev requests and responses
 
@@ -190,7 +190,7 @@ Changes use feature branches and PRs by default. See [CONTRIBUTING.md](CONTRIBUT
 
 ## Credits & license
 
-Built from [Diagram Motion Lab](https://github.com/diegoag64/diagram-motion-lab), with diagram styling rooted in [Cathryn Lavery's diagram-design](https://github.com/cathrynlavery/diagram-design). TypeSafe branding belongs to its respective owner.
+Diagram styling is rooted in [Cathryn Lavery's diagram-design](https://github.com/cathrynlavery/diagram-design). TypeSafe branding belongs to its respective owner.
 
 MIT for project code; see [LICENSE](LICENSE) and [third-party notices](THIRD_PARTY_NOTICES.txt) for design provenance and branding.
 
