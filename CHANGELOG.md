@@ -9,7 +9,7 @@ Dates below use UTC and were checked against npm's publication history. The hist
 | Version | Published (UTC) | Highlights |
 | --- | --- | --- |
 | [Unreleased](#unreleased) | Not published | No additional changes yet. |
-| [0.2.0](#020--pending-publication) | Pending publication | Batched updates, changed-trace streaming, frame-coalesced rendering, less work while the drawer is closed, virtualized Questions, compact Choice diagrams, and reuse of unchanged inspector views. |
+| [0.2.0](#020--october-23-2026-experimental) | 2026-10-23 | Batched updates, changed-trace streaming, frame-coalesced rendering, less work while the drawer is closed, virtualized Questions, compact Choice diagrams, and reuse of unchanged inspector views. |
 | [0.1.3](#013--october-23-2026-experimental) | 2026-10-23 | Isolated drawer styles, diagram pan/zoom, and version-specific npm links. |
 | [0.1.2](#012--october-23-2026-experimental) | 2026-10-23 | Bundled AI setup skill and framework recipes. |
 | [0.1.1](#011--october-23-2026-experimental) | 2026-10-23 | Full inline demo GIF and published-package installation instructions. |
@@ -19,9 +19,9 @@ Dates below use UTC and were checked against npm's publication history. The hist
 
 No additional changes yet.
 
-## 0.2.0 — Pending publication
+## 0.2.0 — October 23, 2026 (experimental)
 
-Prepared from the changes merged since 0.1.3; this version has not been published to npm.
+[Published package](https://www.npmjs.com/package/jev-devtools/v/0.2.0) · [Release preparation #21](https://github.com/diegoag64/jev-devtools/pull/21). Published at 22:15:46 UTC from commit `b3bcb1097246a5065b6608397ff535ad71bb7648`.
 
 ### Performance
 
@@ -99,4 +99,4 @@ Verification uses sample responses through the real SDK. Live inference and brow
 
 ## Registry staging entry
 
-npm also lists `0.0.0-stage`, created on October 23, 2026 during the initial publishing flow. It is a staging placeholder, not a separate feature release. The first public release was `0.1.0`; `latest` pointed to `0.1.3` when this history was checked. Use the exact-version package links above to inspect a specific release.
+npm also lists `0.0.0-stage`, created on October 23, 2026 during the initial publishing flow. It is a staging placeholder, not a separate feature release. The first public release was `0.1.0`; `latest` pointed to `0.2.0` when this history was checked. Use the exact-version package links above to inspect a specific release.
