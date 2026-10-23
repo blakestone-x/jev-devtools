@@ -30,7 +30,7 @@ Follow the context, explore each question, and see the answers come together.
 
 Stop drawing a new diagram for every Jev flow you build. Jev DevTools turns your app's requests into interactive diagrams: add one root component and a server adapter to explore context, questions, and returned values as you develop.
 
-Inspired by the TanStack Query DevTools workflow, built with a custom Jev drawer. **TanStack is not a dependency.**
+Inspired by the TanStack Query DevTools workflow, built with a custom Jev drawer. TanStack Virtual powers the Questions list; the TanStack DevTools shell is not included.
 
 ### Inspect Jev requests and responses
 

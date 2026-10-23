@@ -76,7 +76,7 @@ BENCH_DRAWER_MODES=open,closed,unopened \
   npm run bench:compare -- 4007d1dae73a7c443a8738db8e4b2bbad5194971
 ```
 
-`BENCH_DRAWER_MODES` defaults to `open` for existing command-line callers. `BENCH_ROUNDS` changes ordinary timing rounds (default four); profiling runs use two rounds. `BENCH_BASE_PORT` changes the paired server ports (default 4211/4212). The command stops its own browsers and servers on completion. The CI comparison runs all three drawer modes on one Ubuntu VM and uploads raw reports, CPU profiles, and screenshots. Timings have no hardware-dependent pass/fail threshold; missing final responses and browser exceptions fail the run.
+`BENCH_DRAWER_MODES` defaults to `open` for existing command-line callers. `BENCH_ROUNDS` changes ordinary timing rounds (default four); profiling runs use two rounds. `BENCH_BASE_PORT` changes the paired server ports (default 4211/4212). The command stops its own browsers and servers on completion. Run performance comparisons locally; the hosted benchmark workflow has been retired. Timings have no hardware-dependent pass/fail threshold; missing final responses and browser exceptions fail the run.
 
 ## Correctness
 
