@@ -1109,3 +1109,11 @@
   outline: 2px solid #e551ba;
   outline-offset: -2px;
 }
+
+/* Reserve measured card geometry while rapid scrolling uses a light preview. */
+.jev-devtools .questions-row[data-preview="true"] article {
+  height: 100%;
+}
+.jev-devtools .question-scroll-preview p {
+  margin-top: 16px;
+}

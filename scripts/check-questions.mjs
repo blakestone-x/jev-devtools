@@ -35,6 +35,100 @@ export async function checkQuestions({
     (await page.locator(".question-node.standalone").count()) < 12,
     "Opening 150 questions must not mount the entire collection",
   );
+  // Native wheel events exercise the browser scroll path, independently of picker jumps.
+  // Virtualization must settle with a real answer in view in both directions.
+  const scroller = page.locator(".questions-viewport");
+  await scroller.hover({ position: { x: 4, y: 4 } });
+  let previousOffset = await scroller.evaluate((el) => el.scrollTop);
+  for (const delta of [180, 180, 600, 600, -600, -600, -180, -180]) {
+    await page.mouse.wheel(0, delta);
+    await page.waitForFunction((previous) => {
+      const viewport = document
+        .querySelector("jev-devtools-root")
+        .shadowRoot.querySelector(".questions-viewport");
+      return viewport.scrollTop !== previous;
+    }, previousOffset);
+    await settle();
+    const result = await scroller.evaluate((viewport) => {
+      const bounds = viewport.getBoundingClientRect();
+      const cards = [...viewport.querySelectorAll("article")];
+      return {
+        offset: viewport.scrollTop,
+        mounted: cards.length,
+        visibleAnswers: cards.filter((card) => {
+          const rect = card.getBoundingClientRect();
+          return (
+            rect.bottom > bounds.top &&
+            rect.top < bounds.bottom &&
+            card.querySelector(".answer")
+          );
+        }).length,
+      };
+    });
+    assert.ok(
+      result.visibleAnswers > 0,
+      "Wheel scrolling must reveal complete question cards",
+    );
+    assert.ok(
+      result.mounted < 12,
+      "Wheel scrolling must keep the rendered list bounded",
+    );
+    previousOffset = result.offset;
+  }
+  // Rapid scanning may defer answers, but labels stay available and stopping
+  // must restore complete content without another click or scroll.
+  const sawPreview = await scroller.evaluate(async (viewport) => {
+    let preview = false;
+    for (let i = 1; i <= 12; i++) {
+      viewport.scrollTop = i * 800;
+      await new Promise(requestAnimationFrame);
+      await new Promise(requestAnimationFrame);
+      preview ||= !!viewport.querySelector('article[aria-busy="true"] h3');
+    }
+    return preview;
+  });
+  assert.ok(sawPreview, "Rapid scanning keeps labeled previews available");
+  const fullWhileReading = await scroller.evaluate(async (viewport) => {
+    for (let i = 0; i < 8; i++) {
+      viewport.scrollTop += 40;
+      await new Promise(requestAnimationFrame);
+      await new Promise(requestAnimationFrame);
+    }
+    return (
+      !viewport.querySelector('[aria-busy="true"]') &&
+      !!viewport.querySelector(".answer")
+    );
+  });
+  assert.ok(
+    fullWhileReading,
+    "Slowing to reading pace restores answers without stopping",
+  );
+  // Enter fast scanning again, then verify idle restoration independently.
+  await scroller.evaluate(async (viewport) => {
+    for (let i = 0; i < 6; i++) {
+      viewport.scrollTop += 800;
+      await new Promise(requestAnimationFrame);
+      await new Promise(requestAnimationFrame);
+    }
+  });
+  await page.screenshot({ path: "benchmarks/results/questions-scanning.png" });
+  await page.waitForFunction(() => {
+    const viewport = document
+      .querySelector("jev-devtools-root")
+      .shadowRoot.querySelector(".questions-viewport");
+    const bounds = viewport.getBoundingClientRect();
+    return (
+      !viewport.querySelector('[aria-busy="true"]') &&
+      [...viewport.querySelectorAll("article")].some((card) => {
+        const rect = card.getBoundingClientRect();
+        return (
+          rect.bottom > bounds.top &&
+          rect.top < bounds.bottom &&
+          card.querySelector(".answer")
+        );
+      })
+    );
+  });
   // Visit every answer, not merely the first and last or a synthetic renderer.
   for (let index = 0; index < 150; index++) {
     await jump(index);
@@ -110,9 +204,18 @@ export async function checkQuestions({
   );
   // A focused disclosure stays mounted even when manual scrolling moves it away.
   await card(1).locator("summary").focus();
-  await page.locator(".questions-viewport").evaluate((el) => {
-    el.scrollTop = el.scrollHeight;
+  await page.locator(".questions-viewport").evaluate(async (el) => {
+    for (let i = 1; i <= 8; i++) {
+      el.scrollTop = (el.scrollHeight * i) / 8;
+      await new Promise(requestAnimationFrame);
+      await new Promise(requestAnimationFrame);
+    }
   });
+  assert.equal(
+    await card(1).locator("details[open]").count(),
+    1,
+    "A focused answer stays complete during rapid scrolling",
+  );
   await settle();
   assert.equal(
     await card(1)

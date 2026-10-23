@@ -422,6 +422,7 @@ const inView = (card) => {
   return a.bottom > b.top && a.top < b.bottom;
 };
 async function questionAction(action) {
+  let previewSteps = 0;
   const spec = cases.find((s) => s.id === current);
   const start = performance.now();
   if (action === "open") {
@@ -443,18 +444,37 @@ async function questionAction(action) {
       el.scrollTop = ((el.scrollHeight - el.clientHeight) * i) / 120;
       await frame();
       await frame();
+      if (questionScroller().querySelector('article[aria-busy="true"]'))
+        previewSteps++;
+    }
+  } else if (action === "read") {
+    // Reading pace: 40 px per two frames, below the rapid-scan threshold.
+    questionScroller().scrollTop = 0;
+    await pause(200);
+    for (let i = 0; i <= 120; i++) {
+      questionScroller().scrollTop = i * 40;
+      await frame();
+      await frame();
+      if (questionScroller().querySelector('article[aria-busy="true"]'))
+        previewSteps++;
     }
   } else {
     const el = questionScroller();
     el.scrollTop = action === "last" ? el.scrollHeight : 0;
   }
   const target =
-    action === "last" || action === "sweep" ? spec.questions - 1 : 0;
+    action === "read"
+      ? null
+      : action === "last" || action === "sweep"
+        ? spec.questions - 1
+        : 0;
   let ready = false;
   while (performance.now() - start < 30000) {
     await frame();
-    const card = questionCards().find(
-      (c) => c.querySelector("h3")?.textContent === `question_${target}`,
+    const card = questionCards().find((c) =>
+      target === null
+        ? inView(c)
+        : c.querySelector("h3")?.textContent === `question_${target}`,
     );
     if (inView(card) && card.querySelector(".answer")) {
       ready = true;
@@ -469,6 +489,7 @@ async function questionAction(action) {
     scenario: current,
     action,
     target,
+    previewSteps,
     readyAfterTwoFramesMs: performance.now() - start,
     mountedQuestions: questionCards().length,
     questionElements: questionCards().reduce(
@@ -481,6 +502,6 @@ async function questionAction(action) {
   show(result);
   $("status").textContent = `Questions ${action} complete`;
 }
-for (const action of ["open", "flow", "first", "last", "sweep"])
+for (const action of ["open", "flow", "first", "last", "sweep", "read"])
   $(`questions-${action}`).onclick = () =>
     operation(() => questionAction(action));

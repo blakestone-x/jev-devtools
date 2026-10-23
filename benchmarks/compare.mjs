@@ -8,6 +8,9 @@ import { once } from "node:events";
 const root = resolve(import.meta.dirname, "..");
 const ref = process.argv[2];
 const questions = process.env.BENCH_SUITE === "questions";
+const profileRounds = Number(process.env.BENCH_PROFILE_ROUNDS ?? 2);
+if (!Number.isSafeInteger(profileRounds) || profileRounds < 0)
+  throw new Error("Invalid BENCH_PROFILE_ROUNDS");
 if (!ref) throw new Error("Usage: npm run bench:compare -- BASE_REF");
 const base = execFileSync("git", ["rev-parse", "--verify", `${ref}^{commit}`], {
   cwd: root,
@@ -87,7 +90,7 @@ try {
   ]);
   run(process.execPath, [join(baseline, "scripts/copy-styles.mjs")]);
   run("npm", ["run", "build:package"]);
-  for (const profiling of [false, true]) {
+  for (const profiling of profileRounds ? [false, true] : [false]) {
     const port = Number(process.env.BENCH_BASE_PORT || 4211);
     const variants = [
       { port, revision: `base-${base.slice(0, 7)}`, entry: baseline },
@@ -162,7 +165,9 @@ try {
         env: {
           ...process.env,
           BENCH_PROFILE: profiling ? "1" : "0",
-          BENCH_ROUNDS: profiling ? "2" : process.env.BENCH_ROUNDS || "4",
+          BENCH_ROUNDS: profiling
+            ? String(profileRounds)
+            : process.env.BENCH_ROUNDS || "4",
           BENCH_SCENARIOS: questions
             ? process.env.BENCH_SCENARIOS || "small,many-questions"
             : profiling

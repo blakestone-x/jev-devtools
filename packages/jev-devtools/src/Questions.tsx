@@ -1,6 +1,7 @@
 import {
   memo,
   useCallback,
+  useEffect,
   useLayoutEffect,
   useId,
   useMemo,
@@ -65,6 +66,13 @@ export function Questions({ trace }: { trace: Trace }) {
   );
   const viewport = useRef<HTMLDivElement>(null);
   const sizes = useRef(new Map<string, number>());
+  const [seeking, setSeeking] = useState(false);
+  const scrollSample = useRef<{ offset: number; time: number } | null>(null);
+  const scrollIdle = useRef<ReturnType<typeof setTimeout> | undefined>(
+    undefined,
+  );
+  const explicitJump = useRef(false);
+  useEffect(() => () => clearTimeout(scrollIdle.current), []);
   const pendingFocus = useRef<number | null>(null);
   const [focused, setFocused] = useState<number | null>(null);
   const [destination, setDestination] = useState(0);
@@ -110,6 +118,10 @@ export function Questions({ trace }: { trace: Trace }) {
       }),
     measureElement: (element, entry, instance) => {
       const key = element.dataset.questionKey!;
+      // A fast-scroll preview reserves the last measured height. Never replace
+      // the real measurement cache with its temporary placeholder geometry.
+      if (element.dataset.preview === "true")
+        return sizes.current.get(key) || 600;
       const height = measureElement(element, entry, instance);
       if (height > 0) sizes.current.set(key, height);
       return height || sizes.current.get(key) || 600;
@@ -119,6 +131,9 @@ export function Questions({ trace }: { trace: Trace }) {
   const goTo = useCallback(
     (index: number, focus = false) => {
       const next = Math.max(0, Math.min(entries.length - 1, index));
+      explicitJump.current = true;
+      setSeeking(false);
+      scrollSample.current = null;
       setDestination(next);
       if (focus) {
         pendingFocus.current = next;
@@ -195,6 +210,28 @@ export function Questions({ trace }: { trace: Trace }) {
         role="region"
         aria-label="Questions and answers"
         aria-describedby={helpId}
+        onScroll={(event) => {
+          const offset = event.currentTarget.scrollTop;
+          const time = performance.now();
+          const previous = scrollSample.current;
+          if (!previous || time - previous.time >= 8)
+            scrollSample.current = { offset, time };
+          clearTimeout(scrollIdle.current);
+          scrollIdle.current = setTimeout(() => {
+            scrollSample.current = null;
+            explicitJump.current = false;
+            setSeeking(false);
+          }, 120);
+          if (explicitJump.current || !previous) return;
+          const elapsed = time - previous.time;
+          if (elapsed < 8) return;
+          const velocity =
+            (Math.abs(offset - previous.offset) / elapsed) * 1000;
+          // Hysteresis avoids flickering near the threshold. Ordinary reading
+          // stays fully rendered; rapid scanning defers expensive answer DOM.
+          if (velocity > 4000) setSeeking(true);
+          else if (velocity < 1800) setSeeking(false);
+        }}
         onFocusCapture={(event) => {
           const row = (event.target as HTMLElement).closest<HTMLElement>(
             "[data-index]",
@@ -240,11 +277,18 @@ export function Questions({ trace }: { trace: Trace }) {
         >
           {items.map((item) => {
             const [name, question] = entries[item.index];
+            const preview = seeking && focused !== item.index;
             return (
               <div
                 key={item.key}
                 data-index={item.index}
                 data-question-key={name}
+                data-preview={preview || undefined}
+                style={
+                  preview
+                    ? { height: sizes.current.get(name) || 600 }
+                    : undefined
+                }
                 ref={virtualizer.measureElement}
                 className="questions-row"
                 role="listitem"
@@ -254,16 +298,29 @@ export function Questions({ trace }: { trace: Trace }) {
                 <article
                   className="question-node standalone"
                   tabIndex={-1}
+                  aria-busy={preview || undefined}
                   aria-label={`Question ${item.index + 1}: ${name}`}
                 >
-                  <QuestionContent
-                    name={name}
-                    question={question}
-                    answer={trace.result?.answers[name]}
-                    image={image}
-                    legendOpen={!!legends.get(name)}
-                    onLegendChange={onLegendChange}
-                  />
+                  {preview ? (
+                    <div className="question-scroll-preview">
+                      <header>
+                        <h3>{name}</h3>
+                        <span className="type">{question.type}</span>
+                      </header>
+                      <p className="muted">
+                        Pause scrolling to inspect this answer.
+                      </p>
+                    </div>
+                  ) : (
+                    <QuestionContent
+                      name={name}
+                      question={question}
+                      answer={trace.result?.answers[name]}
+                      image={image}
+                      legendOpen={!!legends.get(name)}
+                      onLegendChange={onLegendChange}
+                    />
+                  )}
                 </article>
               </div>
             );

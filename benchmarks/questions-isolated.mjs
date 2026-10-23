@@ -99,7 +99,7 @@ for (let round = 0; round < rounds; round++) {
           coldOpen,
           actions: {},
         };
-        for (const action of ["open", "last", "first", "sweep"]) {
+        for (const action of ["open", "last", "first", "sweep", "read"]) {
           const before = await metrics(cdp);
           const measurement = await operate(
             "#questions-" + action,
