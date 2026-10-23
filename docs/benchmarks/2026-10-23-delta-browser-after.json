@@ -1,0 +1,159 @@
+{
+  "timestamp": "2026-10-23T17:21:14.884Z",
+  "environment": {
+    "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Safari/537.36",
+    "viewport": [
+      1710,
+      961
+    ],
+    "dpr": 2,
+    "hardwareConcurrency": 8,
+    "production": true
+  },
+  "mounts": [],
+  "streams": [
+    {
+      "scenario": "max-history",
+      "closed": false,
+      "pulses": 5,
+      "calls": 5,
+      "sent": 5,
+      "bytes": 43714,
+      "elapsedMs": 5091.900000095367,
+      "frames": {
+        "n": 280,
+        "median": 16.699999999999818,
+        "p95": 17.599999999998545,
+        "max": 266.6999999999989
+      },
+      "frameGapsOver34Ms": 4,
+      "longTasks": 1,
+      "longTaskMs": 297,
+      "longestTaskMs": 297,
+      "visibility": "visible",
+      "achievedHz": 0.981951727234697
+    },
+    {
+      "scenario": "max-history",
+      "closed": false,
+      "pulses": 5,
+      "calls": 5,
+      "sent": 5,
+      "bytes": 43715,
+      "elapsedMs": 5110.200000047684,
+      "frames": {
+        "n": 174,
+        "median": 16.69999999999891,
+        "p95": 49.899999999999636,
+        "max": 499.89999999999964
+      },
+      "frameGapsOver34Ms": 10,
+      "longTasks": 7,
+      "longTaskMs": 1589,
+      "longestTaskMs": 483,
+      "visibility": "visible",
+      "achievedHz": 0.9784352862810349
+    },
+    {
+      "scenario": "max-history",
+      "closed": false,
+      "pulses": 5,
+      "calls": 5,
+      "sent": 5,
+      "bytes": 43725,
+      "elapsedMs": 5319.300000190735,
+      "frames": {
+        "n": 248,
+        "median": 16.700000000000728,
+        "p95": 50,
+        "max": 116.60000000000218
+      },
+      "frameGapsOver34Ms": 14,
+      "longTasks": 4,
+      "longTaskMs": 251,
+      "longestTaskMs": 82,
+      "visibility": "visible",
+      "achievedHz": 0.9399733047244402
+    },
+    {
+      "scenario": "combined",
+      "closed": false,
+      "pulses": 5,
+      "calls": 5,
+      "sent": 10,
+      "bytes": 953713,
+      "elapsedMs": 5068.600000143051,
+      "frames": {
+        "n": 253,
+        "median": 16.700000000000728,
+        "p95": 33.400000000001455,
+        "max": 183.29999999999927
+      },
+      "frameGapsOver34Ms": 11,
+      "longTasks": 7,
+      "longTaskMs": 737,
+      "longestTaskMs": 189,
+      "visibility": "visible",
+      "achievedHz": 1.9729313813908713
+    },
+    {
+      "scenario": "combined",
+      "closed": false,
+      "pulses": 5,
+      "calls": 5,
+      "sent": 10,
+      "bytes": 953712,
+      "elapsedMs": 5071.700000047684,
+      "frames": {
+        "n": 267,
+        "median": 16.69999999999709,
+        "p95": 17.700000000004366,
+        "max": 116.70000000000073
+      },
+      "frameGapsOver34Ms": 8,
+      "longTasks": 6,
+      "longTaskMs": 468,
+      "longestTaskMs": 95,
+      "visibility": "visible",
+      "achievedHz": 1.9717254569288367
+    },
+    {
+      "scenario": "combined",
+      "closed": false,
+      "pulses": 5,
+      "calls": 5,
+      "sent": 10,
+      "bytes": 953729,
+      "elapsedMs": 5068.899999856949,
+      "frames": {
+        "n": 261,
+        "median": 16.69999999999709,
+        "p95": 33.400000000001455,
+        "max": 116.69999999999709
+      },
+      "frameGapsOver34Ms": 10,
+      "longTasks": 7,
+      "longTaskMs": 568,
+      "longestTaskMs": 105,
+      "visibility": "visible",
+      "achievedHz": 1.9728146146663403
+    }
+  ],
+  "interactions": [],
+  "transportMode": "adapter",
+  "revision": "changed-traces",
+  "provenance": {
+    "baseCommit": "4df055705b0b63e62171eedb6179c7ae5a12b738",
+    "workingTreeDirty": true,
+    "runtimeSourceSha256": {
+      "server/index.ts": "88355db950fa9936122359fff3f81b95cf16c78b2455f862e17501b69c8e1bb4",
+      "server/recorder.ts": "56877f9f2bc906d52c1fd6f03b0750bd397afd821cdc097fc0d9eb05452819fe",
+      "src/protocol.ts": "19211889943188eea3ab5f08286975ed1df86cc3dc9a12db47a2ee09e4264fdf",
+      "src/ConnectedInspector.tsx": "142aebeeb89ae602dc04abd6be796c25eaa1ed700716d34c49f451a3bf23fe9b",
+      "src/trace-store.ts": "8b74b478d7c15d089e6fcbef7394c44057181162222bc91fe52f6ed8c5f7a28e",
+      "src/trace-stream.ts": "57a89814197714324c518a2018f4c42a261a8429c15df680e643eab1a47588b9",
+      "src/index.tsx": "c7818f4f691a33051deda8dc97e5db3bef9e0da57ee0390df4e8f9417bb906aa"
+    },
+    "note": "Incremental working tree, measured before commit. Runtime code unchanged since measurement."
+  }
+}

@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { JevPanel } from "./JevDevtools.js";
 import { JevDrawer } from "./JevDrawer.js";
-import type { Snapshot, Trace } from "./protocol.js";
+import type { Trace } from "./protocol.js";
+import { connectTraceStream } from "./trace-stream.js";
 import type { JevDevtoolsProps } from "./index.js";
 function endpointUrl(endpoint: string) {
   const url = new URL(endpoint, window.location.origin);
@@ -25,7 +26,7 @@ export default function ConnectedInspector({
     [connection, setConnection] = useState("connecting");
   useEffect(() => {
     let alive = true,
-      events: EventSource | undefined;
+      disconnect = () => {};
     const abort = new AbortController();
     setTraces([]);
     setConnection("connecting");
@@ -46,22 +47,7 @@ export default function ConnectedInspector({
         if (config.version !== 1 || !config.enabled)
           throw new Error("Unsupported inspector endpoint");
         if (!alive) return;
-        events = new EventSource(url + "/events");
-        events.addEventListener("snapshot", (event) => {
-          if (!alive) return;
-          try {
-            const data = JSON.parse((event as MessageEvent).data) as Snapshot;
-            if (data.version !== 1 || !Array.isArray(data.traces))
-              throw new Error();
-            setTraces(data.traces);
-            setConnection("connected");
-          } catch {
-            setConnection("Invalid inspector update");
-          }
-        });
-        events.onerror = () => {
-          if (alive) setConnection("reconnecting");
-        };
+        disconnect = connectTraceStream(url, setTraces, setConnection);
       } catch (error) {
         if (alive)
           setConnection(
@@ -72,7 +58,7 @@ export default function ConnectedInspector({
     return () => {
       alive = false;
       abort.abort();
-      events?.close();
+      disconnect();
     };
   }, [endpoint]);
   async function clear() {

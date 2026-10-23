@@ -147,7 +147,7 @@ app.use(inspector.middleware); // At root, before fallback routes.
 // Call inspector.dispose() when shutting down the server.
 ```
 
-Only calls through this client are recorded. Both routes and inspector must share the same adapter instance. History is bounded and in memory, and the browser connects over same-origin SSE. React 18/19 are peer dependencies. Tailwind, shadcn, and the playground are not bundled with the library.
+Only calls through this client are recorded. Both routes and inspector must share the same adapter instance. History is bounded and in memory, and the browser connects over same-origin SSE, receiving an initial snapshot followed by changed traces. React 18/19 are peer dependencies. Tailwind, shadcn, and the playground are not bundled with the library.
 
 See the [complete integration guide](docs/integration.md) for Next.js, proxies, custom endpoints, authorization, redaction, session scoping, and runtime limits. The adapter currently targets Node, not edge runtimes or distributed/serverless aggregation. Capture and display are both disabled by default.
 

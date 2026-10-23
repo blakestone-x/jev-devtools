@@ -99,7 +99,9 @@ function capture(
 
 export class JevRecorder {
   private traces = new Map<string, Trace>();
-  private listeners = new Set<() => void>();
+  private listeners = new Set<(sessions: ReadonlySet<string>) => void>();
+  private revision = 0;
+  private revisions = new WeakMap<Trace, number>();
   private context = new AsyncLocalStorage<string>();
   private limit: number;
   constructor(private options: CaptureOptions = {}) {
@@ -110,21 +112,44 @@ export class JevRecorder {
       [...this.traces.values()].filter((t) => t.session === session).reverse(),
     );
   }
-  subscribe(listener: () => void) {
+  // Only changed payloads are cloned. IDs/order are bounded by the retained
+  // history; no tombstone log or per-session history cache is needed.
+  changes(session: string, after?: number) {
+    const current = [...this.traces.values()]
+      .filter((t) => t.session === session)
+      .reverse();
+    return {
+      revision: this.revision,
+      order: current.map((t) => t.id),
+      upserts: structuredClone(
+        current.filter(
+          (t) => after === undefined || this.revisions.get(t)! > after,
+        ),
+      ),
+    };
+  }
+  subscribe(listener: (sessions: ReadonlySet<string>) => void) {
     this.listeners.add(listener);
     return () => {
       this.listeners.delete(listener);
     };
   }
   clear(session: string) {
+    let changed = false;
     for (const [id, t] of this.traces)
-      if (t.session === session) this.traces.delete(id);
-    this.notify();
+      if (t.session === session) {
+        this.traces.delete(id);
+        changed = true;
+      }
+    if (changed) {
+      this.revision++;
+      this.notify(new Set([session]));
+    }
   }
-  private notify() {
+  private notify(sessions: ReadonlySet<string>) {
     for (const listener of this.listeners) {
       try {
-        listener();
+        listener(sessions);
       } catch {
         /* Observers must not affect inference. */
       }
@@ -134,7 +159,8 @@ export class JevRecorder {
     const t = this.traces.get(id);
     if (t) {
       update(t);
-      this.notify();
+      this.revisions.set(t, ++this.revision);
+      this.notify(new Set([t.session]));
     }
   }
 
@@ -215,9 +241,15 @@ export class JevRecorder {
             attempts: [],
             captureWarnings: [...warnings],
           });
-          while (this.traces.size > this.limit)
-            this.traces.delete(this.traces.keys().next().value!);
-          this.notify();
+          const trace = this.traces.get(id)!;
+          this.revisions.set(trace, ++this.revision);
+          const sessions = new Set([trace.session]);
+          while (this.traces.size > this.limit) {
+            const oldest = this.traces.values().next().value!;
+            sessions.add(oldest.session);
+            this.traces.delete(oldest.id);
+          }
+          this.notify(sessions);
           const fail = (error: unknown) =>
             this.update(id, (t) => {
               const e = error as {

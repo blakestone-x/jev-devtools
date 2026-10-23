@@ -3,6 +3,8 @@ import { lazy, Suspense, useEffect, useState } from "react";
 export type {
   Trace,
   Snapshot,
+  StreamSnapshot,
+  TraceDelta,
   Json,
   AnswerView,
   QuestionView,

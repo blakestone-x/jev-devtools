@@ -40,15 +40,36 @@ export function createJevDevtools(options: JevDevtoolsServerOptions) {
   const recorder = new JevRecorder(options),
     scope = new AsyncLocalStorage<string>();
   const streams = new Set<() => void>();
-  type SnapshotFor = (session: string) => Uint8Array;
-  type Flush = (snapshotFor: SnapshotFor) => void;
+  type Encoded = { bytes: Uint8Array; revision: number };
+  type UpdateFor = (
+    session: string,
+    incremental: boolean,
+    cursor?: number,
+  ) => Encoded;
+  type Flush = (updateFor: UpdateFor) => void;
   const pending = new Set<Flush>();
   const encoder = new TextEncoder();
   let scheduled: ReturnType<typeof setImmediate> | undefined;
-  const encodeSnapshot: SnapshotFor = (session) =>
-    encoder.encode(
-      `event: snapshot\ndata: ${JSON.stringify({ version: 1, traces: recorder.snapshot(session) })}\n\n`,
-    );
+  const encodeUpdate: UpdateFor = (session, incremental, cursor) => {
+    if (!incremental)
+      return {
+        bytes: encoder.encode(
+          `event: snapshot\ndata: ${JSON.stringify({ version: 1, traces: recorder.snapshot(session) })}\n\n`,
+        ),
+        revision: 0,
+      };
+    const { revision, upserts, order } = recorder.changes(session, cursor);
+    const initial = cursor === undefined;
+    const data = initial
+      ? { version: 2, revision, traces: upserts }
+      : { version: 2, base: cursor, revision, upserts, order };
+    return {
+      bytes: encoder.encode(
+        `event: ${initial ? "snapshot" : "delta"}\ndata: ${JSON.stringify(data)}\n\n`,
+      ),
+      revision,
+    };
+  };
   function schedule(flush: Flush) {
     pending.add(flush);
     if (scheduled) return;
@@ -58,16 +79,18 @@ export function createJevDevtools(options: JevDevtoolsServerOptions) {
       pending.clear();
       // Cache only for this synchronous delivery turn and only within a session.
       // Each reader owns its bytes; mutating one Response must not corrupt another.
-      const encoded = new Map<string, Uint8Array>();
-      const snapshotFor: SnapshotFor = (session) => {
-        let bytes = encoded.get(session);
-        if (!bytes) {
-          bytes = encodeSnapshot(session);
-          encoded.set(session, bytes);
+      const encoded = new Map<string, Encoded>();
+      const updateFor: UpdateFor = (session, incremental, cursor) => {
+        // Slow readers can have older cursors even in the same session.
+        const key = JSON.stringify([session, incremental, cursor]);
+        let update = encoded.get(key);
+        if (!update) {
+          update = encodeUpdate(session, incremental, cursor);
+          encoded.set(key, update);
         }
-        return bytes.slice();
+        return { bytes: update.bytes.slice(), revision: update.revision };
       };
-      for (const deliver of batch) deliver(snapshotFor);
+      for (const deliver of batch) deliver(updateFor);
     });
   }
   function unschedule(flush: Flush) {
@@ -116,6 +139,8 @@ export function createJevDevtools(options: JevDevtoolsServerOptions) {
       return json({ error: "Not found" }, 404);
     if (request.method !== "GET")
       return json({ error: "Method not allowed" }, 405);
+    const incremental = url.searchParams.get("protocol") === "2";
+    let cursor: number | undefined;
     let cleanup = () => {},
       wake = () => {},
       flush: Flush = () => {};
@@ -123,11 +148,13 @@ export function createJevDevtools(options: JevDevtoolsServerOptions) {
       start(controller) {
         let closed = false,
           dirty = true;
-        flush = (snapshotFor) => {
+        flush = (updateFor) => {
           if (closed || !dirty || (controller.desiredSize ?? 0) <= 0) return;
           dirty = false;
           try {
-            controller.enqueue(snapshotFor(session));
+            const update = updateFor(session, incremental, cursor);
+            controller.enqueue(update.bytes);
+            cursor = update.revision;
           } catch {
             // Deferred observer failures must not escape into the application's
             // event loop or prevent other viewers from receiving their update.
@@ -138,7 +165,8 @@ export function createJevDevtools(options: JevDevtoolsServerOptions) {
           if (!closed && dirty && (controller.desiredSize ?? 0) > 0)
             schedule(flush);
         };
-        const unsubscribe = recorder.subscribe(() => {
+        const unsubscribe = recorder.subscribe((sessions) => {
+          if (!sessions.has(session)) return;
           dirty = true;
           wake();
         });
@@ -163,7 +191,7 @@ export function createJevDevtools(options: JevDevtoolsServerOptions) {
         streams.add(cleanup);
         request.signal.addEventListener("abort", cleanup, { once: true });
         if (request.signal.aborted) cleanup();
-        else flush(encodeSnapshot);
+        else flush(encodeUpdate);
       },
       pull() {
         // Reading must not bypass the batching boundary. A full queue retains
@@ -265,9 +293,7 @@ export function createJevDevtools(options: JevDevtoolsServerOptions) {
   };
 }
 
-const sharedAdaptersKey = Symbol.for(
-  "jev-devtools/adapters/v1",
-);
+const sharedAdaptersKey = Symbol.for("jev-devtools/adapters/v1");
 type Adapter = ReturnType<typeof createJevDevtools>;
 
 /**

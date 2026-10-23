@@ -6,7 +6,8 @@ import { setTimeout as delay } from "node:timers/promises";
 import { createJevDevtools, getJevDevtools } from "../server/index";
 import { choice } from "@typesafe-ai/sdk";
 import { flowAnswer } from "../src/flow-model";
-import type { Trace } from "../src/protocol";
+import type { Trace, StreamSnapshot, TraceDelta } from "../src/protocol";
+import { TraceStore } from "../src/trace-store";
 
 const origin = "http://localhost:5199";
 const req = (path = "", init: RequestInit = {}) =>
@@ -312,10 +313,18 @@ test("Node framework routes use the verified Host without trusting forwarded hea
 async function watch(
   adapter: ReturnType<typeof createJevDevtools>,
   headers: HeadersInit = {},
+  incremental = false,
 ) {
-  const response = await adapter.handle(req("/events", { headers }));
+  const response = await adapter.handle(
+    req("/events" + (incremental ? "?protocol=2" : ""), { headers }),
+  );
   const reader = response.body!.getReader();
   const received: { traces: Trace[] }[] = [];
+  const messages: {
+    kind: "snapshot" | "delta";
+    data: StreamSnapshot | TraceDelta;
+  }[] = [];
+  const store = new TraceStore();
   const done = (async () => {
     let pending = "";
     const decoder = new TextDecoder();
@@ -327,14 +336,17 @@ async function watch(
       while ((end = pending.indexOf("\n\n")) >= 0) {
         const event = pending.slice(0, end);
         pending = pending.slice(end + 2);
-        if (event.startsWith("event: snapshot\ndata: "))
-          received.push(
-            JSON.parse(event.slice("event: snapshot\ndata: ".length)),
-          );
+        const match = event.match(/^event: (snapshot|delta)\ndata: (.*)$/s);
+        if (match) {
+          const kind = match[1] as "snapshot" | "delta";
+          const data = JSON.parse(match[2]);
+          messages.push({ kind, data });
+          received.push({ traces: store.apply(kind, data) });
+        }
       }
     }
   })();
-  return { received, done, cancel: () => reader.cancel() };
+  return { received, messages, done, cancel: () => reader.cancel() };
 }
 async function eventually(condition: () => boolean) {
   for (let i = 0; i < 200; i++) {
@@ -400,8 +412,8 @@ test("batched streams retain session isolation and deliver final errors, cancell
     enabled: true,
     getSession: (r) => r.headers.get("x-test-user") || "local",
   });
-  const alice = await watch(adapter, { "x-test-user": "alice" });
-  const bob = await watch(adapter, { "x-test-user": "bob" });
+  const alice = await watch(adapter, { "x-test-user": "alice" }, true);
+  const bob = await watch(adapter, { "x-test-user": "bob" }, true);
   try {
     const client = adapter.createClient({
       ...clientOptions,
@@ -514,7 +526,7 @@ test("an outstanding request stays visible as pending before its final result ar
     release = resolve;
   });
   const adapter = createJevDevtools({ origin, enabled: true });
-  const viewer = await watch(adapter);
+  const viewer = await watch(adapter, {}, true);
   const client = adapter.createClient({
     ...clientOptions,
     fetch: async () => {
@@ -538,6 +550,212 @@ test("an outstanding request stays visible as pending before its final result ar
       viewer.received.at(-1)!.traces[0].result?.answers.team.choice,
       "delivery",
     );
+  } finally {
+    release();
+    await call;
+    await viewer.cancel();
+    await viewer.done;
+    adapter.dispose();
+  }
+});
+
+test("incremental streams omit unchanged payloads, preserve order, remove evictions, clear and reconnect", async () => {
+  const adapter = createJevDevtools({ origin, enabled: true, limit: 3 });
+  const client = adapter.createClient(clientOptions);
+  for (let n = 0; n < 3; n++)
+    await client.systemOne({ ...request, state: { n, apiKey: "private" } });
+  await delay(20);
+  const viewer = await watch(adapter, {}, true);
+  try {
+    await eventually(() => viewer.received.length === 1);
+    const initial = viewer.received[0].traces;
+    assert.equal(viewer.messages[0].data.version, 2);
+    assert.deepEqual(
+      initial.map((t) => (t.request.state as { n: number }).n),
+      [2, 1, 0],
+    );
+    await client.systemOne({ ...request, state: { n: 3, apiKey: "private" } });
+    await eventually(
+      () =>
+        (viewer.received.at(-1)?.traces[0]?.request.state as { n?: number })
+          ?.n === 3 && viewer.received.at(-1)?.traces[0]?.status === "success",
+    );
+    const latest = viewer.received.at(-1)!.traces;
+    assert.deepEqual(
+      latest.map((t) => (t.request.state as { n: number }).n),
+      [3, 2, 1],
+    );
+    assert.equal(
+      latest[1],
+      initial[0],
+      "unchanged browser objects retain identity",
+    );
+    for (const { kind, data } of viewer.messages.slice(1)) {
+      assert.equal(kind, "delta");
+      const delta = data as TraceDelta;
+      assert.equal(
+        delta.upserts.length,
+        1,
+        "unchanged history must not be retransmitted",
+      );
+      assert.equal(
+        (delta.upserts[0].request.state as { apiKey: string }).apiKey,
+        "[redacted]",
+      );
+      assert.deepEqual(
+        delta.order,
+        latest.map((t) => t.id),
+      );
+    }
+    await adapter.handle(
+      req("/clear", { method: "DELETE", headers: { origin } }),
+    );
+    await eventually(() => viewer.received.at(-1)?.traces.length === 0);
+    const cleared = viewer.messages.at(-1)!.data as TraceDelta;
+    assert.deepEqual(cleared.upserts, []);
+    assert.deepEqual(cleared.order, []);
+    // A reconnection always starts from full state, regardless of an old cursor.
+    await client.systemOne(request);
+    await eventually(
+      () => viewer.received.at(-1)?.traces[0]?.status === "success",
+    );
+    const reconnected = await watch(
+      adapter,
+      { "last-event-id": "obsolete" },
+      true,
+    );
+    try {
+      await eventually(() => reconnected.received.length === 1);
+      assert.equal(reconnected.messages[0].kind, "snapshot");
+      assert.deepEqual(
+        reconnected.received[0].traces,
+        viewer.received.at(-1)!.traces,
+      );
+    } finally {
+      await reconnected.cancel();
+      await reconnected.done;
+    }
+  } finally {
+    await viewer.cancel();
+    await viewer.done;
+    adapter.dispose();
+  }
+});
+
+test("slow delta readers catch up from their own cursor without retaining removed payloads", async () => {
+  const adapter = createJevDevtools({ origin, enabled: true, limit: 2 });
+  const client = adapter.createClient(clientOptions);
+  await client.systemOne(request);
+  await delay(20);
+  const fast = await watch(adapter, {}, true);
+  const slow = (
+    await adapter.handle(req("/events?protocol=2"))
+  ).body!.getReader();
+  try {
+    for (let n = 0; n < 5; n++)
+      await client.systemOne({ ...request, state: { n } });
+    await eventually(
+      () =>
+        (fast.received.at(-1)?.traces[0]?.request.state as { n?: number })
+          ?.n === 4 &&
+        fast.received.at(-1)?.traces.every((t) => t.status === "success") ===
+          true,
+    );
+    const initial = JSON.parse(
+      new TextDecoder().decode((await slow.read()).value).split("data: ")[1],
+    );
+    const update = JSON.parse(
+      new TextDecoder().decode((await slow.read()).value).split("data: ")[1],
+    );
+    assert.equal(update.base, initial.revision);
+    assert.equal(update.upserts.length, 2);
+    assert.deepEqual(
+      update.upserts.map((t: Trace) => (t.request.state as { n: number }).n),
+      [4, 3],
+    );
+    const store = new TraceStore();
+    store.apply("snapshot", initial);
+    assert.deepEqual(
+      store.apply("delta", update),
+      fast.received.at(-1)!.traces,
+    );
+  } finally {
+    await slow.cancel();
+    await fast.cancel();
+    await fast.done;
+    adapter.dispose();
+  }
+});
+
+test("cross-session retention sends only removal to the evicted session", async () => {
+  const adapter = createJevDevtools({
+    origin,
+    enabled: true,
+    limit: 1,
+    getSession: (r) => r.headers.get("x-test-user")!,
+  });
+  const client = adapter.createClient(clientOptions);
+  const alice = await watch(adapter, { "x-test-user": "alice" }, true);
+  const bob = await watch(adapter, { "x-test-user": "bob" }, true);
+  try {
+    await adapter.run(req("", { headers: { "x-test-user": "alice" } }), () =>
+      client.systemOne(request),
+    );
+    await eventually(
+      () => alice.received.at(-1)?.traces[0]?.status === "success",
+    );
+    const prior = alice.messages.length;
+    await adapter.run(req("", { headers: { "x-test-user": "bob" } }), () =>
+      client.systemOne(request),
+    );
+    await eventually(
+      () =>
+        alice.received.at(-1)?.traces.length === 0 &&
+        bob.received.at(-1)?.traces[0]?.status === "success",
+    );
+    for (const { data } of alice.messages.slice(prior)) {
+      assert.deepEqual((data as TraceDelta).upserts, []);
+      assert.deepEqual((data as TraceDelta).order, []);
+    }
+    assert.ok(
+      bob.received.flatMap((s) => s.traces).every((t) => t.session === "bob"),
+    );
+  } finally {
+    await alice.cancel();
+    await bob.cancel();
+    await Promise.all([alice.done, bob.done]);
+    adapter.dispose();
+  }
+});
+
+test("clearing a pending trace cannot resurrect it when capture completes", async () => {
+  let release!: () => void;
+  const gate = new Promise<void>((resolve) => {
+    release = resolve;
+  });
+  const adapter = createJevDevtools({ origin, enabled: true });
+  const viewer = await watch(adapter, {}, true);
+  const client = adapter.createClient({
+    ...clientOptions,
+    fetch: async () => {
+      await gate;
+      return Response.json(answer);
+    },
+  });
+  const call = client.systemOne(request);
+  try {
+    await eventually(
+      () => viewer.received.at(-1)?.traces[0]?.status === "pending",
+    );
+    await adapter.handle(
+      req("/clear", { method: "DELETE", headers: { origin } }),
+    );
+    await eventually(() => viewer.received.at(-1)?.traces.length === 0);
+    release();
+    await call;
+    await delay(20);
+    assert.deepEqual(viewer.received.at(-1)!.traces, []);
+    assert.deepEqual(await snapshot(adapter), []);
   } finally {
     release();
     await call;

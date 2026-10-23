@@ -52,3 +52,14 @@ export type Trace = {
   captureWarnings: string[];
 };
 export type Snapshot = { version: 1; traces: Trace[] };
+
+// Incremental stream is opt-in via /events?protocol=2. Trace payloads remain v1.
+export type StreamSnapshot = { version: 2; revision: number; traces: Trace[] };
+export type TraceDelta = {
+  version: 2;
+  base: number;
+  revision: number;
+  upserts: Trace[];
+  /** Authoritative newest-first retained IDs. Omitted IDs are removed. */
+  order: string[];
+};
