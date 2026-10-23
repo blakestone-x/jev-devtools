@@ -1,0 +1,12 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": false,
+    "allowImportingTsExtensions": false,
+    "declaration": true,
+    "outDir": "lib",
+    "rootDir": "."
+  },
+  "include": ["src/index.tsx", "server/index.ts"],
+  "exclude": ["node_modules", "lib", "dist", "tests"]
+}
