@@ -8,7 +8,7 @@ Dates below use UTC and were checked against npm's publication history. The hist
 
 | Version | Published (UTC) | Highlights |
 | --- | --- | --- |
-| [Unreleased](#unreleased) | Not published | Batched updates, changed-trace streaming, frame-coalesced rendering, less work while the drawer is closed, and virtualized Questions. |
+| [Unreleased](#unreleased) | Not published | Batched updates, changed-trace streaming, frame-coalesced rendering, less work while the drawer is closed, virtualized Questions, and compact Choice diagrams. |
 | [0.1.3](#013--october-23-2026-experimental) | 2026-10-23 | Isolated drawer styles, diagram pan/zoom, and version-specific npm links. |
 | [0.1.2](#012--october-23-2026-experimental) | 2026-10-23 | Bundled AI setup skill and framework recipes. |
 | [0.1.1](#011--october-23-2026-experimental) | 2026-10-23 | Full inline demo GIF and published-package installation instructions. |
@@ -18,7 +18,7 @@ Dates below use UTC and were checked against npm's publication history. The hist
 
 ### Performance
 
-- Show a compact Flow overview for Choice responses with more than six categories: the top three probabilities, the returned choice when different, and access to every captured probability through a searchable, paginated table. Exact captured values remain available; summaries do not renormalize probabilities.
+- Show a compact Flow overview for Choice responses with more than six categories: the top three probabilities, the returned choice when different, and access to every captured probability through a searchable, paginated table. Exact captured values remain available; summaries do not renormalize probabilities. ([#19](https://github.com/diegoag64/jev-devtools/pull/19))
 
 - Virtualize the Questions tab and show lightweight previews during rapid scrolling. Preserve the complete picker, keyboard navigation, focused controls, expanded legends, and scroll position; restore full answers as scrolling slows or stops. This reduces opening work but moves some work to scrolling; browser Find and screen-reader document browsing see only mounted cards, with all answers still accessible through the picker and Raw. ([#17](https://github.com/diegoag64/jev-devtools/pull/17))
 
@@ -31,7 +31,7 @@ Public component props and server setup APIs are unchanged. These optimizations 
 
 ### Documentation and developer tooling
 
-- Add a sample-only playground sandbox for 150-choice responses, ties, zero probabilities, long labels, large context, and unusual returned choices. Add a local Choice overview/pan/zoom comparison suite; results stay outside Git.
+- Add a sample-only playground sandbox for 150-choice responses, ties, zero probabilities, long labels, large context, and unusual returned choices. Add a local Choice overview/pan/zoom comparison suite; results stay outside Git. ([#19](https://github.com/diegoag64/jev-devtools/pull/19))
 
 - Add repeatable server and isolated-browser benchmarks for large histories, large inputs, diagram rendering, and streaming updates, with before/after findings summarized in the PRs. ([#13](https://github.com/diegoag64/jev-devtools/pull/13), [#14](https://github.com/diegoag64/jev-devtools/pull/14), [#15](https://github.com/diegoag64/jev-devtools/pull/15), [#16](https://github.com/diegoag64/jev-devtools/pull/16))
 - Add browser correctness checks for closing/reopening, preserved controls, clear, and eviction on React 18 and 19. ([#16](https://github.com/diegoag64/jev-devtools/pull/16))
