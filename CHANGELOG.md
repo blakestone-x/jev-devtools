@@ -1,8 +1,8 @@
 # Changelog
 
-## 0.1.0 — experimental, publication pending
+## 0.1.0 — October 23, 2026 (experimental)
 
-First planned public npm release as **`jev-devtools`**. This is a development tool with APIs that may change before 1.0; it has not been published by this preparation PR.
+First public npm release as **[`jev-devtools`](https://www.npmjs.com/package/jev-devtools/v/0.1.0)**. This is a development tool with APIs that may change before 1.0.
 
 ### Included
 
@@ -12,10 +12,6 @@ First planned public npm release as **`jev-devtools`**. This is a development to
 - Same-origin SSE, bounded in-memory history, redaction hooks, authorization and session scoping, and explicit opt-in for both capture and display.
 - Next.js App Router integration for Route Handlers, Server Actions, and Server Components, including shared history across server module reloads.
 - Independent packed-package examples and verification for React 18/19, Node 22.12+/24, and Next.js.
-
-### Migration from the extracted prototype
-
-Change the dependency and imports from `@diagram-motion-lab/jev-devtools` to `jev-devtools`. The public subpaths are `jev-devtools/server` and `jev-devtools/styles.css`. The archive is now `jev-devtools-0.1.0.tgz`. The React component and server APIs are unchanged. Restart your dev server so the renamed adapter registry initializes cleanly.
 
 ### Limits and validation
 

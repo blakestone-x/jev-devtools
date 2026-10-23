@@ -7,11 +7,12 @@
 A drop-in React inspector for TypeSafe Jev.<br />
 Follow the context, explore each question, and see the answers come together.
 
+[![npm version](https://img.shields.io/npm/v/jev-devtools/latest?color=E551BA&labelColor=0D0A0F&logo=npm)](https://www.npmjs.com/package/jev-devtools)
 [![CI](https://github.com/diegoag64/jev-devtools/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/diegoag64/jev-devtools/actions/workflows/ci.yml)
 [![React 18 / 19](https://img.shields.io/badge/React-18%20%2F%2019-61DAFB?logo=react&logoColor=61DAFB&labelColor=0D0A0F)](#install-in-another-react-app)
 [![Next.js App Router](https://img.shields.io/badge/Next.js-App%20Router-white?logo=nextdotjs&labelColor=0D0A0F)](docs/nextjs.md)
 [![MIT license](https://img.shields.io/badge/License-MIT-E551BA?labelColor=0D0A0F)](LICENSE)
-[![Status: prototype](https://img.shields.io/badge/Status-prototype-E551BA?labelColor=0D0A0F)](#install-in-another-react-app)
+[![Status: experimental](https://img.shields.io/badge/Status-experimental-E551BA?labelColor=0D0A0F)](#install-in-another-react-app)
 
 [Demo](#see-it-in-motion) · [Quick start](#run-the-playground) · [Install](#install-in-another-react-app) · [Next.js](docs/nextjs.md) · [Contributing](CONTRIBUTING.md)
 
@@ -75,17 +76,20 @@ npm run dev
 
 Open http://127.0.0.1:4182/. Sample mode needs no API key. Run a scenario to see its application result, then open **Jev DevTools** in the bottom-right corner to inspect the call. Samples cover Choice, Score, Noul, Box, retries, errors, and cancellation. Fixture responses do not change when you edit context.
 
-For optional live mode, copy `apps/playground/.env.example` to `apps/playground/.env.local`, set `TYPESAFE_API_KEY`, and restart. Keys stay on the server. Live inference has not been verified during extraction.
+For optional live mode, copy `apps/playground/.env.example` to `apps/playground/.env.local`, set `TYPESAFE_API_KEY`, and restart. Keys stay on the server. Verification uses sample responses; live inference has not been verified.
 
 ## Install in another React app
 
-**Experimental 0.1.0 · publication pending.** The package will be published as `jev-devtools`. Once the release is available on npm:
+**[Jev DevTools 0.1.0 is available on npm](https://www.npmjs.com/package/jev-devtools).** This is an experimental release; APIs may change before 1.0.
 
 ```sh
 npm install jev-devtools
 ```
 
-Until publication, install the locally packed release candidate:
+<details>
+<summary>Developing locally? Install a packed checkout</summary>
+
+To try local changes before a future release:
 
 ```sh
 # In this repository:
@@ -95,6 +99,8 @@ npm run pack:devtools
 # In your React application:
 npm install /absolute/path/to/jev-devtools/jev-devtools-0.1.0.tgz
 ```
+
+</details>
 
 Mount once near the root:
 
@@ -128,8 +134,6 @@ app.use(inspector.middleware); // At root, before fallback routes.
 Only calls through this client are recorded. Both routes and inspector must share the same adapter instance. History is bounded and in memory, and the browser connects over same-origin SSE. React 18/19 are peer dependencies. Tailwind, shadcn, and the playground are not bundled with the library.
 
 See the [complete integration guide](docs/integration.md) for Next.js, proxies, custom endpoints, authorization, redaction, session scoping, and runtime limits. The adapter currently targets Node, not edge runtimes or distributed/serverless aggregation. Capture and display are both disabled by default.
-
-Migrating from the extracted prototype? Replace `@diagram-motion-lab/jev-devtools` with `jev-devtools` in dependencies and imports, including `/server` and `/styles.css`. Component props and server APIs are unchanged. Restart the dev server after upgrading. See [0.1.0 release notes](CHANGELOG.md).
 
 ## Next.js and server frameworks
 
