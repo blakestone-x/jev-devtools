@@ -13,6 +13,7 @@ The skill and references ship in npm at `node_modules/jev-devtools/skills/setup-
 
 ## Details and examples
 
+- [Changelog](https://raw.githubusercontent.com/diegoag64/jev-devtools/main/CHANGELOG.md): Published release history and merged, unreleased changes; check before assuming a feature is in the installed version.
 - [Integration API and access controls](https://raw.githubusercontent.com/diegoag64/jev-devtools/main/docs/integration.md)
 - [Next.js details](https://raw.githubusercontent.com/diegoag64/jev-devtools/main/docs/nextjs.md)
 - [Vite sample app](https://github.com/diegoag64/jev-devtools/tree/main/examples/react-vite)

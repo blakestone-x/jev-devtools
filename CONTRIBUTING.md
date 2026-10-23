@@ -14,3 +14,9 @@ Tests use the real TypeSafe SDK with custom fetch fixtures. No secrets or infere
 For drawer changes, run `npx playwright install chromium --only-shell` once, then `npm run verify:drawer`. This exercises the public component with sample requests in an isolated browser, including hidden updates, reopening, preserved controls, clear, and eviction. CI runs this check with React 18 and 19. `JEV_VERIFY_PORT` changes its loopback server port (default 4220).
 
 For opt-in performance measurements, run `npm run bench:server` or `npm run bench:browser`. See the [performance baseline and reproduction guide](docs/performance.md) for workloads, measurements, and limitations. Run the server and browser benchmarks separately to avoid CPU contention.
+
+## Keep the changelog current
+
+For user-visible changes, add a concise entry under **Unreleased** in [CHANGELOG.md](CHANGELOG.md) in the same PR. Describe the behavior and any compatibility change, and link the PR once its number is known. Include meaningful documentation and tooling improvements; skip internal refactors with no observable effect. Entries on feature branches describe proposed changes; the changelog on `main` describes merged work.
+
+Keep the overview table useful at a glance. Do not list an open PR as delivered work in another PR's changelog entry. At release time, follow the [release process](docs/releases.md): group the accumulated entries under the new version and verify its publication date before marking it published. npm versions and merged work must remain distinguishable.

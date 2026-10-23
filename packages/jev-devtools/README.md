@@ -6,6 +6,8 @@ A React drawer and Node adapter for inspecting TypeSafe Jev requests with animat
 
 **Experimental 0.1.x.** React 18/19 and Node 22.12+ are supported. APIs may change before 1.0. Verification uses sample responses through the real TypeSafe SDK, not live inference.
 
+[Changelog and release history](https://github.com/diegoag64/jev-devtools/blob/main/CHANGELOG.md) — published versions and unreleased work.
+
 ## Demo
 
 ![Full 28-second Jev DevTools demo showing sample results, the request drawer, and animated diagrams.](https://raw.githubusercontent.com/diegoag64/jev-devtools/main/docs/assets/jev-devtools-preview.gif)
