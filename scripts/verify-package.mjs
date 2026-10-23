@@ -26,7 +26,7 @@ const setupDocs = new Set([
 for (const path of shipped) {
   assert.ok(
     setupDocs.has(path) ||
-      /^(?:package\.json|README\.md|LICENSE|THIRD_PARTY_NOTICES\.txt|lib\/(?:src|server)\/[\w-]+\.(?:js|d\.ts|css))$/.test(
+      /^(?:package\.json|README\.md|LICENSE|THIRD_PARTY_NOTICES\.txt|lib\/(?:src|server|flow)\/[\w-]+\.(?:js|d\.ts|css))$/.test(
         path,
       ),
     `Unexpected file in npm archive: ${path}`,
@@ -78,7 +78,7 @@ execFileSync(
   [
     "--input-type=module",
     "-e",
-    `import assert from 'node:assert/strict';import React from 'react';import {renderToString} from 'react-dom/server';import {JevDevtools} from 'jev-devtools';import {createJevDevtools} from 'jev-devtools/server';assert.equal(renderToString(React.createElement(JevDevtools,{enabled:true})), '');assert.equal(renderToString(React.createElement(JevDevtools)), '');const tools=createJevDevtools({origin:'http://localhost:3000'});assert.equal((await tools.handle(new Request('http://localhost:3000/api/jev-devtools'))).status,404);tools.dispose();console.log('Packed exports, SSR, and disabled endpoint: passed');`,
+    `import assert from 'node:assert/strict';import React from 'react';import {renderToString} from 'react-dom/server';import {JevDevtools} from 'jev-devtools';import {createJevDevtools} from 'jev-devtools/server';import {defineJevFlow} from 'jev-devtools/flow';assert.equal(renderToString(React.createElement(JevDevtools,{enabled:true})), '');assert.equal(renderToString(React.createElement(JevDevtools)), '');const tools=createJevDevtools({origin:'http://localhost:3000'});assert.equal((await tools.handle(new Request('http://localhost:3000/api/jev-devtools'))).status,404);assert.equal((await defineJevFlow('consumer',flow=>flow.output('done')).run({}, {client:tools.createClient({apiKey:'sample-only'})})).outcome,'done');tools.dispose();console.log('Packed exports, SSR, and disabled endpoint: passed');`,
   ],
   { cwd: consumer, stdio: "inherit" },
 );

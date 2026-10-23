@@ -1,3 +1,5 @@
+import { FlowRecorder } from "./flows.js";
+import type { FlowObserver } from "../flow/index.js";
 import { AsyncLocalStorage } from "node:async_hooks";
 import { Readable } from "node:stream";
 import { pipeline } from "node:stream/promises";
@@ -39,6 +41,7 @@ export function createJevDevtools(options: JevDevtoolsServerOptions) {
     throw new Error("Non-loopback inspector endpoints require authorize");
   const recorder = new JevRecorder(options),
     scope = new AsyncLocalStorage<string>();
+  const flows = new FlowRecorder(options);
   const streams = new Set<() => void>();
   type Encoded = { bytes: Uint8Array; revision: number };
   type UpdateFor = (
@@ -126,14 +129,84 @@ export function createJevDevtools(options: JevDevtoolsServerOptions) {
       return json({ error: "Unauthorized" }, 403);
     const session = await sessionFor(request);
     if (url.pathname === endpoint && request.method === "GET")
-      return json({ version: 1, enabled: true });
+      return json({ version: 1, enabled: true, flows: true });
     if (url.pathname === endpoint + "/clear") {
       if (request.method !== "DELETE")
         return json({ error: "Method not allowed" }, 405);
       if (request.headers.get("origin") !== origin)
         return json({ error: "Same-origin requests required" }, 403);
       recorder.clear(session);
+      flows.clear(session);
       return json({ ok: true });
+    }
+    let flowPull = () => {};
+    if (url.pathname === endpoint + "/flows/events") {
+      if (request.method !== "GET")
+        return json({ error: "Method not allowed" }, 405);
+      let stop = () => {};
+      const body = new ReadableStream<Uint8Array>({
+        start(controller) {
+          let closed = false,
+            dirty = true,
+            cursor: number | undefined,
+            timer: ReturnType<typeof setImmediate> | undefined;
+          const flush = () => {
+            timer = undefined;
+            if (closed || !dirty || (controller.desiredSize ?? 0) <= 0) return;
+            dirty = false;
+            const update = flows.changes(session, cursor);
+            cursor = update.revision;
+            controller.enqueue(
+              encoder.encode(
+                `event: flows\ndata: ${JSON.stringify(update.data)}\n\n`,
+              ),
+            );
+          };
+          const wake = () => {
+            if (!closed && dirty && !timer) timer = setImmediate(flush);
+          };
+          const unsubscribe = flows.subscribe((sessions) => {
+            if (sessions.has(session)) {
+              dirty = true;
+              wake();
+            }
+          });
+          const heartbeat = setInterval(() => {
+            if (!closed && (controller.desiredSize ?? 0) > 0)
+              controller.enqueue(encoder.encode(": keepalive\n\n"));
+          }, 15000);
+          stop = () => {
+            if (closed) return;
+            closed = true;
+            unsubscribe();
+            clearImmediate(timer);
+            clearInterval(heartbeat);
+            request.signal.removeEventListener("abort", stop);
+            streams.delete(stop);
+            try {
+              controller.close();
+            } catch {}
+          };
+          streams.add(stop);
+          request.signal.addEventListener("abort", stop, { once: true });
+          flowPull = wake;
+          if (request.signal.aborted) stop();
+          else flush();
+        },
+        pull() {
+          flowPull();
+        },
+        cancel() {
+          stop();
+        },
+      });
+      return new Response(body, {
+        headers: {
+          "content-type": "text/event-stream",
+          "cache-control": "no-store",
+          "x-accel-buffering": "no",
+        },
+      });
     }
     if (url.pathname !== endpoint + "/events")
       return json({ error: "Not found" }, 404);
@@ -249,7 +322,19 @@ export function createJevDevtools(options: JevDevtoolsServerOptions) {
       else res.destroy();
     }
   }
+  const startFlow: FlowObserver["startFlow"] = (definition, run) => {
+    if (!enabled()) return;
+    flows.start(definition, run, scope.getStore() ?? "local");
+    return {
+      update: (next) => {
+        if (enabled()) flows.update(next);
+      },
+      request: (link, onTrace, callback) =>
+        recorder.withFlow(link, onTrace, callback),
+    };
+  };
   return {
+    startFlow,
     handle,
     /**
      * For Node framework routes whose Request URL uses an internal hostname.

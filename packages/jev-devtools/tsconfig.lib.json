@@ -7,6 +7,15 @@
     "outDir": "lib",
     "rootDir": "."
   },
-  "include": ["src/index.tsx", "server/index.ts"],
-  "exclude": ["node_modules", "lib", "dist", "tests"]
+  "include": [
+    "src/index.tsx",
+    "server/index.ts",
+    "flow/index.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "lib",
+    "dist",
+    "tests"
+  ]
 }

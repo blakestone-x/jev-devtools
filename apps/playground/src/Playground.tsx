@@ -42,6 +42,10 @@ async function post(path: string, body: unknown = {}) {
 }
 function App() {
   const [stress, setStress] = useState<StressOptions>(defaultStress);
+  const [flowResult, setFlowResult] = useState<{
+    outcome: string;
+    value?: unknown;
+  } | null>(null);
   const [profile, setProfile] = useState<SampleProfile>("billing");
   const [outcome, setOutcome] = useState<RunState>({
     id: "initial",
@@ -72,6 +76,7 @@ function App() {
     const id = crypto.randomUUID();
     const started = performance.now();
     const captured = { id, scenario, mode, message };
+    setFlowResult(null);
     setOutcome({ ...captured, status: "pending" });
     setRunId(id);
     setFeedback("Request running…");
@@ -84,6 +89,7 @@ function App() {
         profile,
         stress,
       });
+      if (data.flow) setFlowResult(data.flow);
       setOutcome({
         ...captured,
         status: "success",
@@ -107,6 +113,18 @@ function App() {
   return (
     <>
       <main className="playground dark">
+        {scenario.startsWith("flow-") && (
+          <p>
+            Sample-only flow. Run a sample, open Jev DevTools, and choose Flows.
+            Select a node to inspect its captured request.
+          </p>
+        )}
+        {flowResult && (
+          <div role="status">
+            <strong>Outcome: {flowResult.outcome}</strong>
+            <pre>{JSON.stringify(flowResult.value, null, 2)}</pre>
+          </div>
+        )}
         <section className="run-form" aria-label="Request playground">
           <div className="form-row">
             <div className="form-field scenario-field">
@@ -119,10 +137,25 @@ function App() {
                 onChange={(e) => {
                   setScenario(e.target.value);
                   resetOutcome();
-                  if (["retry", "error", "stress"].includes(e.target.value))
+                  if (
+                    ["retry", "error", "stress"].includes(e.target.value) ||
+                    e.target.value.startsWith("flow-")
+                  )
                     setMode("sample");
                 }}
               >
+                {Object.entries({
+                  "flow-approve": "Flow · Approve",
+                  "flow-manual": "Flow · Manual review",
+                  "flow-other": "Flow · Other",
+                  "flow-parallel": "Flow · Parallel checks + join",
+                  "flow-error": "Flow · Failed review",
+                  "flow-cancel": "Flow · Slow call (try Cancel)",
+                }).map(([key, label]) => (
+                  <NativeSelectOption key={key} value={key}>
+                    {label}
+                  </NativeSelectOption>
+                ))}
                 <NativeSelectOption value="stress">
                   Edge-case sandbox · Choice
                 </NativeSelectOption>
@@ -156,7 +189,9 @@ function App() {
                 <NativeSelectOption
                   value="live"
                   disabled={
-                    !live || ["retry", "error", "stress"].includes(scenario)
+                    !live ||
+                    ["retry", "error", "stress"].includes(scenario) ||
+                    scenario.startsWith("flow-")
                   }
                 >
                   Live{!live ? " · no server key" : ""}
@@ -164,6 +199,7 @@ function App() {
               </NativeSelect>
             </div>
             {mode === "sample" &&
+              !scenario.startsWith("flow-") &&
               scenario !== "image" &&
               scenario !== "stress" && (
                 <div className="form-field">
@@ -333,7 +369,9 @@ function App() {
               : "Live inference uses your server key and may incur API charges."}
           </p>
         </section>
-        {outcome.status !== "idle" && <ScenarioResult run={outcome} />}
+        {!scenario.startsWith("flow-") && outcome.status !== "idle" && (
+          <ScenarioResult run={outcome} />
+        )}
       </main>
       <JevDevtools
         enabled={import.meta.env.DEV}

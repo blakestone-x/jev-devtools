@@ -19,7 +19,11 @@
       "types": "./lib/server/index.d.ts",
       "import": "./lib/server/index.js"
     },
-    "./styles.css": "./lib/src/inspector.css"
+    "./styles.css": "./lib/src/inspector.css",
+    "./flow": {
+      "types": "./lib/flow/index.d.ts",
+      "import": "./lib/flow/index.js"
+    }
   },
   "files": [
     "lib",

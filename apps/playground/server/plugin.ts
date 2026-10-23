@@ -1,3 +1,4 @@
+import { refundFlow, parallelFlow, flowTransport } from "./flows.js";
 import type { IncomingMessage, ServerResponse } from "node:http";
 import type { Plugin } from "vite";
 
@@ -70,7 +71,7 @@ export function jevInspectorServer(apiKey?: string): Plugin {
             return;
           }
           let body: {
-            scenario?: Scenario;
+            scenario?: string;
             mode?: string;
             message?: string;
             runId?: string;
@@ -104,9 +105,19 @@ export function jevInspectorServer(apiKey?: string): Plugin {
             return;
           }
           if (
-            !["triage", "image", "retry", "error", "stress"].includes(
-              body.scenario || "",
-            ) ||
+            ![
+              "triage",
+              "image",
+              "retry",
+              "error",
+              "stress",
+              "flow-approve",
+              "flow-manual",
+              "flow-other",
+              "flow-parallel",
+              "flow-error",
+              "flow-cancel",
+            ].includes(body.scenario || "") ||
             !["sample", "live"].includes(body.mode || "") ||
             !validSession(body.runId) ||
             typeof body.message !== "string" ||
@@ -129,7 +140,8 @@ export function jevInspectorServer(apiKey?: string): Plugin {
           }
           if (
             body.mode === "live" &&
-            ["retry", "error", "stress"].includes(body.scenario!)
+            (["retry", "error", "stress"].includes(body.scenario!) ||
+              body.scenario!.startsWith("flow-"))
           ) {
             send(res, 400, {
               error:
@@ -145,8 +157,27 @@ export function jevInspectorServer(apiKey?: string): Plugin {
             id = body.runId;
           running.set(id, { session, controller });
           try {
+            if (body.scenario!.startsWith("flow-")) {
+              const flow =
+                body.scenario === "flow-parallel" ? parallelFlow : refundFlow;
+              const client = inspector.createClient(
+                {
+                  apiKey: "sample-only",
+                  fetch: flowTransport(body.scenario!),
+                  logLevel: "off",
+                  retry: { maxRetries: 0 },
+                },
+                { label: flow.definition.name, source: "sample" },
+              );
+              const result = await flow.run(
+                { message: body.message },
+                { client, devtools: inspector, signal: controller.signal },
+              );
+              send(res, 200, { ok: true, flow: result });
+              return;
+            }
             const request = await makeRequest(
-              body.scenario!,
+              body.scenario! as Scenario,
               body.message,
               body.stress,
             );
@@ -157,7 +188,7 @@ export function jevInspectorServer(apiKey?: string): Plugin {
                   body.mode === "live"
                     ? globalThis.fetch
                     : sampleTransport(
-                        body.scenario!,
+                        body.scenario! as Scenario,
                         body.profile,
                         body.stress,
                       ),

@@ -1264,3 +1264,88 @@
     animation: none;
   }
 }
+
+/* Whole-flow overview mounts only compact cards and one opt-in request detail. */
+.whole-flow {
+  min-width: 0;
+  overflow: auto;
+}
+.flow-overview-viewport {
+  position: relative;
+  min-height: 240px;
+  flex: 1 0 260px;
+  overflow: hidden;
+  touch-action: none;
+  cursor: grab;
+  background-image: radial-gradient(#534357 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+.flow-overview-viewport[data-panning] {
+  cursor: grabbing;
+}
+.flow-overview-canvas {
+  position: absolute;
+  transform-origin: 0 0;
+}
+.flow-connections {
+  position: absolute;
+  inset: 0;
+  color: #c0b8c4;
+  pointer-events: none;
+}
+.flow-step {
+  position: absolute;
+  width: 220px;
+  min-height: 98px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  text-align: left;
+  padding: 14px;
+  border: 1px solid #736476;
+  border-radius: 12px;
+  background: #151017;
+  color: inherit;
+}
+.flow-step strong {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 100%;
+}
+.flow-step.selected {
+  outline: 2px solid #e551ba;
+  outline-offset: 3px;
+}
+.flow-step[data-status="completed"] {
+  border-color: #e551ba;
+}
+.flow-step[data-status="running"] {
+  border-color: #e551ba;
+  background: #2b1728;
+}
+.flow-step[data-status="untaken"],
+.flow-step[data-status="blocked"] {
+  opacity: 0.5;
+}
+.flow-step[data-status="error"] {
+  border-color: #f17c78;
+}
+.flow-step[data-status="cancelled"] {
+  border-style: dashed;
+}
+.flow-selection {
+  padding: 12px 20px;
+  border-top: 1px solid #342a38;
+}
+.flow-selection p {
+  margin: 6px 0;
+  overflow-wrap: anywhere;
+}
+.flow-request-detail {
+  min-height: 450px;
+  border-top: 1px solid #534357;
+}
+.flow-request-detail > .request-detail {
+  min-height: 450px;
+}

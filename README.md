@@ -206,3 +206,7 @@ MIT for project code; see [LICENSE](LICENSE) and [third-party notices](THIRD_PAR
 [Open an issue](https://github.com/diegoag64/jev-devtools/issues) · [Contribute a PR](CONTRIBUTING.md)
 
 </div>
+
+## Connected Jev flows (unreleased)
+
+Define connected calls once with `defineJevFlow` from `jev-devtools/flow`, then execute and inspect their possible paths and actual run in the existing drawer. Includes terminal branches, explicit parallel lanes and joins, named outcomes, and links back to captured request details. This API is not in npm 0.2.0 yet. See the [flow API and examples](docs/flows.md) for setup, semantics, sample scenarios, and limits.

@@ -8,7 +8,7 @@ Dates below use UTC and were checked against npm's publication history. The hist
 
 | Version | Published (UTC) | Highlights |
 | --- | --- | --- |
-| [Unreleased](#unreleased) | Not published | No additional changes yet. |
+| [Unreleased](#unreleased) | Not published | Connected Jev flow definitions, execution, and whole-flow inspection. |
 | [0.2.0](#020--october-23-2026-experimental) | 2026-10-23 | Batched updates, changed-trace streaming, frame-coalesced rendering, less work while the drawer is closed, virtualized Questions, compact Choice diagrams, and reuse of unchanged inspector views. |
 | [0.1.3](#013--october-23-2026-experimental) | 2026-10-23 | Isolated drawer styles, diagram pan/zoom, and version-specific npm links. |
 | [0.1.2](#012--october-23-2026-experimental) | 2026-10-23 | Bundled AI setup skill and framework recipes. |
@@ -17,7 +17,11 @@ Dates below use UTC and were checked against npm's publication history. The hist
 
 ## Unreleased
 
-No additional changes yet.
+### Added
+
+- Add the Node `jev-devtools/flow` API for typed input/answer references, sequential Jev calls, terminal branching, named parallel lanes with joins, and named output values. Definitions build without requests; runs preserve SDK retries and propagate failures/cancellation without automatic flow retries.
+- Capture versioned definitions separately from bounded, session-scoped runs, including actual decisions, step timings and request links. Add a lightweight whole-flow drawer view with preserved camera/selection and opt-in existing request details. Existing single-request integrations remain compatible.
+- Add sample-only refund outcomes, parallel checks, failure and cancellation playground scenarios, execution/UI checks, and local-only flow scaling tooling. No distributed/durable execution, loops, or automatic business actions. See [the flow guide](docs/flows.md) for v1 limits.
 
 ## 0.2.0 — October 23, 2026 (experimental)
 

@@ -20,7 +20,7 @@ export type CaptureOptions = {
 
 // Snapshot before the caller can mutate its request. Bounded and cycle-safe;
 // image handles become explicit previews/references instead of opaque SDK objects.
-function capture(
+export function capture(
   value: unknown,
   warnings: Set<string>,
   redact?: CaptureOptions["redact"],
@@ -103,6 +103,17 @@ export class JevRecorder {
   private revision = 0;
   private revisions = new WeakMap<Trace, number>();
   private context = new AsyncLocalStorage<string>();
+  private flowContext = new AsyncLocalStorage<{
+    link: NonNullable<Trace["flow"]>;
+    onTrace: (id: string) => void;
+  }>();
+  withFlow<T>(
+    link: NonNullable<Trace["flow"]>,
+    onTrace: (id: string) => void,
+    callback: () => T,
+  ): T {
+    return this.flowContext.run({ link, onTrace }, callback);
+  }
   private limit: number;
   constructor(private options: CaptureOptions = {}) {
     this.limit = Math.max(1, Math.min(200, options.limit ?? 50));
@@ -235,6 +246,7 @@ export class JevRecorder {
             version: 1,
             id,
             ...(typeof meta === "function" ? meta() : meta),
+            flow: this.flowContext.getStore()?.link,
             startedAt: Date.now(),
             status: "pending",
             request: captured,
@@ -242,6 +254,11 @@ export class JevRecorder {
             captureWarnings: [...warnings],
           });
           const trace = this.traces.get(id)!;
+          try {
+            this.flowContext.getStore()?.onTrace(id);
+          } catch {
+            /* Observer only. */
+          }
           this.revisions.set(trace, ++this.revision);
           const sessions = new Set([trace.session]);
           while (this.traces.size > this.limit) {

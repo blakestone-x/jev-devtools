@@ -1,3 +1,4 @@
+import { emptyFlows, type FlowHistory } from "./flow-stream.js";
 import {
   lazy,
   memo,
@@ -9,6 +10,11 @@ import {
 import { TraceDiagram } from "./TraceDiagram.js";
 import type { Trace } from "./protocol.js";
 import { JsonBlock, findImage } from "./TraceContent.js";
+const FlowOverview = lazy(() =>
+  import("./FlowOverview.js").then((module) => ({
+    default: module.FlowOverview,
+  })),
+);
 let questionsLoaded = false;
 const Questions = lazy(() =>
   import("./Questions.js").then((module) => {
@@ -47,7 +53,7 @@ const RequestRow = memo(function RequestRow({
   );
 });
 
-const RequestDetail = memo(function RequestDetail({
+export const RequestDetail = memo(function RequestDetail({
   trace,
 }: {
   trace?: Trace;
@@ -203,13 +209,19 @@ const RequestDetail = memo(function RequestDetail({
 
 export function JevPanel({
   traces,
+  flows = emptyFlows,
   connection,
   onClear,
 }: {
   traces: Trace[];
+  flows?: FlowHistory;
   connection: string;
   onClear: () => Promise<unknown>;
 }) {
+  const [view, setView] = useState("requests");
+  const [selectedRun, setSelectedRun] = useState<string>();
+  const run = flows.runs.find((r) => r.id === selectedRun) ?? flows.runs[0];
+  const definition = flows.definitions.find((d) => d.id === run?.definitionId);
   const [selected, setSelected] = useState<string>();
   const [search, setSearch] = useState("");
   const [status, setStatus] = useState("all");
@@ -228,42 +240,81 @@ export function JevPanel({
       <aside className="request-list">
         <header>
           <h2>
-            Jev requests <span>{traces.length}</span>
+            {view === "requests" ? "Jev requests" : "Jev flows"}{" "}
+            <span>
+              {view === "requests" ? traces.length : flows.runs.length}
+            </span>
           </h2>
           <button
             onClick={() => void onClear().catch((e) => setError(e.message))}
-            disabled={!traces.length}
+            disabled={!traces.length && !flows.runs.length}
           >
             Clear
           </button>
         </header>
-        <div className="list-filters">
-          <input
-            aria-label="Search requests"
-            placeholder="Search requests…"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-          />
-          <select
-            aria-label="Filter request status"
-            value={status}
-            onChange={(e) => setStatus(e.target.value)}
-          >
-            {["all", "pending", "success", "error", "cancelled"].map((s) => (
-              <option key={s}>{s}</option>
-            ))}
-          </select>
-        </div>
-        <div className="request-items">
-          {filtered.map((t) => (
-            <RequestRow
-              key={t.id}
-              trace={t}
-              selected={trace?.id === t.id}
-              onSelect={setSelected}
+        {(flows.runs.length > 0 || view === "flows") && (
+          <nav className="detail-tabs" aria-label="History type">
+            <button
+              aria-pressed={view === "requests"}
+              onClick={() => setView("requests")}
+            >
+              Requests
+            </button>
+            <button
+              aria-pressed={view === "flows"}
+              onClick={() => setView("flows")}
+            >
+              Flows
+            </button>
+          </nav>
+        )}
+        {view === "requests" && (
+          <div className="list-filters">
+            <input
+              aria-label="Search requests"
+              placeholder="Search requests…"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
             />
-          ))}
-          {!filtered.length && (
+            <select
+              aria-label="Filter request status"
+              value={status}
+              onChange={(e) => setStatus(e.target.value)}
+            >
+              {["all", "pending", "success", "error", "cancelled"].map((s) => (
+                <option key={s}>{s}</option>
+              ))}
+            </select>
+          </div>
+        )}
+        <div className="request-items">
+          {view === "flows"
+            ? flows.runs.map((r) => (
+                <button
+                  key={r.id}
+                  className={`request-row ${run?.id === r.id ? "selected" : ""}`}
+                  onClick={() => setSelectedRun(r.id)}
+                >
+                  <span className={`status-dot ${r.status}`} />
+                  <span>
+                    <strong>{r.name}</strong>
+                    <small>
+                      {new Date(r.startedAt).toLocaleTimeString()} ·{" "}
+                      {r.outcome ?? r.status}
+                    </small>
+                  </span>
+                  <span className="row-status">{r.status}</span>
+                </button>
+              ))
+            : filtered.map((t) => (
+                <RequestRow
+                  key={t.id}
+                  trace={t}
+                  selected={trace?.id === t.id}
+                  onSelect={setSelected}
+                />
+              ))}
+          {view === "requests" && !filtered.length && (
             <p className="empty">
               {traces.length
                 ? "No matching requests."
@@ -280,7 +331,18 @@ export function JevPanel({
           </footer>
         )}
       </aside>
-      <RequestDetail trace={trace} />
+      {view === "flows" && run && definition ? (
+        <Suspense fallback={<p role="status">Loading flow…</p>}>
+          <FlowOverview
+            key={run.id}
+            run={run}
+            definition={definition}
+            traces={traces}
+          />
+        </Suspense>
+      ) : (
+        <RequestDetail trace={trace} />
+      )}
     </div>
   );
 }
