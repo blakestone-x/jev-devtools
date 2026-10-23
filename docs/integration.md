@@ -137,7 +137,13 @@ npm run dev
 
 Open **http://127.0.0.1:4183/**. This example imports only the installed package's public exports, includes a sample-only server, and uses its own light theme to demonstrate CSS isolation.
 
-Resize the drawer by dragging the top edge or using the focused handle's arrow keys, Shift+arrows, Home, and End. Expand/Restore adjusts its size. Close or Escape returns focus to the TypeSafe-branded Jev DevTools launcher; closing retains the selected request, filters, and subscription. Unmounting/disabling the component closes the subscription; server capture continues independently.
+Resize the drawer by dragging the top edge or using the focused handle's arrow keys, Shift+arrows, Home, and End. Expand/Restore adjusts its size. Close or Escape returns focus to the TypeSafe-branded Jev DevTools launcher.
+
+Closing retains the inspector's selection, filters, active tab, question, flow preference, and diagram camera. Incoming traces continue to be received and merged, but do not schedule inspector renders while closed; SVG flow animations pause too. Reopening applies the latest retained history. A selected request remains selected if it is still present and matches the filters; clear and eviction still apply. If no request was explicitly selected, the inspector continues following the newest request.
+
+Question, flow, and camera state belong to the current diagram. Following a newer request, or falling back after eviction, replaces that diagram just as it does while the drawer is open.
+
+With `defaultOpen={false}`, the inspector panel first mounts when the launcher is opened. After its first open, the hidden panel and its last displayed snapshot stay in memory to preserve UI state. Closing reduces rendering work, not capture, network traffic, or JSON parsing. Unmounting/disabling the component closes the subscription and releases its UI state; server capture continues independently.
 
 
 ## Verification

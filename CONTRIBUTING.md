@@ -11,4 +11,6 @@ Use a feature branch and pull request against `main`, including small fixes and 
 
 Tests use the real TypeSafe SDK with custom fetch fixtures. No secrets or inference service are required. See [AGENTS.md](AGENTS.md) for agent instructions and [release process](docs/releases.md) for packaging.
 
+For drawer changes, run `npx playwright install chromium --only-shell` once, then `npm run verify:drawer`. This exercises the public component with sample requests in an isolated browser, including hidden updates, reopening, preserved controls, clear, and eviction. CI runs this check with React 18 and 19. `JEV_VERIFY_PORT` changes its loopback server port (default 4220).
+
 For opt-in performance measurements, run `npm run bench:server` or `npm run bench:browser`. See the [performance baseline and reproduction guide](docs/performance.md) for workloads, measurements, and limitations. Run the server and browser benchmarks separately to avoid CPU contention.
