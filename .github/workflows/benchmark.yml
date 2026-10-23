@@ -32,6 +32,7 @@ jobs:
       - name: Compare base and candidate on this VM
         env:
           BASELINE: ${{ github.event.pull_request.base.sha || inputs.baseline }}
+          BENCH_DRAWER_MODES: open,closed,unopened
         run: npm run bench:compare -- "$BASELINE"
       - uses: actions/upload-artifact@v4
         if: always()

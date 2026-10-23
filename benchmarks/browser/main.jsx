@@ -22,6 +22,7 @@ const report = {
   },
   mounts: [],
   streams: [],
+  reopens: [],
   interactions: [],
 };
 const commits = [];
@@ -179,10 +180,12 @@ async function load(id, closed = false) {
     await frame();
     const s = shadow();
     if (
-      s?.querySelectorAll(".request-row").length === spec.history &&
-      s.querySelectorAll(".lab-output").length === spec.choices &&
-      s.querySelector(".detail-header h2")?.textContent ===
-        `Sample ${spec.history}`
+      closed
+        ? s?.querySelector(".jev-drawer-trigger")?.hidden === false
+        : s?.querySelectorAll(".request-row").length === spec.history &&
+          s.querySelectorAll(".lab-output").length === spec.choices &&
+          s.querySelector(".detail-header h2")?.textContent ===
+            `Sample ${spec.history}`
     ) {
       ready = true;
       break;
@@ -197,6 +200,7 @@ async function load(id, closed = false) {
   const result = {
     scenario: id,
     closed,
+    readiness: closed ? "launcher" : "latest response",
     snapshotBytes: spec.bytes,
     readyAfterTwoFramesMs: readyMs,
     ...windowMetrics(start),
@@ -282,8 +286,10 @@ async function stream() {
   const visibleRequestId = shadow()?.querySelector(
     ".detail-meta code:last-child",
   )?.textContent;
+  const closed = !!shadow()?.querySelector(".jev-drawer")?.hidden;
   if (
     live &&
+    !closed &&
     (visibleRequestId !== expectedRequestId ||
       !shadow()
         ?.querySelector(".detail-header .eyebrow")
@@ -294,7 +300,7 @@ async function stream() {
     scenario: current,
     expectedRequestId,
     visibleRequestId,
-    closed: !!shadow()?.querySelector(".jev-drawer")?.hidden,
+    closed,
     pulses,
     calls,
     sent,
@@ -307,6 +313,45 @@ async function stream() {
   $("status").textContent = "Stream complete";
 }
 $("stream").onclick = () => operation(stream);
+$("reopen").onclick = () =>
+  operation(async () => {
+    const start = performance.now();
+    const expectedRequestId = report.streams.at(-1)?.expectedRequestId;
+    if (!expectedRequestId)
+      throw new Error("Run a sample stream before reopening");
+    shadow().querySelector('[aria-label="Open Jev DevTools"]').click();
+    let ready = false;
+    while (performance.now() - start < 30000) {
+      await frame();
+      const s = shadow();
+      if (
+        !s.querySelector(".jev-drawer").hidden &&
+        s.querySelector(".detail-meta code:last-child")?.textContent ===
+          expectedRequestId &&
+        s
+          .querySelector(".detail-header .eyebrow")
+          ?.textContent.includes("success") &&
+        s.querySelectorAll(".lab-output").length ===
+          cases.find((c) => c.id === current).choices
+      ) {
+        ready = true;
+        break;
+      }
+    }
+    if (!ready)
+      throw new Error("Reopening did not show the latest completed response");
+    await frame();
+    await frame();
+    const result = {
+      scenario: current,
+      expectedRequestId,
+      readyAfterTwoFramesMs: performance.now() - start,
+      ...windowMetrics(start),
+    };
+    report.reopens.push(result);
+    show(result);
+    $("status").textContent = "Reopen complete";
+  });
 $("stream-suite").onclick = () =>
   operation(async () => {
     for (const [id, closed] of report.transportMode === "adapter"

@@ -6,6 +6,23 @@ on:
 permissions:
   contents: read
 jobs:
+  drawer:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        react: ["18.3.1", "19.3.1"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: npm
+      - run: npm ci
+      - run: npm install --no-save --package-lock=false react@${{ matrix.react }} react-dom@${{ matrix.react }}
+      - run: npx playwright install --with-deps chromium --only-shell
+      - run: npm run verify:drawer
+
   verify:
     runs-on: ubuntu-latest
     strategy:
