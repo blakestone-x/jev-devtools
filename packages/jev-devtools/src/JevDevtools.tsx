@@ -1,99 +1,12 @@
-import { useState } from "react";
+import { lazy, startTransition, Suspense, useState } from "react";
 import { TraceDiagram } from "./TraceDiagram.js";
-import type { AnswerView, Json, Trace } from "./protocol.js";
-const pretty = (value: unknown) => JSON.stringify(value, null, 2);
+import type { Trace } from "./protocol.js";
+import { JsonBlock, findImage } from "./TraceContent.js";
+const Questions = lazy(() =>
+  import("./Questions.js").then((module) => ({ default: module.Questions })),
+);
 const ms = (value?: number) =>
   value === undefined ? "—" : `${Math.round(value)} ms`;
-const percent = (value: number) => `${Math.round(value * 100)}%`;
-function findImage(value: Json): string | undefined {
-  if (!value || typeof value !== "object") return;
-  if (
-    !Array.isArray(value) &&
-    typeof value.preview === "string" &&
-    /^data:image\/(png|jpeg);base64,/.test(value.preview)
-  )
-    return value.preview;
-  for (const child of Object.values(value)) {
-    const found = findImage(child);
-    if (found) return found;
-  }
-}
-function JsonBlock({ value }: { value: unknown }) {
-  return <pre>{pretty(value)}</pre>;
-}
-function Answer({ answer, image }: { answer?: AnswerView; image?: string }) {
-  if (!answer) return <p className="muted">No answer received.</p>;
-  return (
-    <div className="answer">
-      {answer.choice !== undefined && (
-        <strong className="answer-value">{answer.choice}</strong>
-      )}
-      {answer.score !== undefined && (
-        <strong className="answer-value">
-          {answer.score.toFixed(2)} <small>score</small>
-        </strong>
-      )}
-      {answer.noul !== undefined && (
-        <>
-          <strong className="answer-value">
-            {percent(answer.noul)} <small>probability of true</small>
-          </strong>
-          <div className="bar">
-            <i style={{ width: percent(answer.noul) }} />
-          </div>
-        </>
-      )}
-      {answer.probabilities &&
-        Object.entries(answer.probabilities).map(([label, value]) => (
-          <div className="probability" key={label}>
-            <div>
-              <span>{label}</span>
-              <b>{percent(value)}</b>
-            </div>
-            <div className="bar">
-              <i style={{ width: percent(value) }} />
-            </div>
-          </div>
-        ))}
-      {answer.legend && (
-        <details>
-          <summary>Score legend</summary>
-          <JsonBlock value={answer.legend} />
-        </details>
-      )}
-      {answer.box && (
-        <>
-          <div className="box-preview">
-            {image ? (
-              <img src={image} alt="Captured request image" />
-            ) : (
-              <span>Image preview unavailable</span>
-            )}
-            <div
-              className="bounding-box"
-              style={{
-                left: percent(answer.box.left),
-                top: percent(answer.box.top),
-                width: percent(answer.box.right - answer.box.left),
-                height: percent(answer.box.bottom - answer.box.top),
-              }}
-            />
-          </div>
-          <code className="coordinates">
-            {Object.entries(answer.box)
-              .map(([k, v]) => `${k} ${v.toFixed(2)}`)
-              .join(" · ")}
-          </code>
-        </>
-      )}
-      {answer.confidence !== undefined && (
-        <p className="confidence">
-          Confidence <b>{percent(answer.confidence)}</b>
-        </p>
-      )}
-    </div>
-  );
-}
 export function JevPanel({
   traces,
   connection,
@@ -224,7 +137,11 @@ export function JevPanel({
                   <button
                     key={name}
                     aria-pressed={tab === name}
-                    onClick={() => setTab(name)}
+                    onClick={() => {
+                      if (name === "Questions")
+                        startTransition(() => setTab(name));
+                      else setTab(name);
+                    }}
                   >
                     {name}
                   </button>
@@ -232,86 +149,80 @@ export function JevPanel({
               )}
             </nav>
             <div
-              className={`detail-body ${tab === "Flow" ? "detail-body-flow" : ""}`}
+              className={`detail-body ${tab === "Flow" ? "detail-body-flow" : tab === "Questions" ? "detail-body-questions" : ""}`}
             >
-              {trace.error && (
-                <div role="alert" className="error-banner">
-                  <strong>{trace.error.name}</strong> {trace.error.message}
-                </div>
-              )}
-              {trace.captureWarnings.map((w) => (
-                <p className="warning" key={w}>
-                  {w}
-                </p>
-              ))}
-              {tab === "Flow" && <TraceDiagram key={trace.id} trace={trace} />}
-              {tab === "Questions" &&
-                Object.entries(trace.request.questions ?? {})
-                  .filter(
-                    ([, q]) =>
-                      q && typeof q === "object" && typeof q.type === "string",
-                  )
-                  .map(([key, q]) => (
-                    <article className="question-node standalone" key={key}>
-                      <header>
-                        <h3>{key}</h3>
-                        <span className="type">{q.type}</span>
-                      </header>
-                      <JsonBlock value={q} />
-                      <Answer
-                        answer={trace.result?.answers[key]}
-                        image={findImage(trace.request.state)}
+              <Suspense
+                fallback={
+                  <p className="muted" role="status">
+                    Loading questions…
+                  </p>
+                }
+              >
+                {trace.error && (
+                  <div role="alert" className="error-banner">
+                    <strong>{trace.error.name}</strong> {trace.error.message}
+                  </div>
+                )}
+                {trace.captureWarnings.map((w) => (
+                  <p className="warning" key={w}>
+                    {w}
+                  </p>
+                ))}
+                {tab === "Flow" && (
+                  <TraceDiagram key={trace.id} trace={trace} />
+                )}
+                {tab === "Questions" && (
+                  <Questions key={trace.id} trace={trace} />
+                )}
+                {tab === "Context" && (
+                  <>
+                    <p className="muted">
+                      Captured before dispatch. Known credential fields and
+                      email are redacted; captures are size limited.
+                    </p>
+                    {findImage(trace.request.state) && (
+                      <img
+                        className="context-image"
+                        src={findImage(trace.request.state)}
+                        alt="Captured context"
                       />
-                    </article>
-                  ))}
-              {tab === "Context" && (
-                <>
-                  <p className="muted">
-                    Captured before dispatch. Known credential fields and email
-                    are redacted; captures are size limited.
-                  </p>
-                  {findImage(trace.request.state) && (
-                    <img
-                      className="context-image"
-                      src={findImage(trace.request.state)}
-                      alt="Captured context"
-                    />
-                  )}
-                  <JsonBlock value={trace.request.state} />
-                  {trace.request.assets && (
-                    <JsonBlock value={trace.request.assets} />
-                  )}
-                </>
-              )}
-              {tab === "Transport" && (
-                <>
-                  <h3>HTTP attempts</h3>
-                  <p className="muted">
-                    Attempt duration ends at response headers. Total duration
-                    includes SDK processing and retry waits.
-                  </p>
-                  <table>
-                    <thead>
-                      <tr>
-                        <th>Attempt</th>
-                        <th>Status</th>
-                        <th>Duration</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {trace.attempts.map((a) => (
-                        <tr key={a.number}>
-                          <td>{a.number}</td>
-                          <td>{a.error || a.status || "Pending"}</td>
-                          <td>{ms(a.durationMs)}</td>
+                    )}
+                    <JsonBlock value={trace.request.state} />
+                    {trace.request.assets && (
+                      <JsonBlock value={trace.request.assets} />
+                    )}
+                  </>
+                )}
+                {tab === "Transport" && (
+                  <>
+                    <h3>HTTP attempts</h3>
+                    <p className="muted">
+                      Attempt duration ends at response headers. Total duration
+                      includes SDK processing and retry waits.
+                    </p>
+                    <table>
+                      <thead>
+                        <tr>
+                          <th>Attempt</th>
+                          <th>Status</th>
+                          <th>Duration</th>
                         </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                  {!trace.attempts.length && <p>No HTTP attempt recorded.</p>}
-                </>
-              )}
-              {tab === "Raw" && <JsonBlock value={trace} />}
+                      </thead>
+                      <tbody>
+                        {trace.attempts.map((a) => (
+                          <tr key={a.number}>
+                            <td>{a.number}</td>
+                            <td>{a.error || a.status || "Pending"}</td>
+                            <td>{ms(a.durationMs)}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                    {!trace.attempts.length && <p>No HTTP attempt recorded.</p>}
+                  </>
+                )}
+                {tab === "Raw" && <JsonBlock value={trace} />}
+              </Suspense>
             </div>
           </>
         ) : (

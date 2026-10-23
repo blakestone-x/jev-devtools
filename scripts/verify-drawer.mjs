@@ -1,3 +1,4 @@
+import { checkQuestions } from "./check-questions.mjs";
 import assert from "node:assert/strict";
 import { spawn } from "node:child_process";
 import { once } from "node:events";
@@ -201,6 +202,8 @@ try {
     "Cleared traces are not resurrected on reopen",
   );
   assert.equal(await page.locator(".detail-meta").count(), 0);
+
+  await checkQuestions({ page, load, close, open, settle, pulse });
 
   await load("many-questions");
   await page

@@ -1,9 +1,17 @@
-import { choice, TypeSafeClient } from "@typesafe-ai/sdk";
+import { choice, score, noul, box, TypeSafeClient } from "@typesafe-ai/sdk";
 import { JevRecorder } from "jev-devtools/server";
 import { setImmediate as tick } from "node:timers/promises";
 
 // Synthetic, deterministic local transport: no credentials, network inference, or customer data.
 export const scenarios = [
+  {
+    id: "mixed-questions",
+    history: 1,
+    choices: 3,
+    questions: 150,
+    stateChars: 120,
+    mixed: true,
+  },
   { id: "small", history: 1, choices: 3, questions: 1, stateChars: 120 },
   {
     id: "default-history",
@@ -86,6 +94,36 @@ export function fixture(spec) {
         .slice(0, Math.min(10000, spec.stateChars - i * 10000)),
     ]),
   );
+  if (spec.mixed) {
+    state.preview =
+      "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+afooAAAAASUVORK5CYII=";
+    for (let i = 1; i < spec.questions; i++) {
+      const key = `question_${i}`;
+      if (i % 4 === 1) {
+        questions[key] = score(`Score sample ${i}.`, ["Low", "High"]);
+        answers[key] = {
+          type: "score",
+          score: 0.75,
+          probabilities: { 0: 0.25, 1: 0.75 },
+          legend: { 0: "Low", 1: "High" },
+          confidence: 0.8,
+        };
+      } else if (i % 4 === 2) {
+        questions[key] = noul(`Is sample ${i} present?`);
+        answers[key] = { type: "noul", noul: 0.65 };
+      } else if (i % 4 === 3) {
+        questions[key] = box(`Locate sample ${i}.`);
+        answers[key] = {
+          type: "box",
+          box: { left: 0.1, top: 0.2, right: 0.8, bottom: 0.9 },
+        };
+      }
+    }
+    questions.question_72 = choice(
+      "Long instructions. ".repeat(300) + "End of full instructions.",
+      criteria,
+    );
+  }
   const request = { state, questions };
   const body = JSON.stringify({ model: "benchmark-sample", answers });
   const clientOptions = {

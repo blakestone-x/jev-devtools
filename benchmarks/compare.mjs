@@ -7,6 +7,7 @@ import { once } from "node:events";
 
 const root = resolve(import.meta.dirname, "..");
 const ref = process.argv[2];
+const questions = process.env.BENCH_SUITE === "questions";
 if (!ref) throw new Error("Usage: npm run bench:compare -- BASE_REF");
 const base = execFileSync("git", ["rev-parse", "--verify", `${ref}^{commit}`], {
   cwd: root,
@@ -150,7 +151,9 @@ try {
     const runner = spawn(
       process.execPath,
       [
-        "benchmarks/isolated.mjs",
+        questions
+          ? "benchmarks/questions-isolated.mjs"
+          : "benchmarks/isolated.mjs",
         ...variants.map((v) => `http://127.0.0.1:${v.port}`),
       ],
       {
@@ -160,9 +163,11 @@ try {
           ...process.env,
           BENCH_PROFILE: profiling ? "1" : "0",
           BENCH_ROUNDS: profiling ? "2" : process.env.BENCH_ROUNDS || "4",
-          BENCH_SCENARIOS: profiling
-            ? "combined"
-            : process.env.BENCH_SCENARIOS || "max-history,combined",
+          BENCH_SCENARIOS: questions
+            ? process.env.BENCH_SCENARIOS || "small,many-questions"
+            : profiling
+              ? "combined"
+              : process.env.BENCH_SCENARIOS || "max-history,combined",
           BENCH_OUTPUT: join(output, profiling ? "profiles" : "timing"),
         },
       },

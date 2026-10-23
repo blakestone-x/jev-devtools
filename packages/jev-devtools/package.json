@@ -6,6 +6,7 @@
     "node": ">=22.12"
   },
   "dependencies": {
+    "@tanstack/react-virtual": "3.14.22",
     "@typesafe-ai/sdk": "0.7.0"
   },
   "description": "A React drawer and Node server adapter for inspecting TypeSafe Jev requests.",

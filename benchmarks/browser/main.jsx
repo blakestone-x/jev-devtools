@@ -407,3 +407,80 @@ $("save").onclick = () =>
     show(result);
     $("status").textContent = "Measurements saved";
   });
+
+// Shared interaction protocol for baseline and virtualized implementations.
+const questionScroller = () =>
+  shadow().querySelector(".questions-viewport") ||
+  shadow().querySelector(".detail-body");
+const questionCards = () => [
+  ...shadow().querySelectorAll(".question-node.standalone"),
+];
+const inView = (card) => {
+  if (!card) return false;
+  const a = card.getBoundingClientRect(),
+    b = questionScroller().getBoundingClientRect();
+  return a.bottom > b.top && a.top < b.bottom;
+};
+async function questionAction(action) {
+  const spec = cases.find((s) => s.id === current);
+  const start = performance.now();
+  if (action === "open") {
+    [...shadow().querySelectorAll(".detail-tabs button")]
+      .find((b) => b.textContent === "Questions")
+      .click();
+  } else if (action === "flow") {
+    [...shadow().querySelectorAll(".detail-tabs button")]
+      .find((b) => b.textContent === "Flow")
+      .click();
+    await frame();
+    await frame();
+    $("status").textContent = "Questions flow complete";
+    return;
+  } else if (action === "sweep") {
+    // Fixed 120 scroll positions at two-frame intervals; same input on both builds.
+    for (let i = 0; i <= 120; i++) {
+      const el = questionScroller();
+      el.scrollTop = ((el.scrollHeight - el.clientHeight) * i) / 120;
+      await frame();
+      await frame();
+    }
+  } else {
+    const el = questionScroller();
+    el.scrollTop = action === "last" ? el.scrollHeight : 0;
+  }
+  const target =
+    action === "last" || action === "sweep" ? spec.questions - 1 : 0;
+  let ready = false;
+  while (performance.now() - start < 30000) {
+    await frame();
+    const card = questionCards().find(
+      (c) => c.querySelector("h3")?.textContent === `question_${target}`,
+    );
+    if (inView(card) && card.querySelector(".answer")) {
+      ready = true;
+      break;
+    }
+  }
+  if (!ready)
+    throw new Error(`Question ${target} was not reachable during ${action}`);
+  await frame();
+  await frame();
+  const result = {
+    scenario: current,
+    action,
+    target,
+    readyAfterTwoFramesMs: performance.now() - start,
+    mountedQuestions: questionCards().length,
+    questionElements: questionCards().reduce(
+      (n, c) => n + c.querySelectorAll("*").length + 1,
+      0,
+    ),
+    ...windowMetrics(start),
+  };
+  (report.questions ??= []).push(result);
+  show(result);
+  $("status").textContent = `Questions ${action} complete`;
+}
+for (const action of ["open", "flow", "first", "last", "sweep"])
+  $(`questions-${action}`).onclick = () =>
+    operation(() => questionAction(action));

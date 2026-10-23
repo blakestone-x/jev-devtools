@@ -19,6 +19,10 @@ jobs:
   compare:
     runs-on: ubuntu-24.04
     timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        suite: [stream, questions]
     steps:
       - uses: actions/checkout@v4
         with:
@@ -33,10 +37,12 @@ jobs:
         env:
           BASELINE: ${{ github.event.pull_request.base.sha || inputs.baseline }}
           BENCH_DRAWER_MODES: open,closed,unopened
+          BENCH_SUITE: ${{ matrix.suite }}
+          BENCH_SCENARIOS: ${{ matrix.suite == 'questions' && 'small,many-questions,mixed-questions' || 'max-history,combined' }}
         run: npm run bench:compare -- "$BASELINE"
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: isolated-browser-${{ github.run_id }}
+          name: isolated-browser-${{ matrix.suite }}-${{ github.run_id }}
           path: benchmarks/results/comparison/
           retention-days: 14
