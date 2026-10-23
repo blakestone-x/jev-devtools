@@ -13,7 +13,7 @@ Tests use the real TypeSafe SDK with custom fetch fixtures. No secrets or infere
 
 For drawer changes, run `npx playwright install chromium --only-shell` once, then `npm run verify:drawer`. This exercises the public component with sample requests in an isolated browser, including hidden updates, reopening, preserved controls, clear, and eviction. CI runs this check with React 18 and 19. `JEV_VERIFY_PORT` changes its loopback server port (default 4220).
 
-For opt-in performance measurements, run `npm run bench:server` or `npm run bench:browser`. See the [performance baseline and reproduction guide](docs/performance.md) for workloads, measurements, and limitations. Run the server and browser benchmarks separately to avoid CPU contention.
+For opt-in performance measurements, run `npm run bench:server`, `npm run bench:browser`, or `npm run bench:compare -- BASE_COMMIT` locally. Follow the [local benchmark guide](docs/performance.md). Run server and browser benchmarks separately to avoid CPU contention. Never run performance benchmarks in GitHub Actions; hosted CI is for correctness and integration checks. Keep scripts and fixtures tracked, but save all generated results, profiles, screenshots, logs, and per-run reports under ignored `benchmarks/results/`. Put before/after results, commit SHAs, commands, environment, variability, and tradeoffs in the PR description or discussion. Do not force-add artifacts or copy them into `docs/`.
 
 ## Keep the changelog current
 

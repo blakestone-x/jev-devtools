@@ -13,5 +13,11 @@ node_modules/
 # Examples install locally packed archives whose hashes change per build.
 /examples/*/package-lock.json
 
-# Local performance recordings; curated findings live in docs/performance.md.
+# Generated benchmark evidence stays local; summarize results in PRs.
 /benchmarks/results/
+
+# Prevent archived reports/profiles from returning to documentation diffs.
+/docs/benchmarks/
+/docs/performance-*.md
+*.cpuprofile
+*.cpuprofile.gz
