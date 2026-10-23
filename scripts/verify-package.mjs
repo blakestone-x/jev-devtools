@@ -8,7 +8,7 @@ const temp = await mkdtemp(join(tmpdir(), "jev-consumer-"));
 const npm = process.platform === "win32" ? "npm.cmd" : "npm";
 const packed = JSON.parse(
   execFileSync(npm, ["pack", "--json", "--pack-destination", temp], {
-    cwd: root,
+    cwd: join(root, "packages/jev-devtools"),
     encoding: "utf8",
   }),
 );
@@ -19,11 +19,21 @@ await cp(join(root, "examples/react-vite"), consumer, {
   filter: (p) => !p.includes("node_modules") && !p.includes("/dist"),
 });
 const pkg = JSON.parse(await readFile(join(consumer, "package.json"), "utf8"));
+if (process.env.JEV_VERIFY_REACT) {
+  pkg.dependencies.react = process.env.JEV_VERIFY_REACT;
+  pkg.dependencies["react-dom"] = process.env.JEV_VERIFY_REACT;
+}
 pkg.dependencies["@diagram-motion-lab/jev-devtools"] = `file:${tarball}`;
 await writeFile(join(consumer, "package.json"), JSON.stringify(pkg, null, 2));
 execFileSync(
   npm,
-  ["install", "--offline", "--ignore-scripts", "--no-audit", "--no-fund"],
+  [
+    "install",
+    ...(process.env.JEV_VERIFY_OFFLINE === "1" ? ["--offline"] : []),
+    "--ignore-scripts",
+    "--no-audit",
+    "--no-fund",
+  ],
   { cwd: consumer, stdio: "inherit" },
 );
 execFileSync(

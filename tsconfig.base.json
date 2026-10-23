@@ -9,10 +9,6 @@
     "skipLibCheck": true,
     "noEmit": true,
     "allowImportingTsExtensions": true,
-    "types": ["node", "vite/client"],
-    "paths": {
-      "@/*": ["./src/*"]
-    }
-  },
-  "include": ["src", "server", "tests", "vite.config.ts"]
+    "types": ["node"]
+  }
 }

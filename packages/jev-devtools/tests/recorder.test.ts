@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import { setTimeout as delay } from "node:timers/promises";
 import { TypeSafeClient, noul, choice } from "@typesafe-ai/sdk";
 import { JevRecorder } from "../server/recorder";
-import { sampleTransport, makeRequest } from "../server/scenarios";
+import { sampleTransport, makeRequest } from "./support/transport";
 import type { Fetch } from "@typesafe-ai/sdk";
 
 const meta = { session: "one", label: "Test", source: "sample" as const };

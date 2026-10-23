@@ -1,4 +1,4 @@
-// TypeSafe logo reused from the public docs asset in dist/docs/assets/logo-dark.png.
+// TypeSafe logo reused from the public docs asset in Diagram Motion Lab dist/docs/assets/logo-dark.png.
 // Embedded so the installed component needs no host asset route.
 export function TypeSafeMark() {
   return (

@@ -1,28 +1,38 @@
-# Jev Inspector
+# Jev DevTools
 
-A reusable React inspector with one root component and a Node server adapter. It uses Diagram Motion Lab's rounded outline cards, curved connections, pink flowing dots, and probability bars. The drawer contains searchable request history and Flow, Questions, Context, Transport, and Raw views.
+A drop-in React drawer for inspecting TypeSafe Jev requests. See context, questions, Choice probabilities, Score values, Noul probabilities, Box regions, and transport attempts through animated diagrams.
 
-This is an **installable prototype**, not a published npm release. Verified with sample responses through the real TypeSafe SDK; no live inference was used for verification.
+Extracted from [Diagram Motion Lab](https://github.com/diegoag64/diagram-motion-lab). Uses a custom Jev drawer; TanStack DevTools inspired the workflow but is not a dependency.
 
-## Install in another React project
+## Run the playground
 
-Requires React 18 or 19. Use Node 22.12+ for the repository tooling (verified on 24.19). The server adapter requires a Node runtime, not an edge runtime.
-
-From this repository:
+Requires Node **22.12+** (24 recommended).
 
 ```sh
-npm --prefix devtools ci
-cd devtools
-npm pack
+git clone https://github.com/diegoag64/jev-devtools.git
+cd jev-devtools
+npm ci
+npm run dev
 ```
 
-From your React project, install the generated archive:
+Open http://127.0.0.1:4182/. Sample mode needs no API key. Run a scenario to see its application result, then open **Jev DevTools** in the bottom-right corner to inspect the call. Samples cover Choice, Score, Noul, Box, retries, errors, and cancellation. Fixture responses do not change when you edit context.
+
+For optional live mode, copy `apps/playground/.env.example` to `apps/playground/.env.local`, set `TYPESAFE_API_KEY`, and restart. Keys stay on the server. Live inference has not been verified during extraction.
+
+## Install in another React app
+
+This prototype is **not published to npm**. The existing name `@diagram-motion-lab/jev-devtools` is retained for compatibility; a publishing scope will be chosen before release.
 
 ```sh
-npm install /absolute/path/to/diagram-motion-lab/devtools/diagram-motion-lab-jev-devtools-0.1.0.tgz
+# In this repository:
+npm ci
+npm run pack:devtools
+
+# In your React application:
+npm install /absolute/path/to/jev-devtools/diagram-motion-lab-jev-devtools-0.1.0.tgz
 ```
 
-Mount once near the root. No provider, client object, trace props, or application hook is needed:
+Mount once near the root:
 
 ```tsx
 import { JevDevtools } from '@diagram-motion-lab/jev-devtools';
@@ -31,122 +41,57 @@ import '@diagram-motion-lab/jev-devtools/styles.css';
 export function Root() {
   return <>
     <App />
-    <JevDevtools enabled={import.meta.env.DEV} />
+    <JevDevtools enabled={import.meta.env.DEV} defaultOpen={false} />
   </>;
 }
 ```
 
-For Next.js, mount it in a client component and use `enabled={process.env.NODE_ENV === 'development'}`. CSS is scoped to the drawer; it doesn't restyle your application. Server rendering produces no inspector markup, and browser code is loaded after mounting when enabled. `enabled` defaults to **false**. Disabled components open no connections. This is a runtime opt-in, not a guarantee that every bundler removes inspector assets from production output.
-
-| Prop | Default | Purpose |
-| --- | --- | --- |
-| `enabled` | `false` | Explicitly enable the inspector |
-| `endpoint` | `/api/jev-devtools` | Same-origin path to the server adapter |
-| `defaultOpen` | `true` | Start expanded or as the small Jev launcher |
-
-## Server setup
-
-Create one adapter and one instrumented client per server process. Replace your existing TypeSafe client construction with `inspector.createClient(...)`; continue calling `jev.systemOne(...)` normally. API keys stay on the server.
+On the Node server:
 
 ```ts
 import { createJevDevtools } from '@diagram-motion-lab/jev-devtools/server';
 
-export const inspector = createJevDevtools({
+const inspector = createJevDevtools({
   enabled: process.env.NODE_ENV === 'development',
-  origin: 'http://localhost:3000', // exact browser origin, including port
-  redact: (path, value) => path.at(-1) === 'email' ? '[redacted]' : value,
+  origin: 'http://localhost:3000',
 });
-
-export const jev = inspector.createClient({
-  apiKey: process.env.TYPESAFE_API_KEY,
-});
+const jev = inspector.createClient({ apiKey: process.env.TYPESAFE_API_KEY });
+app.use(inspector.middleware); // At root, before fallback routes.
+// Your handlers continue to call jev.systemOne(...).
+// Call inspector.dispose() when shutting down the server.
 ```
 
-For Express, Connect, or Vite's development server, mount the middleware at the application root, before any fallback route. It delegates unrelated paths:
+Only calls through this client are recorded. Both routes and inspector must share the same adapter instance. History is bounded and in memory, and the browser connects over same-origin SSE. React 18/19 are peer dependencies. Tailwind, shadcn, and the playground are not bundled with the library.
 
-```ts
-app.use(inspector.middleware);
-// Your existing application handlers call jev.systemOne(...).
-// On server shutdown: inspector.dispose();
-```
+See the [complete integration guide](docs/integration.md) for Next.js, proxies, custom endpoints, authorization, redaction, session scoping, and runtime limits. The adapter currently targets Node, not edge runtimes or distributed/serverless aggregation. Capture and display are both disabled by default.
 
-For Node frameworks with Web Request/Response handlers, route the endpoint **and its subpaths** to the same adapter instance:
+## Repository layout
 
-```ts
-// Next.js: app/api/jev-devtools/[[...path]]/route.ts
-import { inspector } from '@/server/jev';
-export const runtime = 'nodejs';
-export const GET = (request: Request) => inspector.handle(request);
-export const DELETE = (request: Request) => inspector.handle(request);
-```
+| Path | Purpose |
+| --- | --- |
+| `packages/jev-devtools` | React drawer, diagrams, recorder, Node adapter, scoped CSS |
+| `apps/playground` | Sample/live scenarios, minimal shadcn form, application previews |
+| `examples/react-vite` | Independent consumer using only public package exports |
+| `docs` | Integration, architecture, provenance, and release process |
 
-The adapter serves configuration at the base path, snapshots at `/events` via SSE, and `DELETE /clear`. The React component manages subscriptions, reconnection, and cleanup. If your frontend and backend use different ports, proxy this path and the application's inference endpoint through the frontend origin. The browser does not support a cross-origin inspector endpoint. Middleware must receive the original path and matching Host; configure proxies accordingly.
+The playground consumes built public exports, so restart `npm run dev` after library edits, or run `npm run build:package` separately. The static diagram lab and its `/docs/` replica remain in the original repo.
 
-Both API routes and inspector endpoints must share the **same in-memory adapter instance/process**. This prototype doesn't aggregate traces across workers, serverless instances, or edge runtimes. Framework route wiring is illustrated above; the independently tested integration is React + Vite + the Node adapter.
-
-A disabled server adapter exposes no inspector endpoints and `createClient` returns an ordinary SDK client without recording. Capture is limited to `systemOne` calls through that client; it does not intercept unrelated traffic or discover other SDK instances.
-
-## History and access
-
-Default history is shared across local development tabs, bounded to 50 requests. It resets when the process restarts. Clear affects this local history. Only drawer height is stored in localStorage; captured data stays in process/browser memory.
-
-Host and Origin checks reject cross-origin requests. An enabled non-loopback origin requires an `authorize(request)` callback. For a private authenticated environment, apply your existing authentication, and optionally provide `getSession(request)` returning a server-derived user/workspace scope. Then wrap the application's inference handler in `inspector.run(request, () => jev.systemOne(input))` so recording uses the same scope as the inspector's SSE and clear requests. Authentication still belongs to your application; the inspector does not create accounts or infer authorization. Do not derive scopes from an untrusted query parameter. With no `getSession`, all authorized users share the local history.
-
-Credential-named fields are redacted recursively. Custom `redact(path, value)` applies to inputs and responses. Arbitrary secrets in prose are not detected. Captures have depth, collection, image, and text budgets; omitted/truncated data is marked. Request headers/options are not captured. Small PNG/JPEG byte arrays have inline previews; unsupported or large images retain references and sizes.
-
-## Diagrams and request capture
-
-The Flow tab follows the lab's `jev-choice` layout: shared context and question cards feed a result card, then branch into output cards. Select any question from the batch, zoom or fit the diagram, and pause the synchronized flow dots.
-
-- **Choice:** exact returned choice, candidate distribution, and confidence. Alternatives stay visible; the inspector doesn't replace the returned choice with its own argmax decision.
-- **Score:** returned score, distribution, legend, and confidence.
-- **Noul:** probability of true and its complement; no invented confidence or routing threshold.
-- **Box:** normalized region overlay on the captured image, coordinates, and confidence. A Box is not a presence detector.
-
-Connections illustrate data structure, not hidden model reasoning or per-question timing. Application routes/thresholds are not captured. Full instructions and criteria remain in Questions, and full state remains in Context. Cards follow the lab's visual language, but do not apply its illustrative routing policies to real requests.
-
-The recorder preserves the original SDK APIPromise, including response helpers and cancellation. It observes a cloned response without consuming the caller's body. AsyncLocalStorage correlates transport attempts/retries with their logical request. Total latency covers the logical call; attempt latency ends at response headers.
-
-## Local playground and independent example
-
-```sh
-npm run dev:devtools
-```
-
-Open **http://127.0.0.1:4182/**. The original lab and unlisted `/docs/` remain on 4178. The playground uses the same public component and adapter described above. Its minimal form uses shadcn Button, Native Select, Textarea, and Label components; the top bar and hero are omitted, and application results appear after a run. Its drawer starts closed so the application result remains visible; open **Jev DevTools** in the bottom-right corner to inspect the request.
-
-Samples cover triage (Choice, Score, Noul), image regions (Box + Noul), retry after 429, failure, and cancellation. Choose a sample outcome (blocked payment, delayed delivery, or quick question) to compare different fixture responses. Sample answers and usage are fixed by that selection, even if the context changes. They use the real SDK's serialization/retry paths with a custom fetch and make no inference calls.
-
-Successful runs also update an application preview: Choice selects a support queue, Score sets a priority, and Noul suggests a human handoff. **Why this outcome?** explains the signals. Image runs show the returned Box with a toggleable overlay, gated by the separate Noul presence answer. Retry, failure, and cancellation have explicit states; a failed run never applies an earlier result. Priority and presence thresholds are labeled demo policies, and no actual ticket is sent.
-
-For optional live mode, copy `.env.example` to `.env.local`, set `TYPESAFE_API_KEY` there, and restart. No key is accepted in the browser. The image example uses the SDK's experimental image contract. Live behavior has not been verified.
-
-To try the minimal independent consumer after `npm pack`:
-
-```sh
-cd examples/react-vite
-npm install
-npm run dev
-```
-
-Open **http://127.0.0.1:4183/**. This example imports only the installed package's public exports, includes a sample-only server, and uses its own light theme to demonstrate CSS isolation.
-
-Resize the drawer by dragging the top edge or using the focused handle's arrow keys, Shift+arrows, Home, and End. Expand/Restore adjusts its size. Close or Escape returns focus to the TypeSafe-branded Jev DevTools launcher; closing retains the selected request, filters, and subscription. Unmounting/disabling the component closes the subscription; server capture continues independently.
-
-![Jev Inspector](../docs/images/jev-devtools.png)
-
-## Verification
+## Verify
 
 ```sh
 npm run check
 npm test
-npm run check:devtools
-npm run test:devtools
-npm --prefix devtools run verify:package
+npm run build
+npm run check:playground
+npm run verify:package
 ```
 
-Package verification packs the library, installs it into a temporary independent React app, verifies public exports and SSR/disabled behavior, and builds the consumer while asserting that no server recorder or SDK modules enter the browser bundle. Recorder and adapter tests cover response ownership, retries, error/abort, concurrent scopes, redaction, bounded retention, image capture, HTTP/SSE delivery, origin/auth guards, and scoped clearing.
+`verify:package` packs the library and installs it in a temporary independent React app, checks SSR/disabled behavior, and builds the consumer with a browser/server boundary check. Set `JEV_VERIFY_REACT=18.3.1` to verify React 18 instead of the default React 19. Registry access is allowed by default; `JEV_VERIFY_OFFLINE=1` is available when all dependencies are cached.
 
-Package exports: `@diagram-motion-lab/jev-devtools` (React + browser-safe types), `/styles.css` (scoped styles), and `/server` (Node adapter + recorder). Library output is `lib/`; the playground's production build is separate and intentionally shows only a local-tool notice. No production deployment is included.
+`check:playground` compiles the full interactive development UI into a temporary directory. The regular production build intentionally contains only a local-tool notice; it is not a hosted demo.
 
-The playground controls live in `src/components/ui/` and are generated from [shadcn/ui](https://ui.shadcn.com/docs/installation/vite), with direct Radix imports and the local `cn` helper. `components.json` configures future additions. Tailwind utilities and theme tokens are in `src/controls.css`; global preflight is omitted to preserve inspector styling. These dependencies are development-only and are not needed by consumers of the packaged inspector.
+After `npm run pack:devtools`, you can also run `npm install && npm run dev` inside `examples/react-vite` (port 4183, sample-only).
+
+Changes use feature branches and PRs by default. See [CONTRIBUTING.md](CONTRIBUTING.md), [architecture](docs/architecture.md), and [release instructions](docs/releases.md). No workflow publishes packages or deploys the playground.
+
+MIT for project code; see [LICENSE](LICENSE) and [third-party notices](THIRD_PARTY_NOTICES.txt) for design provenance and branding.
