@@ -8,7 +8,7 @@ Dates below use UTC and were checked against npm's publication history. The hist
 
 | Version | Published (UTC) | Highlights |
 | --- | --- | --- |
-| [Unreleased](#unreleased) | Not published | Batched updates, changed-trace streaming, frame-coalesced rendering, less work while the drawer is closed, virtualized Questions, and compact Choice diagrams. |
+| [Unreleased](#unreleased) | Not published | Batched updates, changed-trace streaming, frame-coalesced rendering, less work while the drawer is closed, virtualized Questions, compact Choice diagrams, and reuse of unchanged inspector views. |
 | [0.1.3](#013--october-23-2026-experimental) | 2026-10-23 | Isolated drawer styles, diagram pan/zoom, and version-specific npm links. |
 | [0.1.2](#012--october-23-2026-experimental) | 2026-10-23 | Bundled AI setup skill and framework recipes. |
 | [0.1.1](#011--october-23-2026-experimental) | 2026-10-23 | Full inline demo GIF and published-package installation instructions. |
@@ -17,6 +17,8 @@ Dates below use UTC and were checked against npm's publication history. The hist
 ## Unreleased
 
 ### Performance
+
+- Reuse unchanged request rows and the selected detail view during incoming updates. Keep changed responses, selection, filtering, and tab navigation live; tab changes no longer rerender the request list. Public APIs are unchanged. ([#20](https://github.com/diegoag64/jev-devtools/pull/20))
 
 - Show a compact Flow overview for Choice responses with more than six categories: the top three probabilities, the returned choice when different, **Show More** to reveal three additional branches per click, and access to every captured probability through a searchable, paginated table. **Show fewer** resets the overview; opening the table preserves expanded branches. Newly revealed cards and connections animate in with a short stagger (disabled for reduced motion). Expanding or collapsing preserves pan and zoom; **Fit** explicitly reframes the diagram. Exact captured values remain available; summaries do not renormalize probabilities. ([#19](https://github.com/diegoag64/jev-devtools/pull/19))
 

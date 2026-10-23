@@ -1,3 +1,4 @@
+import { checkSelection } from "./check-selection.mjs";
 import { checkChoice } from "./check-choice.mjs";
 import { checkQuestions } from "./check-questions.mjs";
 import assert from "node:assert/strict";
@@ -263,6 +264,7 @@ try {
     ),
     true,
   );
+  await checkSelection({ page, load, settle, pulse });
   await checkChoice({ page, load });
   await page.screenshot({ path: "benchmarks/results/drawer-reopened.png" });
   assert.deepEqual(errors, [], "No browser errors");

@@ -7,6 +7,7 @@ import { once } from "node:events";
 
 const root = resolve(import.meta.dirname, "..");
 const refs = process.argv.slice(2);
+const rerenders = process.env.BENCH_SUITE === "rerenders";
 const choices = process.env.BENCH_SUITE === "choices";
 const questions = process.env.BENCH_SUITE === "questions";
 const profileRounds = Number(process.env.BENCH_PROFILE_ROUNDS ?? 2);
@@ -172,11 +173,13 @@ try {
     const runner = spawn(
       process.execPath,
       [
-        choices
-          ? "benchmarks/choices-isolated.mjs"
-          : questions
-            ? "benchmarks/questions-isolated.mjs"
-            : "benchmarks/isolated.mjs",
+        rerenders
+          ? "benchmarks/rerenders-isolated.mjs"
+          : choices
+            ? "benchmarks/choices-isolated.mjs"
+            : questions
+              ? "benchmarks/questions-isolated.mjs"
+              : "benchmarks/isolated.mjs",
         ...variants.map((v) => `http://127.0.0.1:${v.port}`),
       ],
       {

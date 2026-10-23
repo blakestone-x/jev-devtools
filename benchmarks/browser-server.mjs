@@ -32,9 +32,12 @@ for (const spec of scenarios) {
       limit: spec.history,
     });
     const { request, clientOptions } = fixture(spec);
-    let sequence = 0;
+    let sequence = 0,
+      responseDelay = 0;
     const fetchSample = clientOptions.fetch;
     clientOptions.fetch = async (...args) => {
+      if (responseDelay)
+        await new Promise((resolve) => setTimeout(resolve, responseDelay));
       const response = await fetchSample(...args);
       response.headers.set("x-typesafe-request-id", `benchmark-${++sequence}`);
       return response;
@@ -49,6 +52,9 @@ for (const spec of scenarios) {
       client,
       request,
       requestId: () => `benchmark-${sequence}`,
+      setDelay: (ms) => {
+        responseDelay = ms;
+      },
     });
   }
 }
@@ -176,11 +182,22 @@ const server = createServer(async (req, res) => {
         return res.end();
       }
       if (transportMode === "adapter") {
+        // Optional local sample delay lets UI checks inspect a pending trace.
+        const delay = Number(url.searchParams.get("delay") || 0);
+        if (!Number.isInteger(delay) || delay < 0 || delay > 1000) {
+          res.writeHead(400);
+          return res.end("Invalid sample delay");
+        }
         let calls = 0;
         const completed = {};
         for (const id of active.keys()) {
-          const { client, request } = adapters.get(id);
-          await invoke(client, request);
+          const { client, request, setDelay } = adapters.get(id);
+          setDelay(delay);
+          try {
+            await invoke(client, request);
+          } finally {
+            setDelay(0);
+          }
           calls++;
           completed[id] = adapters.get(id).requestId();
         }
