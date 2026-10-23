@@ -120,6 +120,8 @@ function show(value) {
   $("metrics").textContent = JSON.stringify(value, null, 2);
 }
 const cases = await (await fetch("/bench/info")).json();
+report.transportMode = cases[0].transportMode;
+report.revision = cases[0].revision;
 $("scenario").innerHTML = cases
   .map(
     (c) =>
@@ -217,25 +219,35 @@ $("load").onclick = () =>
     $("status").textContent = "Loaded " + current;
   });
 async function stream() {
+  const live = report.transportMode === "adapter";
+  const before = live ? await (await fetch("/bench/counters")).json() : null;
   const start = performance.now();
   let sent = 0,
     bytes = 0,
-    pulses = 0;
+    pulses = 0,
+    calls = 0;
   $("status").textContent = "Streaming " + current;
   // Serial scheduling avoids unbounded test-harness queues; report achieved rate, not just target.
-  for (let i = 0; i < 25; i++) {
-    const due = start + i * 200;
+  for (let i = 0; i < (live ? 5 : 25); i++) {
+    const due = start + i * (live ? 1000 : 200);
     await pause(Math.max(0, due - performance.now()));
     const r = await (await fetch("/bench/pulse", { method: "POST" })).json();
     sent += r.sent;
     bytes += r.bytes;
     pulses++;
+    calls += r.calls || 0;
   }
-  await pause(250);
+  await pause(Math.max(250, start + 5050 - performance.now()));
+  if (live) {
+    const after = await (await fetch("/bench/counters")).json();
+    sent = after.sent - before.sent;
+    bytes = after.bytes - before.bytes;
+  }
   const result = {
     scenario: current,
     closed: !!shadow()?.querySelector(".jev-drawer")?.hidden,
     pulses,
+    calls,
     sent,
     bytes,
     ...windowMetrics(start),
@@ -248,13 +260,18 @@ async function stream() {
 $("stream").onclick = () => operation(stream);
 $("stream-suite").onclick = () =>
   operation(async () => {
-    for (const [id, closed] of [
-      ["default-history", false],
-      ["max-history", false],
-      ["large-state", false],
-      ["combined", false],
-      ["combined", true],
-    ]) {
+    for (const [id, closed] of report.transportMode === "adapter"
+      ? [
+          ["max-history", false],
+          ["combined", false],
+        ]
+      : [
+          ["default-history", false],
+          ["max-history", false],
+          ["large-state", false],
+          ["combined", false],
+          ["combined", true],
+        ]) {
       root.render(null);
       await frame();
       await frame();
@@ -266,7 +283,12 @@ $("stream-suite").onclick = () =>
     }
     $("status").textContent = "Streaming suite complete";
   });
-$("status").textContent = "Ready";
+$("stream").textContent =
+  report.transportMode === "adapter"
+    ? "Run 1 sample call/sec for 5 seconds"
+    : "Stream at 5 Hz for 5 seconds";
+$("status").textContent =
+  "Ready · " + report.transportMode + " · " + report.revision;
 let interactionStart = performance.now();
 $("reset").onclick = () => {
   interactionStart = performance.now();

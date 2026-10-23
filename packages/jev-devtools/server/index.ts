@@ -40,6 +40,43 @@ export function createJevDevtools(options: JevDevtoolsServerOptions) {
   const recorder = new JevRecorder(options),
     scope = new AsyncLocalStorage<string>();
   const streams = new Set<() => void>();
+  type SnapshotFor = (session: string) => Uint8Array;
+  type Flush = (snapshotFor: SnapshotFor) => void;
+  const pending = new Set<Flush>();
+  const encoder = new TextEncoder();
+  let scheduled: ReturnType<typeof setImmediate> | undefined;
+  const encodeSnapshot: SnapshotFor = (session) =>
+    encoder.encode(
+      `event: snapshot\ndata: ${JSON.stringify({ version: 1, traces: recorder.snapshot(session) })}\n\n`,
+    );
+  function schedule(flush: Flush) {
+    pending.add(flush);
+    if (scheduled) return;
+    scheduled = setImmediate(() => {
+      scheduled = undefined;
+      const batch = [...pending];
+      pending.clear();
+      // Cache only for this synchronous delivery turn and only within a session.
+      // Each reader owns its bytes; mutating one Response must not corrupt another.
+      const encoded = new Map<string, Uint8Array>();
+      const snapshotFor: SnapshotFor = (session) => {
+        let bytes = encoded.get(session);
+        if (!bytes) {
+          bytes = encodeSnapshot(session);
+          encoded.set(session, bytes);
+        }
+        return bytes.slice();
+      };
+      for (const deliver of batch) deliver(snapshotFor);
+    });
+  }
+  function unschedule(flush: Flush) {
+    pending.delete(flush);
+    if (!pending.size && scheduled) {
+      clearImmediate(scheduled);
+      scheduled = undefined;
+    }
+  }
   let disposed = false;
   const enabled = () => options.enabled === true && !disposed;
   const sessionFor = async (request: Request) => {
@@ -79,25 +116,31 @@ export function createJevDevtools(options: JevDevtoolsServerOptions) {
       return json({ error: "Not found" }, 404);
     if (request.method !== "GET")
       return json({ error: "Method not allowed" }, 405);
-    const encoder = new TextEncoder();
     let cleanup = () => {},
-      flush = () => {};
+      wake = () => {},
+      flush: Flush = () => {};
     const stream = new ReadableStream<Uint8Array>({
       start(controller) {
         let closed = false,
           dirty = true;
-        flush = () => {
+        flush = (snapshotFor) => {
           if (closed || !dirty || (controller.desiredSize ?? 0) <= 0) return;
           dirty = false;
-          controller.enqueue(
-            encoder.encode(
-              `event: snapshot\ndata: ${JSON.stringify({ version: 1, traces: recorder.snapshot(session) })}\n\n`,
-            ),
-          );
+          try {
+            controller.enqueue(snapshotFor(session));
+          } catch {
+            // Deferred observer failures must not escape into the application's
+            // event loop or prevent other viewers from receiving their update.
+            cleanup();
+          }
+        };
+        wake = () => {
+          if (!closed && dirty && (controller.desiredSize ?? 0) > 0)
+            schedule(flush);
         };
         const unsubscribe = recorder.subscribe(() => {
           dirty = true;
-          flush();
+          wake();
         });
         const heartbeat = setInterval(() => {
           if (!closed && (controller.desiredSize ?? 0) > 0)
@@ -107,6 +150,7 @@ export function createJevDevtools(options: JevDevtoolsServerOptions) {
           if (closed) return;
           closed = true;
           unsubscribe();
+          unschedule(flush);
           clearInterval(heartbeat);
           request.signal.removeEventListener("abort", cleanup);
           streams.delete(cleanup);
@@ -119,10 +163,12 @@ export function createJevDevtools(options: JevDevtoolsServerOptions) {
         streams.add(cleanup);
         request.signal.addEventListener("abort", cleanup, { once: true });
         if (request.signal.aborted) cleanup();
-        else flush();
+        else flush(encodeSnapshot);
       },
       pull() {
-        flush();
+        // Reading must not bypass the batching boundary. A full queue retains
+        // only a dirty flag; the next readable turn delivers current history.
+        wake();
       },
       cancel() {
         cleanup();
