@@ -21,6 +21,7 @@
     "check:playground": "node scripts/check-playground.mjs",
     "pack:devtools": "npm pack -w jev-devtools --pack-destination .",
     "verify:nextjs": "node scripts/verify-nextjs.mjs",
+    "verify:drawer": "npm run build:package && node scripts/verify-drawer.mjs",
     "bench:server": "npm run build:package && node --expose-gc benchmarks/server.mjs",
     "bench:browser": "npm run build:package && node benchmarks/browser-server.mjs",
     "bench:compare": "node benchmarks/compare.mjs"

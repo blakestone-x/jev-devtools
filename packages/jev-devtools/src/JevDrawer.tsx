@@ -28,14 +28,15 @@ function initialHeight() {
 /** Non-modal drawer: the app remains usable and children stay mounted when closed. */
 export function JevDrawer({
   children,
-  defaultOpen = true,
+  open,
+  onOpenChange,
 }: {
   children: ReactNode;
-  defaultOpen?: boolean;
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
 }) {
   const id = useId();
   const [root, setRoot] = useState<ShadowRoot | null>(null);
-  const [open, setOpen] = useState(defaultOpen);
   const [expanded, setExpanded] = useState(false);
   const [viewport, setViewport] = useState(viewportHeight);
   const [height, setHeight] = useState(initialHeight);
@@ -47,6 +48,14 @@ export function JevDrawer({
   const { min, max } = limits(viewport);
   const visibleHeight = expanded ? max : clamp(height, viewport);
 
+  useEffect(() => {
+    // Retain the diagram and its camera, but suspend native SVG timelines while
+    // hidden. This does not change the user's Pause/Play flow preference.
+    panel.current?.querySelectorAll("svg").forEach((svg) => {
+      if (open) svg.unpauseAnimations();
+      else svg.pauseAnimations();
+    });
+  }, [open, root]);
   useEffect(() => {
     const host = document.createElement("jev-devtools-root");
     // The host is the only element exposed to page selectors. The overlay itself
@@ -84,7 +93,7 @@ export function JevDrawer({
   }, [open, root]);
   const toggle = (value: boolean) => {
     interacted.current = true;
-    setOpen(value);
+    onOpenChange(value);
   };
   const resizeTo = (value: number) => {
     setExpanded(false);

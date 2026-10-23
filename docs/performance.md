@@ -1,6 +1,6 @@
 # Performance baseline — October 23, 2026
 
-Follow-ups: [update batching](performance-batching.md) and [changed-trace streaming](performance-deltas.md). The measurements below remain the original baseline.
+Follow-ups: [update batching](performance-batching.md), [changed-trace streaming](performance-deltas.md), [frame coalescing](performance-coalescing.md), and [hidden drawer rendering](performance-hidden-drawer.md). The measurements below remain the original baseline.
 
 The biggest measured scaling cost is repeatedly cloning and sending the entire retained history. Large diagrams have a separate layout/legibility problem. Pan and zoom at rest were responsive in the manual stress check. These measurements identify follow-up work; this PR changes no library runtime behavior.
 
