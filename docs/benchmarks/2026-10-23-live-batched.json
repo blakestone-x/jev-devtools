@@ -1,0 +1,151 @@
+{
+  "timestamp": "2026-10-23T17:02:25.466Z",
+  "environment": {
+    "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Safari/537.36",
+    "viewport": [
+      1710,
+      961
+    ],
+    "dpr": 2,
+    "hardwareConcurrency": 8,
+    "production": true
+  },
+  "mounts": [],
+  "streams": [
+    {
+      "scenario": "max-history",
+      "closed": false,
+      "pulses": 5,
+      "calls": 5,
+      "sent": 5,
+      "bytes": 863328,
+      "elapsedMs": 5069.099999904633,
+      "frames": {
+        "n": 302,
+        "median": 16.69999999999891,
+        "p95": 17.5,
+        "max": 33.30000000000109
+      },
+      "frameGapsOver34Ms": 0,
+      "longTasks": 0,
+      "longTaskMs": 0,
+      "longestTaskMs": 0,
+      "visibility": "visible",
+      "achievedHz": 0.9863683888844307
+    },
+    {
+      "scenario": "max-history",
+      "closed": false,
+      "pulses": 5,
+      "calls": 5,
+      "sent": 5,
+      "bytes": 863251,
+      "elapsedMs": 5056.799999952316,
+      "frames": {
+        "n": 293,
+        "median": 16.69999999999891,
+        "p95": 17.200000000000728,
+        "max": 66.69999999999891
+      },
+      "frameGapsOver34Ms": 2,
+      "longTasks": 0,
+      "longTaskMs": 0,
+      "longestTaskMs": 0,
+      "visibility": "visible",
+      "achievedHz": 0.9887676000726048
+    },
+    {
+      "scenario": "max-history",
+      "closed": false,
+      "pulses": 5,
+      "calls": 5,
+      "sent": 5,
+      "bytes": 863210,
+      "elapsedMs": 5064.299999952316,
+      "frames": {
+        "n": 298,
+        "median": 16.700000000000728,
+        "p95": 17.299999999999272,
+        "max": 33.39999999999782
+      },
+      "frameGapsOver34Ms": 0,
+      "longTasks": 0,
+      "longTaskMs": 0,
+      "longestTaskMs": 0,
+      "visibility": "visible",
+      "achievedHz": 0.9873032798307916
+    },
+    {
+      "scenario": "combined",
+      "closed": false,
+      "pulses": 5,
+      "calls": 5,
+      "sent": 10,
+      "bytes": 180486752,
+      "elapsedMs": 5067.599999904633,
+      "frames": {
+        "n": 250,
+        "median": 16.700000000000728,
+        "p95": 33.400000000001455,
+        "max": 100.10000000000218
+      },
+      "frameGapsOver34Ms": 12,
+      "longTasks": 7,
+      "longTaskMs": 500,
+      "longestTaskMs": 100,
+      "visibility": "visible",
+      "achievedHz": 1.9733207041179632
+    },
+    {
+      "scenario": "combined",
+      "closed": false,
+      "pulses": 5,
+      "calls": 5,
+      "sent": 10,
+      "bytes": 180486734,
+      "elapsedMs": 5067.700000047684,
+      "frames": {
+        "n": 254,
+        "median": 16.700000000000728,
+        "p95": 49.89999999999782,
+        "max": 100.09999999999854
+      },
+      "frameGapsOver34Ms": 13,
+      "longTasks": 7,
+      "longTaskMs": 463,
+      "longestTaskMs": 80,
+      "visibility": "visible",
+      "achievedHz": 1.9732817648846432
+    },
+    {
+      "scenario": "combined",
+      "closed": false,
+      "pulses": 5,
+      "calls": 5,
+      "sent": 10,
+      "bytes": 180486659,
+      "elapsedMs": 5069.900000095367,
+      "frames": {
+        "n": 254,
+        "median": 16.69999999999709,
+        "p95": 49.89999999999418,
+        "max": 116.70000000000437
+      },
+      "frameGapsOver34Ms": 13,
+      "longTasks": 8,
+      "longTaskMs": 527,
+      "longestTaskMs": 78,
+      "visibility": "visible",
+      "achievedHz": 1.9724254915899513
+    }
+  ],
+  "interactions": [],
+  "transportMode": "adapter",
+  "revision": "batched",
+  "provenance": {
+    "baseCommit": "53e437b196f8e2d1e6c80d615e45388de0a5276b",
+    "workingTreeDirty": true,
+    "serverSourceSha256": "25f6bb9579f647df254806ed72323dfe53aa1e2bce35be6901d1c6630553f4c3",
+    "note": "Batched working tree on the merged PR #13 base; commit field identifies HEAD, not an already-committed implementation."
+  }
+}

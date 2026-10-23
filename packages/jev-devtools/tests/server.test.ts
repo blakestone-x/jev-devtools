@@ -6,6 +6,7 @@ import { setTimeout as delay } from "node:timers/promises";
 import { createJevDevtools, getJevDevtools } from "../server/index";
 import { choice } from "@typesafe-ai/sdk";
 import { flowAnswer } from "../src/flow-model";
+import type { Trace } from "../src/protocol";
 
 const origin = "http://localhost:5199";
 const req = (path = "", init: RequestInit = {}) =>
@@ -302,6 +303,246 @@ test("Node framework routes use the verified Host without trusting forwarded hea
       404,
     );
   } finally {
+    adapter.dispose();
+  }
+});
+
+// These cases exercise delivery on an already-open stream. Reconnecting for each
+// assertion would miss batching, stale queued data, and scheduled-flush cleanup.
+async function watch(
+  adapter: ReturnType<typeof createJevDevtools>,
+  headers: HeadersInit = {},
+) {
+  const response = await adapter.handle(req("/events", { headers }));
+  const reader = response.body!.getReader();
+  const received: { traces: Trace[] }[] = [];
+  const done = (async () => {
+    let pending = "";
+    const decoder = new TextDecoder();
+    for (;;) {
+      const next = await reader.read();
+      if (next.done) return;
+      pending += decoder.decode(next.value, { stream: true });
+      let end: number;
+      while ((end = pending.indexOf("\n\n")) >= 0) {
+        const event = pending.slice(0, end);
+        pending = pending.slice(end + 2);
+        if (event.startsWith("event: snapshot\ndata: "))
+          received.push(
+            JSON.parse(event.slice("event: snapshot\ndata: ".length)),
+          );
+      }
+    }
+  })();
+  return { received, done, cancel: () => reader.cancel() };
+}
+async function eventually(condition: () => boolean) {
+  for (let i = 0; i < 200; i++) {
+    if (condition()) return;
+    await delay(5);
+  }
+  assert.fail("Expected SSE state was not delivered");
+}
+
+test("open SSE viewers receive one coherent burst instead of every intermediate request state", async () => {
+  const adapter = createJevDevtools({ origin, enabled: true });
+  const viewers = await Promise.all([watch(adapter), watch(adapter)]);
+  try {
+    await eventually(() => viewers.every((v) => v.received.length === 1));
+    const client = adapter.createClient(clientOptions);
+    await Promise.all(
+      Array.from({ length: 4 }, (_, n) =>
+        client.systemOne({ ...request, state: { n } }),
+      ),
+    );
+    await eventually(() =>
+      viewers.every(
+        (v) =>
+          v.received.at(-1)?.traces.length === 4 &&
+          v.received.at(-1)!.traces.every((t) => t.status === "success"),
+      ),
+    );
+    for (const viewer of viewers) {
+      // A fast burst may finish capture in a later turn, but must not send all
+      // four lifecycle notifications for each of the four calls.
+      assert.ok(
+        viewer.received.length <= 3,
+        `Expected initial + at most two burst snapshots; got ${viewer.received.length}`,
+      );
+      assert.deepEqual(
+        viewer.received
+          .at(-1)!
+          .traces.map((t) => (t.request.state as { n: number }).n)
+          .sort((a, b) => a - b),
+        [0, 1, 2, 3],
+      );
+      assert.ok(
+        viewer.received
+          .at(-1)!
+          .traces.every(
+            (t) =>
+              t.attempts.length === 1 &&
+              t.result?.answers.team.choice === "delivery",
+          ),
+      );
+    }
+    assert.deepEqual(viewers[0].received.at(-1), viewers[1].received.at(-1));
+  } finally {
+    await Promise.all(viewers.map((v) => v.cancel()));
+    await Promise.all(viewers.map((v) => v.done));
+    adapter.dispose();
+  }
+});
+
+test("batched streams retain session isolation and deliver final errors, cancellation, and clear", async () => {
+  const adapter = createJevDevtools({
+    origin,
+    enabled: true,
+    getSession: (r) => r.headers.get("x-test-user") || "local",
+  });
+  const alice = await watch(adapter, { "x-test-user": "alice" });
+  const bob = await watch(adapter, { "x-test-user": "bob" });
+  try {
+    const client = adapter.createClient({
+      ...clientOptions,
+      retry: { maxRetries: 0 },
+      fetch: async () =>
+        Response.json(
+          { error: { message: "sample failure" } },
+          { status: 400 },
+        ),
+    });
+    const abort = new AbortController();
+    abort.abort();
+    await Promise.allSettled([
+      adapter.run(req("", { headers: { "x-test-user": "alice" } }), () =>
+        client.systemOne(request),
+      ),
+      adapter.run(req("", { headers: { "x-test-user": "bob" } }), () =>
+        client.systemOne(request, { signal: abort.signal }),
+      ),
+    ]);
+    await eventually(
+      () =>
+        alice.received.at(-1)?.traces[0]?.status === "error" &&
+        bob.received.at(-1)?.traces[0]?.status === "cancelled",
+    );
+    assert.ok(
+      alice.received
+        .flatMap((s) => s.traces)
+        .every((t) => t.session === "alice"),
+    );
+    assert.ok(
+      bob.received.flatMap((s) => s.traces).every((t) => t.session === "bob"),
+    );
+    await adapter.handle(
+      req("/clear", {
+        method: "DELETE",
+        headers: { origin, "x-test-user": "alice" },
+      }),
+    );
+    await eventually(() => alice.received.at(-1)?.traces.length === 0);
+    assert.equal(bob.received.at(-1)!.traces[0].status, "cancelled");
+  } finally {
+    await Promise.all([alice.cancel(), bob.cancel()]);
+    await Promise.all([alice.done, bob.done]);
+    adapter.dispose();
+  }
+});
+
+test("a backpressured stream catches up to retained final state and disposal cancels pending delivery", async () => {
+  const adapter = createJevDevtools({ origin, enabled: true, limit: 2 });
+  const response = await adapter.handle(req("/events"));
+  const reader = response.body!.getReader();
+  try {
+    const client = adapter.createClient(clientOptions);
+    for (let n = 0; n < 5; n++)
+      await client.systemOne({ ...request, state: { n } });
+    await delay(20);
+    assert.match(
+      new TextDecoder().decode((await reader.read()).value),
+      /"traces":\[\]/,
+    );
+    const next = await reader.read();
+    const traces: Trace[] = JSON.parse(
+      new TextDecoder().decode(next.value).split("data: ")[1],
+    ).traces;
+    assert.equal(traces.length, 2);
+    assert.deepEqual(
+      traces.map((t) => (t.request.state as { n: number }).n),
+      [4, 3],
+    );
+    assert.ok(traces.every((t) => t.status === "success"));
+    // Clearing queues another update. Disposal must cancel it before delivery.
+    await adapter.handle(
+      req("/clear", { method: "DELETE", headers: { origin } }),
+    );
+    adapter.dispose();
+    assert.equal((await reader.read()).done, true);
+  } finally {
+    await reader.cancel();
+    adapter.dispose();
+  }
+});
+
+test("viewers own independent bytes when receiving the same batched session snapshot", async () => {
+  const adapter = createJevDevtools({ origin, enabled: true });
+  const readers = await Promise.all(
+    [0, 1].map(async () =>
+      (await adapter.handle(req("/events"))).body!.getReader(),
+    ),
+  );
+  try {
+    await Promise.all(readers.map((r) => r.read()));
+    await adapter.createClient(clientOptions).systemOne(request);
+    const [first, second] = await Promise.all(readers.map((r) => r.read()));
+    assert.ok(first.value && second.value);
+    first.value.fill(0);
+    const data = JSON.parse(
+      new TextDecoder().decode(second.value).split("data: ")[1],
+    );
+    assert.equal(data.traces[0].request.state.message, "Sample");
+  } finally {
+    await Promise.all(readers.map((r) => r.cancel()));
+    adapter.dispose();
+  }
+});
+
+test("an outstanding request stays visible as pending before its final result arrives", async () => {
+  let release!: () => void;
+  const gate = new Promise<void>((resolve) => {
+    release = resolve;
+  });
+  const adapter = createJevDevtools({ origin, enabled: true });
+  const viewer = await watch(adapter);
+  const client = adapter.createClient({
+    ...clientOptions,
+    fetch: async () => {
+      await gate;
+      return Response.json(answer);
+    },
+  });
+  const call = client.systemOne(request);
+  try {
+    await eventually(
+      () => viewer.received.at(-1)?.traces[0]?.status === "pending",
+    );
+    const id = viewer.received.at(-1)!.traces[0].id;
+    release();
+    await call;
+    await eventually(
+      () => viewer.received.at(-1)?.traces[0]?.status === "success",
+    );
+    assert.equal(viewer.received.at(-1)!.traces[0].id, id);
+    assert.equal(
+      viewer.received.at(-1)!.traces[0].result?.answers.team.choice,
+      "delivery",
+    );
+  } finally {
+    release();
+    await call;
+    await viewer.cancel();
+    await viewer.done;
     adapter.dispose();
   }
 });

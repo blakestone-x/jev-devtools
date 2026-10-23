@@ -1,5 +1,7 @@
 # Performance baseline — October 23, 2026
 
+Follow-up: [update batching results and comparison](performance-batching.md). The measurements below remain the original baseline.
+
 The biggest measured scaling cost is repeatedly cloning and sending the entire retained history. Large diagrams have a separate layout/legibility problem. Pan and zoom at rest were responsive in the manual stress check. These measurements identify follow-up work; this PR changes no library runtime behavior.
 
 ## Environment and method
