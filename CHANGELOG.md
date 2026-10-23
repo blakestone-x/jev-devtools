@@ -8,13 +8,20 @@ Dates below use UTC and were checked against npm's publication history. The hist
 
 | Version | Published (UTC) | Highlights |
 | --- | --- | --- |
-| [Unreleased](#unreleased) | Not published | Batched updates, changed-trace streaming, frame-coalesced rendering, less work while the drawer is closed, virtualized Questions, compact Choice diagrams, and reuse of unchanged inspector views. |
+| [Unreleased](#unreleased) | Not published | No additional changes yet. |
+| [0.2.0](#020--pending-publication) | Pending publication | Batched updates, changed-trace streaming, frame-coalesced rendering, less work while the drawer is closed, virtualized Questions, compact Choice diagrams, and reuse of unchanged inspector views. |
 | [0.1.3](#013--october-23-2026-experimental) | 2026-10-23 | Isolated drawer styles, diagram pan/zoom, and version-specific npm links. |
 | [0.1.2](#012--october-23-2026-experimental) | 2026-10-23 | Bundled AI setup skill and framework recipes. |
 | [0.1.1](#011--october-23-2026-experimental) | 2026-10-23 | Full inline demo GIF and published-package installation instructions. |
 | [0.1.0](#010--october-23-2026-experimental) | 2026-10-23 | First public package: React inspector, Jev diagrams, Node adapter, and Next.js integration. |
 
 ## Unreleased
+
+No additional changes yet.
+
+## 0.2.0 — Pending publication
+
+Prepared from the changes merged since 0.1.3; this version has not been published to npm.
 
 ### Performance
 
@@ -29,7 +36,7 @@ Dates below use UTC and were checked against npm's publication history. The hist
 - Apply received events in order, but publish accumulated browser state to React once per animation frame to reduce repeated rendering during bursts. This can add about one frame of display latency. ([#15](https://github.com/diegoag64/jev-devtools/pull/15))
 - Defer the inspector's first render until opening; suspend trace-driven React updates and SVG animation while closed. Reopening shows current history while preserving controls and the retained request's selection and camera. Capture, transport, and parsing continue while hidden; the previously opened panel stays in memory. ([#16](https://github.com/diegoag64/jev-devtools/pull/16))
 
-Public component props and server setup APIs are unchanged. These optimizations are **not included in npm 0.1.3**. See the linked PRs for measured workloads, comparisons, and tradeoffs, and the [local benchmark guide](docs/performance.md) to reproduce them.
+Public component props and server setup APIs are unchanged. Upgrading from 0.1.3 does not require integration changes. Performance gains depend on workload; the changes do not eliminate initial snapshot transfer, hidden transport/parsing, or retained history memory. See the linked PRs for measured workloads, comparisons, and tradeoffs, and the [local benchmark guide](docs/performance.md) to reproduce them.
 
 ### Documentation and developer tooling
 

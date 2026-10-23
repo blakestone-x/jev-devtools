@@ -1,6 +1,6 @@
 # Jev DevTools
 
-[![npm version 0.1.3](https://img.shields.io/badge/npm-v0.1.3-E551BA?labelColor=0D0A0F&logo=npm)](https://www.npmjs.com/package/jev-devtools/v/0.1.3)
+[![npm version 0.2.0](https://img.shields.io/badge/npm-v0.2.0-E551BA?labelColor=0D0A0F&logo=npm)](https://www.npmjs.com/package/jev-devtools/v/0.2.0)
 
 A React drawer and Node adapter for inspecting TypeSafe Jev requests with animated diagrams. Includes request history, context, questions, typed answers, transport attempts, and raw snapshots.
 
@@ -44,7 +44,7 @@ To try unpublished local changes instead:
 npm ci
 npm run pack:devtools
 # From the consuming app:
-npm install /absolute/path/to/jev-devtools-0.1.3.tgz
+npm install /absolute/path/to/jev-devtools-0.2.0.tgz
 ```
 
 Mount once:
