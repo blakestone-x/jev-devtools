@@ -1,6 +1,6 @@
 # Jev DevTools
 
-[![npm version](https://img.shields.io/npm/v/jev-devtools/latest?color=E551BA&labelColor=0D0A0F&logo=npm)](https://www.npmjs.com/package/jev-devtools)
+[![npm version 0.1.2](https://img.shields.io/badge/npm-v0.1.2-E551BA?labelColor=0D0A0F&logo=npm)](https://www.npmjs.com/package/jev-devtools/v/0.1.2)
 
 A React drawer and Node adapter for inspecting TypeSafe Jev requests with animated diagrams. Includes request history, context, questions, typed answers, transport attempts, and raw snapshots.
 

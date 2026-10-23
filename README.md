@@ -7,7 +7,7 @@
 A drop-in React inspector for TypeSafe Jev.<br />
 Follow the context, explore each question, and see the answers come together.
 
-[![npm version](https://img.shields.io/npm/v/jev-devtools/latest?color=E551BA&labelColor=0D0A0F&logo=npm)](https://www.npmjs.com/package/jev-devtools)
+[![npm version 0.1.2](https://img.shields.io/badge/npm-v0.1.2-E551BA?labelColor=0D0A0F&logo=npm)](https://www.npmjs.com/package/jev-devtools/v/0.1.2)
 [![CI](https://github.com/diegoag64/jev-devtools/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/diegoag64/jev-devtools/actions/workflows/ci.yml)
 [![React 18 / 19](https://img.shields.io/badge/React-18%20%2F%2019-61DAFB?logo=react&logoColor=61DAFB&labelColor=0D0A0F)](#install-in-another-react-app)
 [![Next.js App Router](https://img.shields.io/badge/Next.js-App%20Router-white?logo=nextdotjs&labelColor=0D0A0F)](docs/nextjs.md)
@@ -96,7 +96,7 @@ A Node backend is required for live Jev calls. The guide includes a local Vite s
 
 ## Install in another React app
 
-**[Jev DevTools is available on npm](https://www.npmjs.com/package/jev-devtools).** This is an experimental release; APIs may change before 1.0.
+**[Jev DevTools is available on npm](https://www.npmjs.com/package/jev-devtools/v/0.1.2).** This is an experimental release; APIs may change before 1.0.
 
 ```sh
 npm install jev-devtools
