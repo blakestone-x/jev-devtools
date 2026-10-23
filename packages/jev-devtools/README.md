@@ -1,16 +1,18 @@
 # Jev DevTools
 
+[![npm version](https://img.shields.io/npm/v/jev-devtools/latest?color=E551BA&labelColor=0D0A0F&logo=npm)](https://www.npmjs.com/package/jev-devtools)
+
 A React drawer and Node adapter for inspecting TypeSafe Jev requests with animated diagrams. Includes request history, context, questions, typed answers, transport attempts, and raw snapshots.
 
 **Experimental 0.1.0.** React 18/19 and Node 22.12+ are supported. APIs may change before 1.0. Verification uses sample responses through the real TypeSafe SDK, not live inference.
 
-Registry installation (once the pending first release is published):
+Install from npm:
 
 ```sh
 npm install jev-devtools
 ```
 
-To try the release candidate before publication:
+To try unpublished local changes instead:
 
 ```sh
 # From the jev-devtools repository root:

@@ -1,8 +1,8 @@
 # Changelog
 
-## 0.1.0 — experimental, publication pending
+## 0.1.0 — October 23, 2026 (experimental)
 
-First planned public npm release as **`jev-devtools`**. This is a development tool with APIs that may change before 1.0; it has not been published by this preparation PR.
+First public npm release as **[`jev-devtools`](https://www.npmjs.com/package/jev-devtools/v/0.1.0)**. This is a development tool with APIs that may change before 1.0.
 
 ### Included
 

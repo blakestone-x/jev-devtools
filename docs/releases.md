@@ -1,10 +1,10 @@
 # Packaging and releases
 
-## Release candidate
+## Published release
 
-**`jev-devtools@0.1.0` is experimental and publication is pending.** Only `packages/jev-devtools` is publishable, with explicit public access and the npm registry configured. The workspace root, playground, and examples remain private. There is no automatic publishing workflow.
+**[`jev-devtools@0.1.0`](https://www.npmjs.com/package/jev-devtools/v/0.1.0) was published on October 23, 2026 and is experimental.** The `latest` tag points to `0.1.0`. Only `packages/jev-devtools` is publishable, with explicit public access and the npm registry configured. The workspace root, playground, and examples remain private. There is no automatic publishing workflow.
 
-The registry returned 404 for `jev-devtools` on October 23, 2026. That means the name appeared unused at that time, not that it is reserved or guaranteed to be accepted. Recheck before the first publish. See [release notes](../CHANGELOG.md) and [npm name guidelines](https://docs.npmjs.com/package-name-guidelines/).
+The registry also contains npm’s `0.0.0-stage` placeholder. It does not control default installs: `npm install jev-devtools` resolves the `latest` tag. See [release notes](../CHANGELOG.md) and [npm staged publishing](https://docs.npmjs.com/staged-publishing/).
 
 ## Prepare and inspect an archive
 
@@ -35,9 +35,11 @@ tar -xOf jev-devtools-0.1.0.tgz package/package.json
 
 Confirm the name/version, public access, Node engine, React peers, three public exports, and absence of `private: true`. Save the release commit SHA and archive checksum with the release evidence. Keep the archive unchanged between final inspection and publication. Do not publish from a dirty checkout or use a wildcard that could select an old archive.
 
-## First publish: explicit approval required
+## First-publish checklist (historical)
 
-Preparation does **not** authorize merging, publishing, or creating a release tag. Before running the publish command:
+The first publish below is complete. These commands record that process; **do not republish 0.1.0**. For future versions, use the release workflow below with the new version and archive. Each merge, publish, and release tag still requires explicit authorization.
+
+Before running a publish command:
 
 1. Review and merge the release PR with Diego's explicit approval. Use its exact merged commit on `main`, with green CI, and run the archive checks above again if the contents changed.
 2. Confirm which npm account will own the package. GitHub authentication does not authenticate npm. Sign in to that account locally and enable two-factor authentication; complete browser/security-key challenges yourself. Never paste tokens or recovery codes into chat or commit them.
@@ -71,7 +73,7 @@ npm view jev-devtools dist-tags --json --registry=https://registry.npmjs.org/
 
 Confirm `latest` points to `0.1.0`. Install `jev-devtools@0.1.0` from the registry in a clean React consumer, verify the imports and CSS, and repeat the Next.js example using the registry version. Check the public README and license. Record the registry integrity alongside the local archive checksum.
 
-Then, with release/tag authorization, tag the exact published commit and create a GitHub release using the 0.1.0 notes. Update the repository's pending-publication labels and changelog date through a PR after publication is confirmed. Do not claim a release exists before npm confirms success.
+Then, with release/tag authorization, tag the exact published commit and create a GitHub release using the 0.1.0 notes. Update the repository documentation and changelog date through a PR after publication is confirmed. Do not claim a release exists before npm confirms success.
 
 ## Future releases
 

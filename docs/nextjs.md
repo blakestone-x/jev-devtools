@@ -6,13 +6,13 @@ The package has no Next.js dependency. `handle(request)` also works with other N
 
 ## Install
 
-The first release is experimental and publication is pending. Once published, install in your Next.js app:
+The first release is experimental and [available on npm](https://www.npmjs.com/package/jev-devtools). Install in your Next.js app:
 
 ```sh
 npm install jev-devtools server-only
 ```
 
-Before publication, run `npm ci && npm run pack:devtools` from this repository, then in your Next.js app:
+To try unpublished local changes instead, run `npm ci && npm run pack:devtools` from this repository, then in your Next.js app:
 
 ```sh
 npm install /absolute/path/to/jev-devtools-0.1.0.tgz server-only
