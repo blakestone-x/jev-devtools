@@ -32,7 +32,7 @@ I got tired of drawing a new diagram for every Jev idea. This turns the requests
 
 Inspired by the TanStack Query DevTools workflow, built with a custom Jev drawer and the visual language of [Diagram Motion Lab](https://github.com/diegoag64/diagram-motion-lab). **TanStack is not a dependency.**
 
-### A little less JSON archaeology
+### Inspect Jev requests and responses
 
 | | What you can inspect |
 | --- | --- |
