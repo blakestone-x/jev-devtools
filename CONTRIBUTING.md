@@ -10,3 +10,5 @@ Use a feature branch and pull request against `main`, including small fixes and 
 6. Push the feature branch and open a PR describing the behavior, checks, and limits. Use samples unless live verification is explicitly requested.
 
 Tests use the real TypeSafe SDK with custom fetch fixtures. No secrets or inference service are required. See [AGENTS.md](AGENTS.md) for agent instructions and [release process](docs/releases.md) for packaging.
+
+For opt-in performance measurements, run `npm run bench:server` or `npm run bench:browser`. See the [performance baseline and reproduction guide](docs/performance.md) for workloads, measurements, and limitations. Run the server and browser benchmarks separately to avoid CPU contention.

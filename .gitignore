@@ -12,3 +12,6 @@ node_modules/
 *.tsbuildinfo
 # Examples install locally packed archives whose hashes change per build.
 /examples/*/package-lock.json
+
+# Local performance recordings; curated findings live in docs/performance.md.
+/benchmarks/results/

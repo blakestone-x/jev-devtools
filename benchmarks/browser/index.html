@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Jev DevTools performance bench</title>
+    <style>
+      body {
+        font: 14px system-ui;
+        margin: 24px;
+        background: #f6f6f8;
+        color: #18161a;
+      }
+      button,
+      select {
+        font: inherit;
+        padding: 8px;
+        margin: 4px;
+      }
+      pre {
+        white-space: pre-wrap;
+        font-size: 12px;
+        max-height: 160px;
+        overflow: auto;
+      }
+      #status {
+        font-weight: 600;
+      }
+      h1 {
+        font-size: 22px;
+      }
+      p {
+        max-width: 900px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Jev DevTools performance bench</h1>
+    <p>
+      Synthetic requests captured through the real SDK recorder. Production
+      React build. No live inference. Keep this tab visible; measurements are
+      saved locally.
+    </p>
+    <button id="suite">Run mount suite (3 repeats)</button
+    ><button id="stream-suite">Run streaming suite (3 repeats)</button
+    ><select id="scenario" aria-label="Benchmark scenario"></select
+    ><label><input id="closed" type="checkbox" />Start drawer closed</label
+    ><button id="load">Load scenario</button
+    ><button id="stream">Stream at 5 Hz for 5 seconds</button
+    ><button id="reset">Reset interaction metrics</button
+    ><button id="save">Save measurements</button>
+    <p id="status">Loading fixtures…</p>
+    <pre id="metrics"></pre>
+    <div id="root"></div>
+    <script type="module" src="/main.jsx"></script>
+  </body>
+</html>
