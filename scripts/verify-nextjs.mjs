@@ -28,7 +28,7 @@ await cp(join(root, "examples/nextjs-app"), app, {
     !path.endsWith(".tsbuildinfo"),
 });
 const pkg = JSON.parse(await readFile(join(app, "package.json"), "utf8"));
-pkg.dependencies["@diagram-motion-lab/jev-devtools"] =
+pkg.dependencies["jev-devtools"] =
   `file:${join(temp, packed[0].filename)}`;
 await writeFile(join(app, "package.json"), JSON.stringify(pkg, null, 2));
 execFileSync(npm, ["install", "--ignore-scripts", "--no-audit", "--no-fund"], {

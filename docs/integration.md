@@ -2,13 +2,19 @@
 
 A reusable React inspector with one root component and a Node server adapter. It uses Diagram Motion Lab's rounded outline cards, curved connections, pink flowing dots, and probability bars. The drawer contains searchable request history and Flow, Questions, Context, Transport, and Raw views.
 
-This is an **installable prototype**, not a published npm release. Verified with sample responses through the real TypeSafe SDK; no live inference was used for verification.
+This is the **experimental 0.1.0 release candidate**; npm publication is pending. Verified with sample responses through the real TypeSafe SDK; no live inference was used for verification.
 
 ## Install in another React project
 
 Requires React 18 or 19. Use Node 22.12+ for the repository tooling (verified on 24.19). The server adapter requires a Node runtime, not an edge runtime.
 
-From this repository:
+Once the first release is published:
+
+```sh
+npm install jev-devtools
+```
+
+Before publication, build a local archive from this repository:
 
 ```sh
 npm ci
@@ -18,14 +24,14 @@ npm run pack:devtools
 From your React project, install the generated archive:
 
 ```sh
-npm install /absolute/path/to/jev-devtools/diagram-motion-lab-jev-devtools-0.1.0.tgz
+npm install /absolute/path/to/jev-devtools/jev-devtools-0.1.0.tgz
 ```
 
 Mount once near the root. No provider, client object, trace props, or application hook is needed:
 
 ```tsx
-import { JevDevtools } from '@diagram-motion-lab/jev-devtools';
-import '@diagram-motion-lab/jev-devtools/styles.css';
+import { JevDevtools } from 'jev-devtools';
+import 'jev-devtools/styles.css';
 
 export function Root() {
   return <>
@@ -48,7 +54,7 @@ For the complete Next.js App Router setup, see [the Next.js guide](nextjs.md), i
 Create one adapter and one instrumented client per server process. Replace your existing TypeSafe client construction with `inspector.createClient(...)`; continue calling `jev.systemOne(...)` normally. API keys stay on the server.
 
 ```ts
-import { createJevDevtools } from '@diagram-motion-lab/jev-devtools/server';
+import { createJevDevtools } from 'jev-devtools/server';
 
 export const inspector = createJevDevtools({
   enabled: process.env.NODE_ENV === 'development',
@@ -146,6 +152,6 @@ npm run verify:package
 
 Package verification packs the library, installs it into a temporary independent React app, verifies public exports and SSR/disabled behavior, and builds the consumer while asserting that no server recorder or SDK modules enter the browser bundle. Recorder and adapter tests cover response ownership, retries, error/abort, concurrent scopes, redaction, bounded retention, image capture, HTTP/SSE delivery, origin/auth guards, and scoped clearing.
 
-Package exports: `@diagram-motion-lab/jev-devtools` (React + browser-safe types), `/styles.css` (scoped styles), and `/server` (Node adapter + recorder). Library output is `packages/jev-devtools/lib/`; the playground's production build is separate and intentionally shows only a local-tool notice. No production deployment is included.
+Package exports: `jev-devtools` (React + browser-safe types), `/styles.css` (scoped styles), and `/server` (Node adapter + recorder). Library output is `packages/jev-devtools/lib/`; the playground's production build is separate and intentionally shows only a local-tool notice. No production deployment is included.
 
 The playground controls live in `apps/playground/src/components/ui/` and are generated from [shadcn/ui](https://ui.shadcn.com/docs/installation/vite), with direct Radix imports and the local `cn` helper. `apps/playground/components.json` configures future additions. Tailwind utilities and theme tokens are in `apps/playground/src/controls.css`; global preflight is omitted to preserve inspector styling. These dependencies are playground-only and are not needed by consumers of the packaged inspector.

@@ -220,7 +220,7 @@ export function createJevDevtools(options: JevDevtoolsServerOptions) {
 }
 
 const sharedAdaptersKey = Symbol.for(
-  "@diagram-motion-lab/jev-devtools/adapters/v1",
+  "jev-devtools/adapters/v1",
 );
 type Adapter = ReturnType<typeof createJevDevtools>;
 

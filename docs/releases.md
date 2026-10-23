@@ -1,8 +1,14 @@
 # Packaging and releases
 
-No npm release is configured. The root, playground, and library currently have `private: true`; npm therefore refuses publication. Tarball installation works without publishing.
+## Release candidate
 
-From the repository root:
+**`jev-devtools@0.1.0` is experimental and publication is pending.** Only `packages/jev-devtools` is publishable, with explicit public access and the npm registry configured. The workspace root, playground, and examples remain private. There is no automatic publishing workflow.
+
+The registry returned 404 for `jev-devtools` on October 23, 2026. That means the name appeared unused at that time, not that it is reserved or guaranteed to be accepted. Recheck before the first publish. See [release notes](../CHANGELOG.md) and [npm name guidelines](https://docs.npmjs.com/package-name-guidelines/).
+
+## Prepare and inspect an archive
+
+Use Node 22.12+ (24 recommended). From a clean checkout of the reviewed release commit:
 
 ```sh
 npm ci
@@ -12,19 +18,63 @@ npm run build
 npm run check:playground
 npm run verify:package
 npm run verify:nextjs
+git diff --check
+npm pack --dry-run --json -w jev-devtools
 npm run pack:devtools
+tar -tzf jev-devtools-0.1.0.tgz
+shasum -a 256 jev-devtools-0.1.0.tgz
 ```
 
-The archive appears in the repository root and includes only compiled library files, its README, license, notices, and package manifest. The playground, fixtures, tests, environment files, and original lab are excluded. Install this archive in another project or use the independent example.
+The archive must contain only `package.json`, the package README, MIT license, third-party notices, and compiled JavaScript, declaration files, and scoped CSS under `lib/src` and `lib/server`. It must not contain playground code, tests, fixtures, source TypeScript, demo media, environment files, or credentials. `verify:package` checks the actual pack file list before installing into an independent React app. `verify:nextjs` checks a separate packed installation with real development and production Next.js servers. Both use sample responses; neither makes live inference calls.
 
-Before the first registry release, make a release PR that:
+Inspect the packed manifest too:
 
-1. Confirms an available npm name/scope and owner access. The current `@diagram-motion-lab/jev-devtools` name is preserved for compatibility, not a claim of registry ownership.
-2. Updates imports, metadata, workspace dependency, example archive path, and documentation if the name changes.
-3. Chooses a version and records changes; updates package/workspace references, lockfile, and example archive path together.
-4. Removes `private` from the library only, explicitly configures public access for a scoped package, and leaves the root/playground private.
-5. Runs the full verification suite and `npm pack --dry-run -w @diagram-motion-lab/jev-devtools`; inspects archive contents and notices.
+```sh
+tar -xOf jev-devtools-0.1.0.tgz package/package.json
+```
 
-After review and explicit authorization, publish the reviewed package and tag that release. CI never publishes automatically. Merge the extraction PR before merging the original repo cleanup PR. A registry release is not required for cleanup because the standalone repo supports packed installation.
+Confirm the name/version, public access, Node engine, React peers, three public exports, and absence of `private: true`. Save the release commit SHA and archive checksum with the release evidence. Keep the archive unchanged between final inspection and publication. Do not publish from a dirty checkout or use a wildcard that could select an old archive.
 
-References: [npm package metadata](https://docs.npmjs.com/cli/configuring-npm/package-json/), [GitHub Node CI](https://docs.github.com/en/actions/tutorials/build-and-test-code/nodejs).
+## First publish: explicit approval required
+
+Preparation does **not** authorize merging, publishing, or creating a release tag. Before running the publish command:
+
+1. Review and merge the release PR with Diego's explicit approval. Use its exact merged commit on `main`, with green CI, and run the archive checks above again if the contents changed.
+2. Confirm which npm account will own the package. GitHub authentication does not authenticate npm. Sign in to that account locally and enable two-factor authentication; complete browser/security-key challenges yourself. Never paste tokens or recovery codes into chat or commit them.
+3. Verify the registry identity and current name availability using the read-only commands below. A 404 means no public package was found; a different error is not proof of availability. If a package now exists, check ownership and stop rather than attempting an unauthorized publish.
+4. Obtain explicit authorization to publish `jev-devtools@0.1.0` publicly with the `latest` tag. `latest` makes the documented `npm install jev-devtools` command resolve this release; the version remains experimental despite that tag.
+
+Authentication and read-only checks (these do not publish):
+
+```sh
+npm login --registry=https://registry.npmjs.org/
+npm whoami --registry=https://registry.npmjs.org/
+npm view jev-devtools name version maintainers --json --registry=https://registry.npmjs.org/
+```
+
+After all approvals, from the repository root, publish the **inspected archive**:
+
+```sh
+npm publish ./jev-devtools-0.1.0.tgz --access public --tag latest --registry=https://registry.npmjs.org/
+```
+
+Complete npm's authentication challenge if prompted. This command is documented for the maintainer; it is not run by preparation scripts or CI. npm name/version pairs cannot be overwritten after publication. See [npm's unscoped publishing guide](https://docs.npmjs.com/creating-and-publishing-unscoped-public-packages/) and [publish command](https://docs.npmjs.com/cli/v11/commands/npm-publish/).
+
+## Confirm the published result
+
+After npm reports success:
+
+```sh
+npm view jev-devtools@0.1.0 name version dist.integrity dist.tarball --json --registry=https://registry.npmjs.org/
+npm view jev-devtools dist-tags --json --registry=https://registry.npmjs.org/
+```
+
+Confirm `latest` points to `0.1.0`. Install `jev-devtools@0.1.0` from the registry in a clean React consumer, verify the imports and CSS, and repeat the Next.js example using the registry version. Check the public README and license. Record the registry integrity alongside the local archive checksum.
+
+Then, with release/tag authorization, tag the exact published commit and create a GitHub release using the 0.1.0 notes. Update the repository's pending-publication labels and changelog date through a PR after publication is confirmed. Do not claim a release exists before npm confirms success.
+
+## Future releases
+
+Use a release PR for each version. Update the library version, the playground's exact workspace dependency, example archive paths, root lockfile, and changelog together. Run the full checks and inspect the packed artifact. After review and explicit approval, publish that artifact, verify the registry result, and tag the exact release commit. Never publish every push or every merge to `main`.
+
+A later, separately reviewed automation PR can add [npm trusted publishing](https://docs.npmjs.com/trusted-publishers/) through GitHub Actions OIDC. Configure the exact repository and workflow on the npm package, use a protected release environment with maintainer approval and narrowly scoped `id-token: write`, and require an approved release commit/tag. Use a supported Node/npm version and GitHub-hosted runner, and verify provenance. This avoids storing a long-lived publish token in GitHub. No trusted publisher, npm token, publishing permission, automatic release, or release workflow is configured by this preparation PR.

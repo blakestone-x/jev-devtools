@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import "@diagram-motion-lab/jev-devtools/styles.css";
+import "jev-devtools/styles.css";
 import "./style.css";
 import { Devtools } from "./devtools";
 

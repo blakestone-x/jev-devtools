@@ -79,7 +79,13 @@ For optional live mode, copy `apps/playground/.env.example` to `apps/playground/
 
 ## Install in another React app
 
-This prototype is **not published to npm**. The existing name `@diagram-motion-lab/jev-devtools` is retained for compatibility; a publishing scope will be chosen before release.
+**Experimental 0.1.0 · publication pending.** The package will be published as `jev-devtools`. Once the release is available on npm:
+
+```sh
+npm install jev-devtools
+```
+
+Until publication, install the locally packed release candidate:
 
 ```sh
 # In this repository:
@@ -87,14 +93,14 @@ npm ci
 npm run pack:devtools
 
 # In your React application:
-npm install /absolute/path/to/jev-devtools/diagram-motion-lab-jev-devtools-0.1.0.tgz
+npm install /absolute/path/to/jev-devtools/jev-devtools-0.1.0.tgz
 ```
 
 Mount once near the root:
 
 ```tsx
-import { JevDevtools } from '@diagram-motion-lab/jev-devtools';
-import '@diagram-motion-lab/jev-devtools/styles.css';
+import { JevDevtools } from 'jev-devtools';
+import 'jev-devtools/styles.css';
 
 export function Root() {
   return <>
@@ -107,7 +113,7 @@ export function Root() {
 On the Node server:
 
 ```ts
-import { createJevDevtools } from '@diagram-motion-lab/jev-devtools/server';
+import { createJevDevtools } from 'jev-devtools/server';
 
 const inspector = createJevDevtools({
   enabled: process.env.NODE_ENV === 'development',
@@ -122,6 +128,8 @@ app.use(inspector.middleware); // At root, before fallback routes.
 Only calls through this client are recorded. Both routes and inspector must share the same adapter instance. History is bounded and in memory, and the browser connects over same-origin SSE. React 18/19 are peer dependencies. Tailwind, shadcn, and the playground are not bundled with the library.
 
 See the [complete integration guide](docs/integration.md) for Next.js, proxies, custom endpoints, authorization, redaction, session scoping, and runtime limits. The adapter currently targets Node, not edge runtimes or distributed/serverless aggregation. Capture and display are both disabled by default.
+
+Migrating from the extracted prototype? Replace `@diagram-motion-lab/jev-devtools` with `jev-devtools` in dependencies and imports, including `/server` and `/styles.css`. Component props and server APIs are unchanged. Restart the dev server after upgrading. See [0.1.0 release notes](CHANGELOG.md).
 
 ## Next.js and server frameworks
 

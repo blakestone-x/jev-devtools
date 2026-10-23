@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { createRoot } from "react-dom/client";
-import { JevDevtools } from "@diagram-motion-lab/jev-devtools";
+import { JevDevtools } from "jev-devtools";
 import { ScenarioResult, type RunState } from "./ScenarioResult";
 import { sampleProfiles, type SampleProfile } from "./sample-profiles";
 import { Button } from "./components/ui/button";
@@ -12,7 +12,7 @@ import { Textarea } from "./components/ui/textarea";
 import { Label } from "./components/ui/label";
 import { ArrowRight, LoaderCircle } from "lucide-react";
 import "./controls.css";
-import "@diagram-motion-lab/jev-devtools/styles.css";
+import "jev-devtools/styles.css";
 import "./style.css";
 
 const savedSession = sessionStorage.getItem("jev-inspector-session");
