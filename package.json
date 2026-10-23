@@ -1,0 +1,54 @@
+{
+  "name": "@diagram-motion-lab/jev-devtools",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.12"
+  },
+  "scripts": {
+    "dev": "vite --host 127.0.0.1",
+    "check": "tsc --noEmit",
+    "build": "tsc --noEmit && vite build",
+    "test": "node --import tsx --test tests/*.test.ts",
+    "build:package": "tsc -p tsconfig.lib.json && node scripts/copy-styles.mjs",
+    "prepack": "npm run build:package",
+    "verify:package": "node scripts/verify-package.mjs"
+  },
+  "dependencies": {
+    "@typesafe-ai/sdk": "0.7.0"
+  },
+  "devDependencies": {
+    "@types/node": "26.6.5",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "tsx": "4.23.15",
+    "typescript": "7.0.2",
+    "vite": "8.3.5",
+    "react": "19.3.1",
+    "react-dom": "19.3.1"
+  },
+  "description": "A React drawer and Node server adapter for inspecting TypeSafe Jev requests.",
+  "exports": {
+    ".": {
+      "types": "./lib/src/index.d.ts",
+      "import": "./lib/src/index.js"
+    },
+    "./server": {
+      "types": "./lib/server/index.d.ts",
+      "import": "./lib/server/index.js"
+    },
+    "./styles.css": "./lib/src/inspector.css"
+  },
+  "files": [
+    "lib",
+    "README.md"
+  ],
+  "sideEffects": [
+    "**/*.css"
+  ],
+  "peerDependencies": {
+    "react": ">=18 <20",
+    "react-dom": ">=18 <20"
+  }
+}
