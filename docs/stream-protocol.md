@@ -36,4 +36,4 @@ Authorization, same-origin enforcement, server-derived session scope, redaction 
 
 ## Remaining costs
 
-The initial full snapshot can still be large. Each changed trace still sends its complete captured state/result, and every delta carries the retained ID order. The inspector still renders while closed, and large diagrams still have their existing layout costs. See the [measured comparison](performance-deltas.md) for benefits and limits.
+The initial full snapshot can still be large. Each changed trace still sends its complete captured state/result, and every delta carries the retained ID order. While the drawer is closed, transport and parsing continue but trace-driven React updates are suspended. Large diagrams still have layout costs. See the [transport comparison in PR #15](https://github.com/diegoag64/jev-devtools/pull/15) and [hidden-drawer comparison in PR #16](https://github.com/diegoag64/jev-devtools/pull/16) for benefits and limits.
