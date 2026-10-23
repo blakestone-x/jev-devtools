@@ -17,6 +17,8 @@ Dates below use UTC and were checked against npm's publication history. The hist
 
 ## Unreleased
 
+Changes proposed in [#23](https://github.com/diegoag64/jev-devtools/pull/23); not included in npm 0.2.0.
+
 ### Added
 
 - Add the Node `jev-devtools/flow` API for typed input/answer references, sequential Jev calls, terminal branching, named parallel lanes with joins, and named output values. Definitions build without requests; runs preserve SDK retries and propagate failures/cancellation without automatic flow retries.
