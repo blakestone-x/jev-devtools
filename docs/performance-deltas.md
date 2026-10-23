@@ -40,6 +40,8 @@ Raw server runs: [batching](benchmarks/2026-10-23-delta-server-before.json), [in
 
 ## Browser comparison
 
+The original desktop runs below are preserved. See the [frame-coalescing follow-up](performance-coalescing.md) for an isolated comparison against this PR’s original incremental implementation, profiling evidence, and the subsequent browser fix.
+
 Both client and server revisions are matched: frozen PR #14 client/server versus the incremental client/server. Production React, Chrome 154, 1710 × 961, DPR 2, drawer open. Each workload receives five real SDK sample calls one second apart in an approximately five-second window. Three windows per workload per run. The two workloads are 200 small requests and the combined 200-request/150-choice/80-KB-state case.
 
 The first pair ran baseline then candidate. Browser timings were unexpectedly variable, so a second pair ran in reverse order, candidate then baseline. Both pairs are retained; results were not selected for favorable timings. No builds or server benchmarks ran during timed browser windows. Other desktop/browser activity was present: a process snapshot between runs showed substantial Chrome renderer and WindowServer CPU. That observation does not prove the cause of any particular long task or exclude a rendering regression.

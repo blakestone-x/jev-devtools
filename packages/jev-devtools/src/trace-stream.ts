@@ -8,7 +8,30 @@ export function connectTraceStream(
 ) {
   let alive = true,
     events: EventSource | undefined,
-    retry: ReturnType<typeof setTimeout> | undefined;
+    retry: ReturnType<typeof setTimeout> | undefined,
+    frame: number | undefined,
+    fallback: ReturnType<typeof setTimeout> | undefined,
+    pending: Trace[] | undefined;
+  const cancelPublish = () => {
+    if (frame !== undefined) cancelAnimationFrame(frame);
+    clearTimeout(fallback);
+    frame = undefined;
+    fallback = undefined;
+    pending = undefined;
+  };
+  const publish = () => {
+    const next = pending;
+    cancelPublish();
+    if (alive && next) onTraces(next);
+  };
+  const schedule = (next: Trace[]) => {
+    pending = next;
+    if (frame !== undefined) return;
+    // Merge every protocol event, but render only the newest state per frame.
+    // Background tabs may suspend rAF; keep delivery bounded there as well.
+    frame = requestAnimationFrame(publish);
+    fallback = setTimeout(publish, 100);
+  };
   const connect = () => {
     if (!alive) return;
     // Native reconnects receive a full snapshot too. After an invalid delta,
@@ -23,9 +46,10 @@ export function connectTraceStream(
           kind,
           JSON.parse((event as MessageEvent).data),
         );
-        onTraces(next);
+        schedule(next);
         onConnection("connected");
       } catch {
+        cancelPublish();
         source.close();
         events = undefined;
         onConnection("resynchronizing");
@@ -42,6 +66,7 @@ export function connectTraceStream(
   return () => {
     alive = false;
     clearTimeout(retry);
+    cancelPublish();
     events?.close();
   };
 }

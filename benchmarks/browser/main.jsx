@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Profiler } from "react";
 import { createRoot } from "react-dom/client";
 import { JevDevtools } from "jev-devtools";
 const root = createRoot(document.getElementById("root"));
@@ -24,6 +24,7 @@ const report = {
   streams: [],
   interactions: [],
 };
+const commits = [];
 let longTasks = [],
   eventTimings = [],
   actionTimes = [],
@@ -107,6 +108,11 @@ function windowMetrics(start, end = performance.now()) {
     longTaskMs: tasks.reduce((n, e) => n + e.duration, 0),
     longestTaskMs: Math.max(0, ...tasks.map((e) => e.duration)),
     visibility: document.visibilityState,
+    ...(__BENCH_PROFILE__
+      ? {
+          commits: commits.filter((c) => c.start >= start && c.start < end),
+        }
+      : {}),
   };
 }
 async function save() {
@@ -122,6 +128,7 @@ function show(value) {
 const cases = await (await fetch("/bench/info")).json();
 report.transportMode = cases[0].transportMode;
 report.revision = cases[0].revision;
+report.profiling = cases[0].profiling;
 $("scenario").innerHTML = cases
   .map(
     (c) =>
@@ -132,13 +139,40 @@ async function load(id, closed = false) {
   current = id;
   const spec = cases.find((s) => s.id === id);
   const start = performance.now();
-  root.render(
+  const inspector = (
     <JevDevtools
       key={++generation}
       enabled
       endpoint={"/api/" + id}
       defaultOpen={!closed}
-    />,
+    />
+  );
+  root.render(
+    __BENCH_PROFILE__ ? (
+      <Profiler
+        id="inspector"
+        onRender={(
+          _id,
+          phase,
+          actualDuration,
+          baseDuration,
+          start,
+          commitTime,
+        ) => {
+          commits.push({
+            phase,
+            actualDuration,
+            baseDuration,
+            start,
+            commitTime,
+          });
+        }}
+      >
+        {inspector}
+      </Profiler>
+    ) : (
+      inspector
+    ),
   );
   let ready = false;
   while (performance.now() - start < 30000) {
@@ -225,7 +259,8 @@ async function stream() {
   let sent = 0,
     bytes = 0,
     pulses = 0,
-    calls = 0;
+    calls = 0,
+    expectedRequestId;
   $("status").textContent = "Streaming " + current;
   // Serial scheduling avoids unbounded test-harness queues; report achieved rate, not just target.
   for (let i = 0; i < (live ? 5 : 25); i++) {
@@ -236,6 +271,7 @@ async function stream() {
     bytes += r.bytes;
     pulses++;
     calls += r.calls || 0;
+    expectedRequestId = r.completed?.[current];
   }
   await pause(Math.max(250, start + 5050 - performance.now()));
   if (live) {
@@ -243,8 +279,21 @@ async function stream() {
     sent = after.sent - before.sent;
     bytes = after.bytes - before.bytes;
   }
+  const visibleRequestId = shadow()?.querySelector(
+    ".detail-meta code:last-child",
+  )?.textContent;
+  if (
+    live &&
+    (visibleRequestId !== expectedRequestId ||
+      !shadow()
+        ?.querySelector(".detail-header .eyebrow")
+        ?.textContent.includes("success"))
+  )
+    throw new Error("Latest completed response was not rendered");
   const result = {
     scenario: current,
+    expectedRequestId,
+    visibleRequestId,
     closed: !!shadow()?.querySelector(".jev-drawer")?.hidden,
     pulses,
     calls,

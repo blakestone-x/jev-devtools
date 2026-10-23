@@ -30,6 +30,8 @@ An unread stream keeps a bounded queue and a dirty flag. When it can consume aga
 
 The client validates envelope versions, revision continuity, unique IDs and whether all retained IDs can be resolved before committing an update. A gap, duplicate/out-of-order delta, malformed envelope or unknown retained ID closes the stream and schedules a fresh connection after one second. Old events cannot overwrite the new connection, and unmount cancels pending retries. Ordinary EventSource reconnects also receive a full snapshot; a server restart can therefore reset its revision counter safely.
 
+The browser applies and validates every event in arrival order, then publishes the latest accumulated history to React once per animation frame. It does not skip protocol revisions or discard independent traces. Fast pending-to-complete transitions can share one paint; requests still pending at publication remain visible as pending. A 100 ms timeout is a fallback when animation frames are suspended (background browser timer throttling can delay it). Only one latest array is queued, and publication cancels the other scheduled callback. Invalid data discards queued publication before resynchronizing; unmount cancels both publication callbacks and reconnect retries. Connection status updates remain immediate.
+
 Authorization, same-origin enforcement, server-derived session scope, redaction and capture limits are unchanged. No raw SDK options or unredacted request bodies are added to the transport.
 
 ## Remaining costs
