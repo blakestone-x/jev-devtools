@@ -2,8 +2,12 @@ import { lazy, startTransition, Suspense, useState } from "react";
 import { TraceDiagram } from "./TraceDiagram.js";
 import type { Trace } from "./protocol.js";
 import { JsonBlock, findImage } from "./TraceContent.js";
+let questionsLoaded = false;
 const Questions = lazy(() =>
-  import("./Questions.js").then((module) => ({ default: module.Questions })),
+  import("./Questions.js").then((module) => {
+    questionsLoaded = true;
+    return { default: module.Questions };
+  }),
 );
 const ms = (value?: number) =>
   value === undefined ? "—" : `${Math.round(value)} ms`;
@@ -138,7 +142,9 @@ export function JevPanel({
                     key={name}
                     aria-pressed={tab === name}
                     onClick={() => {
-                      if (name === "Questions")
+                      // Keep the current view while its chunk loads, but don't
+                      // defer subsequent opens once the component is available.
+                      if (name === "Questions" && !questionsLoaded)
                         startTransition(() => setTab(name));
                       else setTab(name);
                     }}
