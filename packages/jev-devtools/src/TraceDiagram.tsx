@@ -1,4 +1,5 @@
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
+import { useDiagramViewport } from "./useDiagramViewport.js";
 import type { AnswerView, Trace } from "./protocol.js";
 import { findImage, flowAnswer, stateText } from "./flow-model.js";
 const pct = (v: number) => `${Math.round(v * 100)}%`;
@@ -114,9 +115,7 @@ function Result({ answer, image }: { answer?: AnswerView; image?: string }) {
 }
 export function TraceDiagram({ trace }: { trace: Trace }) {
   const [selected, setSelected] = useState(""),
-    [zoom, setZoom] = useState(0.8),
     [flow, setFlow] = useState(true);
-  const viewport = useRef<HTMLDivElement>(null);
   const entries = Object.entries(trace.request.questions ?? {}).filter(
       ([, q]) => q && typeof q === "object" && typeof q.type === "string",
     ),
@@ -137,16 +136,11 @@ export function TraceDiagram({ trace }: { trace: Trace }) {
   const height = Math.max(520, resultHeight + 90, outputs.length * 136 + 60),
     ry = Math.max(40, (height - resultHeight) / 2),
     mid = ry + resultHeight / 2;
-  const fit = () => {
-    if (viewport.current)
-      setZoom(Math.min(1, (viewport.current.clientWidth - 24) / 1120));
-  };
-  useEffect(() => {
-    if (viewport.current)
-      setZoom(
-        Math.min(1, Math.max(0.75, (viewport.current.clientWidth - 24) / 1120)),
-      );
-  }, []);
+  const { viewport, canvas, zoom, zoomBy, fit } = useDiagramViewport(
+    1120,
+    height,
+    key,
+  );
   if (!question)
     return <p className="muted">No questions available in this capture.</p>;
   const sourcePath = (y: number) => `M260 ${y} C325 ${y},325 ${mid},390 ${mid}`;
@@ -179,14 +173,16 @@ export function TraceDiagram({ trace }: { trace: Trace }) {
         <div>
           <button
             aria-label="Zoom diagram out"
-            onClick={() => setZoom((v) => Math.max(0.4, v - 0.1))}
+            disabled={zoom <= 10}
+            onClick={() => zoomBy(1 / 1.2)}
           >
             −
           </button>
-          <output aria-label="Diagram zoom">{Math.round(zoom * 100)}%</output>
+          <output aria-label="Diagram zoom">{zoom}%</output>
           <button
             aria-label="Zoom diagram in"
-            onClick={() => setZoom((v) => Math.min(1.5, v + 0.1))}
+            disabled={zoom >= 400}
+            onClick={() => zoomBy(1.2)}
           >
             +
           </button>
@@ -200,116 +196,119 @@ export function TraceDiagram({ trace }: { trace: Trace }) {
         className="lab-flow-viewport"
         ref={viewport}
         tabIndex={0}
-        aria-label="Jev diagram, scroll to explore"
+        role="group"
+        aria-label="Jev diagram. Drag to pan, scroll or pinch to zoom. Arrow keys pan, plus and minus zoom, zero fits."
       >
-        <div style={{ width: 1120 * zoom, height: height * zoom }}>
-          <div
-            className="lab-flow-canvas"
-            style={{ width: 1120, height, transform: `scale(${zoom})` }}
+        <div
+          ref={canvas}
+          className="lab-flow-canvas"
+          style={{ width: 1120, height }}
+        >
+          <svg
+            className="lab-connections"
+            width="1120"
+            height={height}
+            aria-hidden="true"
           >
-            <svg
-              className="lab-connections"
-              width="1120"
-              height={height}
-              aria-hidden="true"
-            >
-              {paths.map((path) => (
-                <g key={path.id}>
-                  <path d={path.d} className={path.active ? "active" : ""} />
-                  {flow &&
-                    path.active &&
-                    !["error", "cancelled"].includes(trace.status) && (
-                      <circle r="3" className="lab-flow-dot">
-                        <animateMotion
-                          dur="3.2s"
-                          repeatCount="indefinite"
-                          path={path.d}
-                        />
-                      </circle>
-                    )}
-                </g>
-              ))}
-              <text x="305" y={mid - 65}>
-                state
-              </text>
-              <text x="300" y={mid + 65}>
-                question
-              </text>
-            </svg>
-            <article
-              className="lab-card"
-              style={{ left: 20, top: 32, width: 240, height: 180 }}
-            >
-              <span className="lab-eyebrow">
-                {image ? "IMAGE STATE" : "STATE"}
-              </span>
-              <h3>Shared context</h3>
-              {image ? (
-                <img
-                  className="lab-source-image"
-                  src={image}
-                  alt="Captured image state"
-                />
-              ) : (
-                <p className="lab-copy" title={stateText(trace)}>
-                  {stateText(trace)}
-                </p>
-              )}
-            </article>
-            <article
-              className="lab-card"
-              style={{ left: 20, top: 288, width: 240, height: 180 }}
-            >
-              <span className="lab-eyebrow">INSTRUCTIONS</span>
-              <h3>Question · {question.type}</h3>
-              <p
-                className="lab-copy"
-                title={
-                  typeof question.instructions === "string"
-                    ? question.instructions
-                    : JSON.stringify(question.instructions)
-                }
-              >
-                {typeof question.instructions === "string"
-                  ? question.instructions
-                  : JSON.stringify(question.instructions)}
+            {paths.map((path) => (
+              <g key={path.id}>
+                <path d={path.d} className={path.active ? "active" : ""} />
+                {flow &&
+                  path.active &&
+                  !["error", "cancelled"].includes(trace.status) && (
+                    <circle r="3" className="lab-flow-dot">
+                      <animateMotion
+                        dur="3.2s"
+                        repeatCount="indefinite"
+                        path={path.d}
+                      />
+                    </circle>
+                  )}
+              </g>
+            ))}
+            <text x="305" y={mid - 65}>
+              state
+            </text>
+            <text x="300" y={mid + 65}>
+              question
+            </text>
+          </svg>
+          <article
+            className="lab-card"
+            style={{ left: 20, top: 32, width: 240, height: 180 }}
+          >
+            <span className="lab-eyebrow">
+              {image ? "IMAGE STATE" : "STATE"}
+            </span>
+            <h3>Shared context</h3>
+            {image ? (
+              <img
+                className="lab-source-image"
+                src={image}
+                alt="Captured image state"
+              />
+            ) : (
+              <p className="lab-copy" title={stateText(trace)}>
+                {stateText(trace)}
               </p>
-            </article>
+            )}
+          </article>
+          <article
+            className="lab-card"
+            style={{ left: 20, top: 288, width: 240, height: 180 }}
+          >
+            <span className="lab-eyebrow">INSTRUCTIONS</span>
+            <h3>Question · {question.type}</h3>
+            <p
+              className="lab-copy"
+              title={
+                typeof question.instructions === "string"
+                  ? question.instructions
+                  : JSON.stringify(question.instructions)
+              }
+            >
+              {typeof question.instructions === "string"
+                ? question.instructions
+                : JSON.stringify(question.instructions)}
+            </p>
+          </article>
+          <article
+            className="lab-card lab-answer-card"
+            style={{
+              left: 390,
+              top: ry,
+              width: 320,
+              minHeight: resultHeight,
+            }}
+          >
+            <span className="lab-eyebrow">
+              JEV · {question.type.toUpperCase()}
+            </span>
+            <h3 title={key}>{key}</h3>
+            <Result answer={answer} image={image} />
+          </article>
+          {outputs.map((output, i) => (
             <article
-              className="lab-card lab-answer-card"
+              key={i}
+              className={`lab-card lab-output ${output.active ? "" : "lab-idle"}`}
               style={{
-                left: 390,
-                top: ry,
-                width: 320,
-                minHeight: resultHeight,
+                left: 870,
+                top: 40 + i * 136,
+                width: 230,
+                minHeight: 104,
               }}
             >
-              <span className="lab-eyebrow">
-                JEV · {question.type.toUpperCase()}
-              </span>
-              <h3 title={key}>{key}</h3>
-              <Result answer={answer} image={image} />
+              <span className="lab-eyebrow">{output.eyebrow}</span>
+              <h3 title={output.label}>{output.label}</h3>
+              <p>{output.detail}</p>
             </article>
-            {outputs.map((output, i) => (
-              <article
-                key={i}
-                className={`lab-card lab-output ${output.active ? "" : "lab-idle"}`}
-                style={{
-                  left: 870,
-                  top: 40 + i * 136,
-                  width: 230,
-                  minHeight: 104,
-                }}
-              >
-                <span className="lab-eyebrow">{output.eyebrow}</span>
-                <h3 title={output.label}>{output.label}</h3>
-                <p>{output.detail}</p>
-              </article>
-            ))}
-          </div>
+          ))}
         </div>
       </div>
-      <p className="muted">
+      <p className="muted lab-flow-caption">
+        <span className="lab-gesture-hint">
+          Drag to pan · Scroll or pinch to zoom · 0 to fit
+        </span>
         {entries.length} parallel question{entries.length === 1 ? "" : "s"} in
         one request. Connections show data flow, not model timing. Application
         routes and thresholds are not captured. Full inputs and criteria are in

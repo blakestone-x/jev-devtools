@@ -10,3 +10,4 @@ These instructions apply to contributing to this repository. For installing the 
 - Add tests for observable behavior and credible regressions. Keep recorder fixtures independent of demo scenarios.
 - Keep API credentials on the server. Distinguish samples from live inference. Follow official TypeSafe semantics; diagrams must not invent model reasoning or routing policies.
 - Preserve third-party notices and PR-based workflow documentation when moving code.
+- After changing the package version, run `npm run sync:readme-version` to update both README badges, exact-version npm links, and archive examples. CI checks and package creation reject stale README versions.

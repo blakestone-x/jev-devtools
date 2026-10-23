@@ -1,9 +1,15 @@
 .jev-devtools {
+  all: initial;
+  display: block;
+  direction: ltr;
+  unicode-bidi: isolate;
+  pointer-events: auto;
   color-scheme: dark;
   font:
     12px system-ui,
     sans-serif;
   color: #eee8ed;
+  line-height: 1.5;
 }
 .jev-devtools,
 .jev-devtools * {
@@ -184,6 +190,7 @@
 .jev-devtools .request-detail {
   flex: 1;
   min-width: 0;
+  min-height: 0;
   display: flex;
   flex-direction: column;
 }
@@ -664,6 +671,8 @@
 }
 
 .jev-devtools.jev-drawer {
+  margin: 0;
+  padding: 0;
   position: fixed;
   z-index: 1000;
   inset: auto 0 0;
@@ -756,6 +765,8 @@
   gap: 9px;
   padding: 10px 16px;
   border: 1px solid #a24487;
+  border-radius: 8px;
+  cursor: pointer;
   background: #211321;
   color: #f1cbe6;
   font:
@@ -768,12 +779,25 @@
   font-size: 20px;
 }
 /* Baseline cards and authored left-to-right composition from the lab's Jev presets. */
+.jev-devtools .detail-body.detail-body-flow {
+  display: flex;
+  padding: 0;
+  overflow: hidden;
+}
+.jev-devtools .lab-flow {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+}
 .jev-devtools .lab-flow-toolbar {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  margin-bottom: 14px;
+  flex-shrink: 0;
+  padding: 12px 16px;
   flex-wrap: wrap;
 }
 .jev-devtools .lab-flow-toolbar label {
@@ -802,15 +826,40 @@
   text-align: center;
 }
 .jev-devtools .lab-flow-viewport {
-  overflow: auto;
-  max-height: 65vh;
-  background: #0d0a0f;
-  border: 1px solid #302634;
-  border-radius: 8px;
+  position: relative;
+  flex: 1;
+  min-height: 100px;
+  overflow: hidden;
+  background-color: #0d0a0f;
+  background-image: radial-gradient(#463449 0.8px, transparent 0.8px);
+  background-size: 20px 20px;
+  border-block: 1px solid #302634;
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+  overscroll-behavior: contain;
+}
+.jev-devtools .lab-flow-viewport[data-panning] {
+  cursor: grabbing;
+}
+.jev-devtools .lab-flow-viewport:focus-visible {
+  outline: 2px solid #e551ba;
+  outline-offset: -2px;
+}
+.jev-devtools .lab-flow-caption {
+  flex-shrink: 0;
+  padding: 8px 16px;
+  margin: 0;
+}
+.jev-devtools .lab-gesture-hint {
+  display: block;
+  color: #c6a7bd;
 }
 .jev-devtools .lab-flow-canvas {
-  position: relative;
+  position: absolute;
+  inset: 0 auto auto 0;
   transform-origin: top left;
+  will-change: transform;
   font-family: system-ui, sans-serif;
   color: #f5f3f6;
 }

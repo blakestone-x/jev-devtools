@@ -175,7 +175,9 @@ export function JevPanel({
         </div>
         {(connection !== "connected" || error) && (
           <footer>
-            {connection !== "connected" && <span role="status">{connection}</span>}
+            {connection !== "connected" && (
+              <span role="status">{connection}</span>
+            )}
             {error && <p role="alert">{error}</p>}
           </footer>
         )}
@@ -229,7 +231,9 @@ export function JevPanel({
                 ),
               )}
             </nav>
-            <div className="detail-body">
+            <div
+              className={`detail-body ${tab === "Flow" ? "detail-body-flow" : ""}`}
+            >
               {trace.error && (
                 <div role="alert" className="error-banner">
                   <strong>{trace.error.name}</strong> {trace.error.message}

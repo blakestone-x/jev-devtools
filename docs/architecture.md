@@ -19,3 +19,9 @@ The animated diagrams use the visual style developed in [Diagram Motion Lab](htt
 ## Limits
 
 One Node process/adapter instance, same-origin browser endpoint, memory-only traces, and explicit opt-in. Non-loopback access requires application authorization. Distributed workers, serverless aggregation, edge runtimes, persistent traces, and automatic discovery of arbitrary SDK clients are outside this prototype. Live inference and browser visual QA must be reported separately from sample and SSR checks.
+
+## Isolated UI and diagram camera
+
+The client drawer portals into an open ShadowRoot on a `jev-devtools-root` host. Its root resets inherited typography and layout, while shadow encapsulation keeps host selectors out of internal cards, headers, and controls. `copy-styles.mjs` emits the embedded stylesheet from the same CSS source as the public stylesheet export. Existing stylesheet imports remain compatible. The host and listeners are removed on unmount, including React Strict Mode cleanup.
+
+The diagram camera uses pointer capture and animation-frame transform updates rather than a scrollable scaled container. Wheel zoom preserves the diagram coordinate beneath the pointer, two-finger pinch also follows its moving midpoint, and Fit considers both viewport dimensions. ResizeObserver refits a fitted view or keeps a manually positioned view centered when the drawer changes size. Camera geometry tests cover full-content fitting, anchored/clamped zoom, and moving pinch.
