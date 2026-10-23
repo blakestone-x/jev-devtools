@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import { createServer } from "node:http";
 import { once } from "node:events";
 import { setTimeout as delay } from "node:timers/promises";
-import { createJevDevtools } from "../server/index";
+import { createJevDevtools, getJevDevtools } from "../server/index";
 import { choice } from "@typesafe-ai/sdk";
 import { flowAnswer } from "../src/flow-model";
 
@@ -227,4 +227,81 @@ test("flow branches preserve the returned choice even when it is not the highest
     "Score 1.23",
   );
   assert.deepEqual(flowAnswer(), []);
+});
+
+// Adapter lifetime is distinct from the existing request/SSE contract tests:
+// module re-evaluation must retain history, while dispose must release the key.
+test("shared adapters retain history per application key and release disposed instances", async () => {
+  const key = "shared-lifecycle-test";
+  const first = getJevDevtools(key, () => ({ origin, enabled: true }));
+  const other = getJevDevtools(key + "-other", () => ({
+    origin,
+    enabled: true,
+  }));
+  let replacement: ReturnType<typeof getJevDevtools> | undefined;
+  try {
+    await first.createClient(clientOptions).systemOne(request);
+    await delay(10);
+    const reused = getJevDevtools(key, () => {
+      throw new Error("Configuration must be initialized once");
+    });
+    assert.equal(
+      (await snapshot(reused))[0].result.answers.team.choice,
+      "delivery",
+    );
+    assert.deepEqual(await snapshot(other), []);
+    first.dispose();
+    assert.equal((await first.handle(req())).status, 404);
+    replacement = getJevDevtools(key, () => ({ origin, enabled: true }));
+    assert.deepEqual(await snapshot(replacement), []);
+    first.dispose(); // A stale owner must not evict the replacement.
+    await replacement.createClient(clientOptions).systemOne(request);
+    await delay(10);
+    assert.equal(
+      (await snapshot(getJevDevtools(key, () => ({ origin }))))[0].result
+        .answers.team.choice,
+      "delivery",
+    );
+  } finally {
+    first.dispose();
+    other.dispose();
+    replacement?.dispose();
+  }
+});
+
+// Next may reconstruct Request.url using localhost while Host contains the
+// configured browser authority. Normalize only after validating that Host.
+test("Node framework routes use the verified Host without trusting forwarded headers", async () => {
+  const adapter = createJevDevtools({ origin, enabled: true });
+  const internal = "http://127.0.0.1:9999/api/jev-devtools";
+  try {
+    for (const [headers, status] of [
+      [{ host: "localhost:5199" }, 200],
+      [{ host: "evil.test" }, 403],
+      [{ "x-forwarded-host": "localhost:5199" }, 403],
+      [{ host: "localhost:5199", origin: "https://evil.test" }, 403],
+      [{ host: "localhost:5199", "sec-fetch-site": "cross-site" }, 403],
+    ] as [HeadersInit, number][]) {
+      assert.equal(
+        (await adapter.handleNodeRoute(new Request(internal, { headers })))
+          .status,
+        status,
+      );
+    }
+    assert.equal(
+      (
+        await adapter.handle(
+          new Request(internal, { headers: { host: "localhost:5199" } }),
+        )
+      ).status,
+      403,
+    );
+    adapter.dispose();
+    assert.equal(
+      (await adapter.handleNodeRoute(new Request(internal))).status,
+      404,
+    );
+  } finally {
+    adapter.dispose();
+  }
 });

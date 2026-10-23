@@ -65,6 +65,12 @@ Only calls through this client are recorded. Both routes and inspector must shar
 
 See the [complete integration guide](docs/integration.md) for Next.js, proxies, custom endpoints, authorization, redaction, session scoping, and runtime limits. The adapter currently targets Node, not edge runtimes or distributed/serverless aggregation. Capture and display are both disabled by default.
 
+## Next.js and server frameworks
+
+Next.js App Router has a [complete setup guide](docs/nextjs.md) and [sample app](examples/nextjs-app) covering Route Handlers, Server Actions, and Server Components. Use `getJevDevtools(appKey, optionsFactory)` on the server to retain a shared recorder across module reloads, and mount the same `<JevDevtools />` component in your root layout. No Next.js dependency is added to the package.
+
+`handle(request)` supports Node frameworks with Web Request/Response; `middleware` supports Express/Connect. Histories remain local to one Node realm/process. Edge runtimes and distributed/serverless aggregation are not supported.
+
 ## Repository layout
 
 | Path | Purpose |
@@ -72,6 +78,7 @@ See the [complete integration guide](docs/integration.md) for Next.js, proxies, 
 | `packages/jev-devtools` | React drawer, diagrams, recorder, Node adapter, scoped CSS |
 | `apps/playground` | Sample/live scenarios, minimal shadcn form, application previews |
 | `examples/react-vite` | Independent consumer using only public package exports |
+| `examples/nextjs-app` | Next.js App Router consumer using the packed package |
 | `docs` | Integration, architecture, provenance, and release process |
 
 The playground consumes built public exports, so restart `npm run dev` after library edits, or run `npm run build:package` separately. The static diagram lab and its `/docs/` replica remain in the original repo.
@@ -84,6 +91,7 @@ npm test
 npm run build
 npm run check:playground
 npm run verify:package
+npm run verify:nextjs
 ```
 
 `verify:package` packs the library and installs it in a temporary independent React app, checks SSR/disabled behavior, and builds the consumer with a browser/server boundary check. Set `JEV_VERIFY_REACT=18.3.1` to verify React 18 instead of the default React 19. Registry access is allowed by default; `JEV_VERIFY_OFFLINE=1` is available when all dependencies are cached.

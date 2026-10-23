@@ -35,7 +35,7 @@ export function Root() {
 }
 ```
 
-For Next.js, mount it in a client component and use `enabled={process.env.NODE_ENV === 'development'}`. CSS is scoped to the drawer; it doesn't restyle your application. Server rendering produces no inspector markup, and browser code is loaded after mounting when enabled. `enabled` defaults to **false**. Disabled components open no connections. This is a runtime opt-in, not a guarantee that every bundler removes inspector assets from production output.
+For the complete Next.js App Router setup, see [the Next.js guide](nextjs.md), including `getJevDevtools` for shared history across module reloads and the SDK externalization setting. Mount it in a client component and use `enabled={process.env.NODE_ENV === 'development'}`. CSS is scoped to the drawer; it doesn't restyle your application. Server rendering produces no inspector markup, and browser code is loaded after mounting when enabled. `enabled` defaults to **false**. Disabled components open no connections. This is a runtime opt-in, not a guarantee that every bundler removes inspector assets from production output.
 
 | Prop | Default | Purpose |
 | --- | --- | --- |
@@ -75,13 +75,14 @@ For Node frameworks with Web Request/Response handlers, route the endpoint **and
 // Next.js: app/api/jev-devtools/[[...path]]/route.ts
 import { inspector } from '@/server/jev';
 export const runtime = 'nodejs';
-export const GET = (request: Request) => inspector.handle(request);
-export const DELETE = (request: Request) => inspector.handle(request);
+export const dynamic = 'force-dynamic';
+export const GET = (request: Request) => inspector.handleNodeRoute(request);
+export const DELETE = (request: Request) => inspector.handleNodeRoute(request);
 ```
 
 The adapter serves configuration at the base path, snapshots at `/events` via SSE, and `DELETE /clear`. The React component manages subscriptions, reconnection, and cleanup. If your frontend and backend use different ports, proxy this path and the application's inference endpoint through the frontend origin. The browser does not support a cross-origin inspector endpoint. Middleware must receive the original path and matching Host; configure proxies accordingly.
 
-Both API routes and inspector endpoints must share the **same in-memory adapter instance/process**. This prototype doesn't aggregate traces across workers, serverless instances, or edge runtimes. Framework route wiring is illustrated above; the independently tested integration is React + Vite + the Node adapter.
+Both API routes and inspector endpoints must share the **same in-memory adapter instance/process**. This prototype doesn't aggregate traces across workers, serverless instances, or edge runtimes. Independently tested integrations are React + Vite and the Next.js App Router example (Route Handlers, Server Actions, and Server Components). See [Next.js setup and limitations](nextjs.md).
 
 A disabled server adapter exposes no inspector endpoints and `createClient` returns an ordinary SDK client without recording. Capture is limited to `systemOne` calls through that client; it does not intercept unrelated traffic or discover other SDK instances.
 
