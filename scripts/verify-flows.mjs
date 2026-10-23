@@ -9,6 +9,7 @@ try {
       viewport: { width: 1710, height: 1000 },
     }),
     errors = [];
+  page.setDefaultTimeout(10000);
   page.on("pageerror", (e) => errors.push(String(e)));
   await page.goto(origin);
   await page.evaluate(() =>
@@ -22,7 +23,47 @@ try {
     .getByRole("button", { name: "Open Jev DevTools", exact: true })
     .click();
   await page.getByRole("button", { name: "Flows", exact: true }).click();
+  await page
+    .getByRole("button", { name: "Expand Jev drawer", exact: true })
+    .click();
   await page.getByRole("region", { name: "Flow canvas" }).waitFor();
+  const triage = page.getByRole("article", {
+    name: "Request triage",
+    exact: true,
+  });
+  const review = page.getByRole("article", {
+    name: "Request review",
+    exact: true,
+  });
+  await triage.getByText("Shared context", { exact: true }).waitFor();
+  await triage.getByText("Selected: refund", { exact: true }).waitFor();
+  // One shared camera; each request retains its existing question/answer controls.
+  assert.equal(
+    await page.getByRole("region", { name: "Flow canvas" }).count(),
+    1,
+  );
+  assert.equal(
+    await triage
+      .getByRole("button", { name: "Zoom diagram in", exact: true })
+      .count(),
+    0,
+  );
+  await page.selectOption('[aria-label="Flow step"]', "review");
+  await review.getByText("94%", { exact: true }).first().waitFor();
+  await page.waitForTimeout(150);
+  const beforeQuestion = await page
+    .locator(".flow-overview-canvas")
+    .getAttribute("style");
+  await review
+    .getByRole("combobox", { name: "Diagram question", exact: true })
+    .selectOption("risky");
+  await review.getByText("10%", { exact: true }).first().waitFor();
+  await page.waitForTimeout(150);
+  assert.equal(
+    await page.locator(".flow-overview-canvas").getAttribute("style"),
+    beforeQuestion,
+  );
+
   await page
     .getByRole("button", { name: "Step review, jev, completed", exact: true })
     .click();
@@ -126,11 +167,85 @@ try {
   await page
     .getByRole("button", { name: "Step triage, jev, cancelled", exact: true })
     .waitFor();
+  await page.evaluate(() =>
+    fetch("/run?scenario=flow-parallel", { method: "POST" }),
+  );
+  await page.waitForTimeout(150);
+  await rows.first().click();
+  await page.selectOption('[aria-label="Flow step"]', "checks");
+  await page.getByText("Wait for both checks", { exact: true }).waitFor();
+  await page.getByText("All finished · continue", { exact: true }).waitFor();
+  await page
+    .getByText("This marker waits for their results", { exact: false })
+    .waitFor();
+  await page.selectOption('[aria-label="Flow step"]', "combined");
+  await page
+    .getByRole("article", { name: "Request combined", exact: true })
+    .getByText("Shared context", { exact: true })
+    .waitFor();
+  await page.getByRole("button", { name: "Fit flow", exact: true }).click();
+  await page.waitForTimeout(200);
+  await mkdir("benchmarks/results/flows", { recursive: true });
+  await page.screenshot({
+    path: "benchmarks/results/flows/connected-parallel.png",
+  });
+  await page.evaluate(() =>
+    fetch("/run?scenario=flow-large-choice", { method: "POST" }),
+  );
+  await page.waitForTimeout(150);
+  await rows.first().click();
+  await page.selectOption('[aria-label="Flow step"]', "classify");
+  const classify = page.getByRole("article", {
+    name: "Request classify",
+    exact: true,
+  });
+  await classify
+    .getByText("Showing 3 of 150 probabilities", { exact: true })
+    .waitFor();
+  await page.waitForTimeout(150);
+  const cameraTransform = () =>
+    page.locator(".flow-overview-canvas").evaluate((el) => el.style.transform);
+  const beforeExpansion = await cameraTransform();
+  await classify
+    .getByRole("button", { name: "Show More", exact: true })
+    .click();
+  await classify
+    .getByText("Showing 6 of 150 probabilities", { exact: true })
+    .waitFor();
+  await page.waitForTimeout(200);
+  assert.equal(await cameraTransform(), beforeExpansion);
+  await classify
+    .getByRole("button", { name: "All probabilities (150)", exact: true })
+    .click();
+  await classify
+    .getByRole("searchbox", { name: "Search categories" })
+    .fill("category-150");
+  await classify
+    .getByRole("rowheader", { name: "category-150", exact: true })
+    .waitFor();
+  await classify
+    .getByRole("button", { name: "Back to overview", exact: true })
+    .click();
+  await classify
+    .getByText("Showing 6 of 150 probabilities", { exact: true })
+    .waitFor();
+  await page.selectOption('[aria-label="Flow step"]', "check");
+  await page
+    .getByRole("article", { name: "Request check", exact: true })
+    .getByText("90%", { exact: true })
+    .first()
+    .waitFor();
+  await page.selectOption('[aria-label="Flow step"]', "classify");
+  await classify
+    .getByText("Showing 6 of 150 probabilities", { exact: true })
+    .waitFor();
   assert.deepEqual(errors, []);
   await mkdir("benchmarks/results/flows", { recursive: true });
-  await page.screenshot({ path: "benchmarks/results/flows/cancelled.png" });
+  await page.screenshot({
+    path: "benchmarks/results/flows/connected-choice.png",
+  });
   console.log(
-    "Flows verified: outcome paths, untaken nodes, request details, pinned camera/selection across incoming runs and reopening, cancellation.",
+    "Flows verified: connected request diagrams, question switching with one preserved camera, parallel wait explanation, outcome paths, untaken nodes, request details, pinned camera/selection across incoming runs and reopening, cancellation.",
   );
 } finally {
   await browser.close();

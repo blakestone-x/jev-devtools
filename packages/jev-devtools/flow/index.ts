@@ -415,6 +415,7 @@ export function defineJevFlow<T>(
           );
         }
         nodes.find((n) => n.id === id)!.dependencies = tails.filter(Boolean);
+        nodes.find((n) => n.id === id)!.lanes = Object.keys(lanes);
         return refs as never;
       },
       output(outcome, value) {
@@ -470,6 +471,7 @@ export function defineJevFlow<T>(
   for (const node of definitionView.nodes) {
     Object.freeze(node.dependencies);
     Object.freeze(node.path);
+    if (node.lanes) Object.freeze(node.lanes);
     Object.freeze(node);
   }
   Object.freeze(definitionView.nodes);

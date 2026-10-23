@@ -83,4 +83,4 @@ MIT for project code. See bundled LICENSE and THIRD_PARTY_NOTICES.txt for origin
 
 ## Connected flows (unreleased)
 
-The next release adds `jev-devtools/flow`: define Jev calls, branches, parallel joins, and named outcomes once, then inspect whole runs inside the same drawer. Existing single-request setup remains unchanged. [API guide and sample flows](https://github.com/diegoag64/jev-devtools/blob/main/docs/flows.md). Not available in npm 0.2.0.
+The next release adds `jev-devtools/flow`: define Jev calls, branches, parallel joins, and named outcomes once, then inspect their connected request diagrams on one shared canvas. Each request retains its question and probability controls; named parallel checks show when execution can continue. Existing single-request setup remains unchanged. [API guide and sample flows](https://github.com/diegoag64/jev-devtools/blob/main/docs/flows.md). Not available in npm 0.2.0.

@@ -3,6 +3,7 @@ import { chromium } from "playwright";
 import { mkdir, writeFile } from "node:fs/promises";
 import os from "node:os";
 const origin = process.env.FLOW_URL ?? "http://127.0.0.1:4230";
+const output = process.env.BENCH_OUTPUT ?? "benchmarks/results/flows";
 const rounds = Number(process.env.BENCH_ROUNDS ?? 3);
 if (!Number.isSafeInteger(rounds) || rounds < 1)
   throw new Error("Invalid rounds");
@@ -11,7 +12,7 @@ const results = {
   node: process.version,
   runs: [],
 };
-await mkdir("benchmarks/results/flows", { recursive: true });
+await mkdir(output, { recursive: true });
 for (let round = 0; round < rounds; round++) {
   const browser = await chromium.launch({ headless: true });
   try {
@@ -91,7 +92,4 @@ for (let round = 0; round < rounds; round++) {
     await browser.close();
   }
 }
-await writeFile(
-  "benchmarks/results/flows/scaling.json",
-  JSON.stringify(results, null, 2),
-);
+await writeFile(`${output}/scaling.json`, JSON.stringify(results, null, 2));

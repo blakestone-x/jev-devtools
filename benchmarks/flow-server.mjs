@@ -3,7 +3,7 @@ import { createServer } from "node:http";
 import { readFile } from "node:fs/promises";
 import { join, resolve } from "node:path";
 import { build } from "vite";
-import { noul } from "@typesafe-ai/sdk";
+import { choice, noul } from "@typesafe-ai/sdk";
 import { defineJevFlow } from "jev-devtools/flow";
 import { createJevDevtools } from "jev-devtools/server";
 import {
@@ -22,6 +22,20 @@ await build({
 });
 const inspector = createJevDevtools({ enabled: true, origin, limit: 200 });
 const running = new Set();
+const categories = Object.fromEntries(
+  Array.from({ length: 150 }, (_, i) => [`category-${i + 1}`, null]),
+);
+const largeChoice = defineJevFlow("large-choice", (flow) => {
+  const classified = flow.jev("classify", {
+    state: flow.input,
+    questions: { category: choice("Classify the sample", categories) },
+  });
+  const checked = flow.jev("check", {
+    state: classified.answer("category").choice,
+    questions: { eligible: noul("Eligible?") },
+  });
+  return flow.output("done", checked.answer("eligible").noul);
+});
 const scales = new Map(
   [10, 50, 150].map((count) => [
     count,
@@ -68,7 +82,9 @@ const server = createServer((req, res) => {
                 ? scales.get(Number(scenario.slice(6)))
                 : scenario === "flow-parallel"
                   ? parallelFlow
-                  : refundFlow;
+                  : scenario === "flow-large-choice"
+                    ? largeChoice
+                    : refundFlow;
               if (!flow || running.size > 5) throw new Error("Invalid flow");
               const controller = new AbortController();
               running.add(controller);
@@ -76,6 +92,7 @@ const server = createServer((req, res) => {
                 const client = inspector.createClient(
                   {
                     apiKey: "sample-only",
+                    compression: false,
                     logLevel: "off",
                     retry: { maxRetries: 0 },
                     fetch: scenario?.startsWith("scale-")
@@ -84,7 +101,27 @@ const server = createServer((req, res) => {
                             model: "sample",
                             answers: { eligible: { type: "noul", noul: 0.9 } },
                           })
-                      : flowTransport(scenario),
+                      : scenario === "flow-large-choice"
+                        ? async (_url, init) => {
+                            const request = JSON.parse(String(init.body));
+                            return Response.json({
+                              model: "sample",
+                              answers: request.questions.category
+                                ? {
+                                    category: {
+                                      type: "choice",
+                                      choice: "category-1",
+                                      probabilities: Object.fromEntries(
+                                        Object.keys(categories).map(
+                                          (key, i) => [key, (150 - i) / 11325],
+                                        ),
+                                      ),
+                                    },
+                                  }
+                                : { eligible: { type: "noul", noul: 0.9 } },
+                            });
+                          }
+                        : flowTransport(scenario),
                   },
                   { source: "sample", label: flow.definition.name },
                 );

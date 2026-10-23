@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useLayoutEffect, useMemo, useRef, useState } from "react";
 import { useDiagramViewport } from "./useDiagramViewport.js";
 import type { AnswerView, Trace } from "./protocol.js";
 import { findImage, flowAnswer, stateText } from "./flow-model.js";
@@ -128,7 +128,27 @@ function Result({
     </>
   );
 }
-export function TraceDiagram({ trace }: { trace: Trace }) {
+export function TraceDiagram({
+  trace,
+  embedded = false,
+  onHeightChange,
+}: {
+  trace: Trace;
+  /** Render in a parent diagram's coordinates, without a nested camera. */
+  embedded?: boolean;
+  onHeightChange?: (height: number) => void;
+}) {
+  const root = useRef<HTMLDivElement>(null);
+  useLayoutEffect(() => {
+    if (!embedded || !root.current || !onHeightChange) return;
+    const element = root.current;
+    const observer = new ResizeObserver(() => {
+      // Closed drawers and skipped offscreen content cannot replace retained bounds.
+      if (element.offsetHeight > 0) onHeightChange(element.offsetHeight);
+    });
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, [embedded, onHeightChange]);
   const [selected, setSelected] = useState(""),
     [flow, setFlow] = useState(true),
     [extraCategories, setExtraCategories] = useState<Record<string, number>>(
@@ -224,7 +244,10 @@ export function TraceDiagram({ trace }: { trace: Trace }) {
     })),
   ];
   return (
-    <div className={`lab-flow ${compact ? "lab-flow-compact" : ""}`}>
+    <div
+      ref={root}
+      className={`lab-flow ${compact ? "lab-flow-compact" : ""} ${embedded ? "lab-flow-embedded" : ""}`}
+    >
       <div className="lab-flow-toolbar">
         <label>
           Question
@@ -271,22 +294,26 @@ export function TraceDiagram({ trace }: { trace: Trace }) {
                   Show fewer
                 </button>
               )}
-              <button
-                aria-label="Zoom diagram out"
-                disabled={zoom <= 10}
-                onClick={() => zoomBy(1 / 1.2)}
-              >
-                −
-              </button>
-              <output aria-label="Diagram zoom">{zoom}%</output>
-              <button
-                aria-label="Zoom diagram in"
-                disabled={zoom >= 400}
-                onClick={() => zoomBy(1.2)}
-              >
-                +
-              </button>
-              <button onClick={fit}>Fit</button>
+              {!embedded && (
+                <>
+                  <button
+                    aria-label="Zoom diagram out"
+                    disabled={zoom <= 10}
+                    onClick={() => zoomBy(1 / 1.2)}
+                  >
+                    −
+                  </button>
+                  <output aria-label="Diagram zoom">{zoom}%</output>
+                  <button
+                    aria-label="Zoom diagram in"
+                    disabled={zoom >= 400}
+                    onClick={() => zoomBy(1.2)}
+                  >
+                    +
+                  </button>
+                  <button onClick={fit}>Fit</button>
+                </>
+              )}
               <button aria-pressed={flow} onClick={() => setFlow(!flow)}>
                 {flow ? "Pause flow" : "Play flow"}
               </button>
@@ -299,14 +326,19 @@ export function TraceDiagram({ trace }: { trace: Trace }) {
       )}
       <div
         hidden={showProbabilities}
-        className="lab-flow-viewport"
-        ref={viewport}
-        tabIndex={0}
+        className={embedded ? "lab-flow-surface" : "lab-flow-viewport"}
+        ref={embedded ? undefined : viewport}
+        style={embedded ? { height } : undefined}
+        tabIndex={embedded ? undefined : 0}
         role="group"
-        aria-label="Jev diagram. Drag to pan, scroll or pinch to zoom. Arrow keys pan, plus and minus zoom, zero fits."
+        aria-label={
+          embedded
+            ? "Jev request diagram"
+            : "Jev diagram. Drag to pan, scroll or pinch to zoom. Arrow keys pan, plus and minus zoom, zero fits."
+        }
       >
         <div
-          ref={canvas}
+          ref={embedded ? undefined : canvas}
           className="lab-flow-canvas"
           style={{ width: 1120, height }}
         >
@@ -466,7 +498,7 @@ export function TraceDiagram({ trace }: { trace: Trace }) {
           )}
         </div>
       </div>
-      {!showProbabilities && (
+      {!showProbabilities && !embedded && (
         <p className="muted lab-flow-caption">
           <span className="lab-gesture-hint">
             Drag to pan · Scroll or pinch to zoom · 0 to fit

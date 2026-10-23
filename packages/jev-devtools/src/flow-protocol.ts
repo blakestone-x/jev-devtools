@@ -6,6 +6,8 @@ export type FlowNode = {
   dependencies: string[];
   path: string[];
   condition?: string;
+  /** Named concurrent lanes; optional for older captures. */
+  lanes?: string[];
 };
 export type FlowDefinition = {
   version: 1;

@@ -38,7 +38,8 @@ export function useDiagramViewport(
         canvas.current.style.transform = `translate(${x}px, ${y}px) scale(${scale})`;
       if (viewport.current) {
         viewport.current.style.backgroundPosition = `${x}px ${y}px`;
-        viewport.current.style.backgroundSize = `${20 * scale}px ${20 * scale}px`;
+        const grid = Math.max(12, 20 * scale);
+        viewport.current.style.backgroundSize = `${grid}px ${grid}px`;
       }
       setZoom(Math.round(scale * 100));
     });
@@ -52,6 +53,19 @@ export function useDiagramViewport(
   const preserveCamera = useCallback(() => {
     fitted.current = false;
   }, []);
+  const focusArea = useCallback(
+    (area: Point & { width: number; height: number }) => {
+      fitted.current = false;
+      const focused = fitCamera(size.current, area);
+      camera.current = {
+        ...focused,
+        x: focused.x - area.x * focused.scale,
+        y: focused.y - area.y * focused.scale,
+      };
+      paint();
+    },
+    [paint],
+  );
   useEffect(() => {
     if (fitted.current) fit();
   }, [width, height, fit]);
@@ -200,5 +214,5 @@ export function useDiagramViewport(
       frame.current = null;
     };
   }, [fit, zoomBy, paint, scene]);
-  return { viewport, canvas, zoom, zoomBy, fit, preserveCamera };
+  return { viewport, canvas, zoom, zoomBy, fit, preserveCamera, focusArea };
 }

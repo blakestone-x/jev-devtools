@@ -22,7 +22,7 @@ Changes proposed in [#23](https://github.com/diegoag64/jev-devtools/pull/23); no
 ### Added
 
 - Add the Node `jev-devtools/flow` API for typed input/answer references, sequential Jev calls, terminal branching, named parallel lanes with joins, and named output values. Definitions build without requests; runs preserve SDK retries and propagate failures/cancellation without automatic flow retries.
-- Capture versioned definitions separately from bounded, session-scoped runs, including actual decisions, step timings and request links. Add a lightweight whole-flow drawer view with preserved camera/selection and opt-in existing request details. Existing single-request integrations remain compatible.
+- Capture versioned definitions separately from bounded, session-scoped runs, including actual decisions, step timings and request links. Connect complete request diagrams on one shared flow canvas, preserving camera/selection and per-request question/probability controls. Explain parallel waits with named lanes and a “Wait for both checks” marker. Full tabbed request inspection remains available on selection. Existing single-request integrations remain compatible.
 - Add sample-only refund outcomes, parallel checks, failure and cancellation playground scenarios, execution/UI checks, and local-only flow scaling tooling. No distributed/durable execution, loops, or automatic business actions. See [the flow guide](docs/flows.md) for v1 limits.
 
 ## 0.2.0 — October 23, 2026 (experimental)
