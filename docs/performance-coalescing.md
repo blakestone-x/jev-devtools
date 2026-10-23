@@ -71,7 +71,7 @@ The comparison command archives and builds the baseline package, builds the work
 
 `BENCH_BASE_PORT` chooses the first of two ports (default 4211); `BENCH_ROUNDS` changes ordinary rounds. `benchmarks/isolated.mjs URL [URL ...]` also measures already-built servers. Set `BENCH_PROFILE=1` on both server and runner for profiling builds. `node benchmarks/profile-summary.mjs path/to/file.cpuprofile` prints sampled self/inclusive hotspots; inclusive times overlap.
 
-The **Isolated browser benchmark** workflow runs on benchmark/workflow PR changes and supports manual dispatch after it reaches the default branch. PR runs compare the PR base with the checked-out candidate; manual runs accept a baseline ref. Each comparison runs sequentially on one Ubuntu VM, uploads results/profiles/screenshots, and has no hardware-sensitive pass/fail threshold. A hosted VM removes local desktop contention but still shares underlying cloud hardware. To compare this exact fix, use the original PR #15 SHA above as the baseline rather than `main`.
+The former **Isolated browser benchmark** workflow compared revisions on a hosted Ubuntu VM and uploaded results, profiles and screenshots. That workflow has been retired to avoid hosted benchmark costs. Run the comparison locally using the command above; correctness checks remain in CI. To compare this exact fix, use the original PR #15 SHA above as the baseline rather than `main`.
 
 ## Correctness and integration checks
 

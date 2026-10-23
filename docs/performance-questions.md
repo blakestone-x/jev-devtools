@@ -85,6 +85,6 @@ BENCH_SUITE=questions \
   npm run bench:compare -- 866f9b5522febda3123f5fc738fe9aef47049403
 ```
 
-`BENCH_ROUNDS` changes ordinary timing rounds (default four); profiling uses two rounds. `BENCH_BASE_PORT` changes paired ports (default 4211/4212). The runner stops its own browsers/servers. The Questions comparison also runs in its own CI job alongside the existing stream comparison, uploading screenshots, raw data and CPU profiles. Timing values have no hardware-dependent pass/fail threshold; missing answers and browser errors fail the run.
+`BENCH_ROUNDS` changes ordinary timing rounds (default four); profiling uses two rounds. `BENCH_BASE_PORT` changes paired ports (default 4211/4212). The runner stops its own browsers/servers and saves screenshots, raw data and CPU profiles locally. Performance comparisons must run locally; the hosted benchmark workflow has been retired to avoid its cost. Correctness checks remain in CI. Timing values have no hardware-dependent pass/fail threshold; missing answers and browser errors fail the run.
 
 Remaining gaps include low-end/mobile hardware, real assistive-technology sessions, native touch/wheel scrolling, sustained heap profiling, and continuous request updates while scrolling. An optimization for tab entry does not establish a speedup for every browsing pattern.
