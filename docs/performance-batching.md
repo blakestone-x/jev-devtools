@@ -1,5 +1,7 @@
 # Update batching — October 23, 2026
 
+Next iteration: [changed-trace streaming comparison](performance-deltas.md). These measurements remain the batching-only baseline.
+
 Batching reduces repeated full-history snapshot work. In this run, median call-and-capture time with one fast viewer fell by 40–71%, and with three viewers by 80–90%. Large payloads remain expensive: the combined stress case still sends about 36 MB per call to each viewer. This is a first optimization, not a solution to every scaling issue.
 
 ## What changed

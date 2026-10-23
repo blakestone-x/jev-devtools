@@ -1,4 +1,9 @@
-import { createJevDevtools } from "jev-devtools/server";
+import { pathToFileURL } from "node:url";
+const { createJevDevtools } = await import(
+  process.env.BENCH_SERVER_ENTRY
+    ? pathToFileURL(process.env.BENCH_SERVER_ENTRY).href
+    : "jev-devtools/server"
+);
 import { TypeSafeClient } from "@typesafe-ai/sdk";
 import { performance } from "node:perf_hooks";
 import { cpus, platform, arch } from "node:os";
@@ -16,6 +21,8 @@ const rounds = 3,
   samples = 20;
 const report = {
   timestamp: new Date().toISOString(),
+  revision: process.env.BENCH_REVISION || "working-tree",
+  requestedStreamProtocol: 2,
   commit: execFileSync("git", ["rev-parse", "HEAD"], {
     encoding: "utf8",
   }).trim(),
@@ -95,7 +102,7 @@ for (const spec of scenarios.filter((s) =>
       const count = mode === "sse-three" ? 3 : mode.startsWith("sse-") ? 1 : 0;
       for (let i = 0; i < count; i++) {
         const response = await adapter.handle(
-          new Request(origin + "/api/jev-devtools/events"),
+          new Request(origin + "/api/jev-devtools/events?protocol=2"),
         );
         const reader = response.body.getReader();
         readers.push(reader);

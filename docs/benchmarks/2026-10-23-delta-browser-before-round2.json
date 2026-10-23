@@ -1,0 +1,1074 @@
+{
+  "timestamp": "2026-10-23T17:26:17.112Z",
+  "environment": {
+    "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Safari/537.36",
+    "viewport": [
+      1710,
+      961
+    ],
+    "dpr": 2,
+    "hardwareConcurrency": 8,
+    "production": true
+  },
+  "mounts": [
+    {
+      "repeat": 0,
+      "scenario": "small",
+      "closed": false,
+      "snapshotBytes": 881,
+      "readyAfterTwoFramesMs": 51,
+      "elapsedMs": 51.09999990463257,
+      "frames": {
+        "n": 2,
+        "median": 16,
+        "p95": 17.30000000000291,
+        "max": 17.30000000000291
+      },
+      "frameGapsOver34Ms": 0,
+      "longTasks": 0,
+      "longTaskMs": 0,
+      "longestTaskMs": 0,
+      "visibility": "visible",
+      "domElements": 135,
+      "rows": 1,
+      "outputs": 3,
+      "animatedDots": 3,
+      "canvasHeight": "520px",
+      "zoom": "17%",
+      "viewport": [
+        1710,
+        961
+      ],
+      "drawerHeight": 420,
+      "idle": {
+        "elapsedMs": 1002.6999998092651,
+        "frames": {
+          "n": 51,
+          "median": 16.69999999999709,
+          "p95": 17.59999999999127,
+          "max": 133.3000000000029
+        },
+        "frameGapsOver34Ms": 1,
+        "longTasks": 1,
+        "longTaskMs": 130,
+        "longestTaskMs": 130,
+        "visibility": "visible"
+      }
+    },
+    {
+      "repeat": 0,
+      "scenario": "default-history",
+      "closed": false,
+      "snapshotBytes": 43075,
+      "readyAfterTwoFramesMs": 49.69999980926514,
+      "elapsedMs": 49.799999952316284,
+      "frames": {
+        "n": 2,
+        "median": 16.60000000000582,
+        "p95": 16.69999999999709,
+        "max": 16.69999999999709
+      },
+      "frameGapsOver34Ms": 0,
+      "longTasks": 0,
+      "longTaskMs": 0,
+      "longestTaskMs": 0,
+      "visibility": "visible",
+      "domElements": 429,
+      "rows": 50,
+      "outputs": 3,
+      "animatedDots": 3,
+      "canvasHeight": "520px",
+      "zoom": "17%",
+      "viewport": [
+        1710,
+        961
+      ],
+      "drawerHeight": 420,
+      "idle": {
+        "elapsedMs": 1001.1000001430511,
+        "frames": {
+          "n": 59,
+          "median": 16.69999999999709,
+          "p95": 17.5,
+          "max": 17.60000000000582
+        },
+        "frameGapsOver34Ms": 0,
+        "longTasks": 0,
+        "longTaskMs": 0,
+        "longestTaskMs": 0,
+        "visibility": "visible"
+      }
+    },
+    {
+      "repeat": 0,
+      "scenario": "max-history",
+      "closed": false,
+      "snapshotBytes": 172458,
+      "readyAfterTwoFramesMs": 138.29999995231628,
+      "elapsedMs": 138.29999995231628,
+      "frames": {
+        "n": 4,
+        "median": 17.5,
+        "p95": 49,
+        "max": 49
+      },
+      "frameGapsOver34Ms": 1,
+      "longTasks": 0,
+      "longTaskMs": 0,
+      "longestTaskMs": 0,
+      "visibility": "visible",
+      "domElements": 1329,
+      "rows": 200,
+      "outputs": 3,
+      "animatedDots": 3,
+      "canvasHeight": "520px",
+      "zoom": "17%",
+      "viewport": [
+        1710,
+        961
+      ],
+      "drawerHeight": 420,
+      "idle": {
+        "elapsedMs": 1011.0999999046326,
+        "frames": {
+          "n": 60,
+          "median": 16.69999999999709,
+          "p95": 17.39999999999418,
+          "max": 17.59999999999127
+        },
+        "frameGapsOver34Ms": 0,
+        "longTasks": 0,
+        "longTaskMs": 0,
+        "longestTaskMs": 0,
+        "visibility": "visible"
+      }
+    },
+    {
+      "repeat": 0,
+      "scenario": "wide-choice",
+      "closed": false,
+      "snapshotBytes": 10308,
+      "readyAfterTwoFramesMs": 195,
+      "elapsedMs": 195,
+      "frames": {
+        "n": 2,
+        "median": 66.90000000002328,
+        "p95": 99.79999999998836,
+        "max": 99.79999999998836
+      },
+      "frameGapsOver34Ms": 2,
+      "longTasks": 1,
+      "longTaskMs": 85,
+      "longestTaskMs": 85,
+      "visibility": "visible",
+      "domElements": 1899,
+      "rows": 1,
+      "outputs": 150,
+      "animatedDots": 3,
+      "canvasHeight": "20460px",
+      "zoom": "10%",
+      "viewport": [
+        1710,
+        961
+      ],
+      "drawerHeight": 420,
+      "idle": {
+        "elapsedMs": 1008.6000001430511,
+        "frames": {
+          "n": 58,
+          "median": 16.699999999982538,
+          "p95": 17.199999999982538,
+          "max": 17.20000000001164
+        },
+        "frameGapsOver34Ms": 0,
+        "longTasks": 0,
+        "longTaskMs": 0,
+        "longestTaskMs": 0,
+        "visibility": "visible"
+      }
+    },
+    {
+      "repeat": 0,
+      "scenario": "many-questions",
+      "closed": false,
+      "snapshotBytes": 46898,
+      "readyAfterTwoFramesMs": 50.90000009536743,
+      "elapsedMs": 51,
+      "frames": {
+        "n": 2,
+        "median": 16.699999999982538,
+        "p95": 16.70000000001164,
+        "max": 16.70000000001164
+      },
+      "frameGapsOver34Ms": 0,
+      "longTasks": 0,
+      "longTaskMs": 0,
+      "longestTaskMs": 0,
+      "visibility": "visible",
+      "domElements": 284,
+      "rows": 1,
+      "outputs": 3,
+      "animatedDots": 3,
+      "canvasHeight": "520px",
+      "zoom": "17%",
+      "viewport": [
+        1710,
+        961
+      ],
+      "drawerHeight": 420,
+      "idle": {
+        "elapsedMs": 1013.7000000476837,
+        "frames": {
+          "n": 59,
+          "median": 16.699999999982538,
+          "p95": 17.29999999998836,
+          "max": 17.699999999982538
+        },
+        "frameGapsOver34Ms": 0,
+        "longTasks": 0,
+        "longTaskMs": 0,
+        "longestTaskMs": 0,
+        "visibility": "visible"
+      }
+    },
+    {
+      "repeat": 0,
+      "scenario": "large-state",
+      "closed": false,
+      "snapshotBytes": 16166510,
+      "readyAfterTwoFramesMs": 226.5,
+      "elapsedMs": 226.59999990463257,
+      "frames": {
+        "n": 7,
+        "median": 16.70000000001164,
+        "p95": 83.39999999999418,
+        "max": 83.39999999999418
+      },
+      "frameGapsOver34Ms": 1,
+      "longTasks": 0,
+      "longTaskMs": 0,
+      "longestTaskMs": 0,
+      "visibility": "visible",
+      "domElements": 1329,
+      "rows": 200,
+      "outputs": 3,
+      "animatedDots": 3,
+      "canvasHeight": "520px",
+      "zoom": "17%",
+      "viewport": [
+        1710,
+        961
+      ],
+      "drawerHeight": 420,
+      "idle": {
+        "elapsedMs": 1012.0999999046326,
+        "frames": {
+          "n": 60,
+          "median": 16.699999999982538,
+          "p95": 16.800000000017462,
+          "max": 17.60000000000582
+        },
+        "frameGapsOver34Ms": 0,
+        "longTasks": 0,
+        "longTaskMs": 0,
+        "longestTaskMs": 0,
+        "visibility": "visible"
+      }
+    },
+    {
+      "repeat": 0,
+      "scenario": "combined",
+      "closed": false,
+      "snapshotBytes": 18051250,
+      "readyAfterTwoFramesMs": 351.59999990463257,
+      "elapsedMs": 351.7000000476837,
+      "frames": {
+        "n": 10,
+        "median": 16.70000000001164,
+        "p95": 116.5,
+        "max": 116.5
+      },
+      "frameGapsOver34Ms": 2,
+      "longTasks": 2,
+      "longTaskMs": 180,
+      "longestTaskMs": 128,
+      "visibility": "visible",
+      "domElements": 3093,
+      "rows": 200,
+      "outputs": 150,
+      "animatedDots": 3,
+      "canvasHeight": "20460px",
+      "zoom": "10%",
+      "viewport": [
+        1710,
+        961
+      ],
+      "drawerHeight": 420,
+      "idle": {
+        "elapsedMs": 1011.2000000476837,
+        "frames": {
+          "n": 58,
+          "median": 16.699999999982538,
+          "p95": 17.70000000001164,
+          "max": 33.39999999999418
+        },
+        "frameGapsOver34Ms": 0,
+        "longTasks": 0,
+        "longTaskMs": 0,
+        "longestTaskMs": 0,
+        "visibility": "visible"
+      }
+    },
+    {
+      "repeat": 1,
+      "scenario": "small",
+      "closed": false,
+      "snapshotBytes": 881,
+      "readyAfterTwoFramesMs": 65.79999995231628,
+      "elapsedMs": 65.89999985694885,
+      "frames": {
+        "n": 3,
+        "median": 16.900000000023283,
+        "p95": 17.39999999999418,
+        "max": 17.39999999999418
+      },
+      "frameGapsOver34Ms": 0,
+      "longTasks": 0,
+      "longTaskMs": 0,
+      "longestTaskMs": 0,
+      "visibility": "visible",
+      "domElements": 135,
+      "rows": 1,
+      "outputs": 3,
+      "animatedDots": 3,
+      "canvasHeight": "520px",
+      "zoom": "17%",
+      "viewport": [
+        1710,
+        961
+      ],
+      "drawerHeight": 420,
+      "idle": {
+        "elapsedMs": 1015.7000000476837,
+        "frames": {
+          "n": 58,
+          "median": 16.699999999982538,
+          "p95": 16.89999999999418,
+          "max": 33.39999999999418
+        },
+        "frameGapsOver34Ms": 0,
+        "longTasks": 0,
+        "longTaskMs": 0,
+        "longestTaskMs": 0,
+        "visibility": "visible"
+      }
+    },
+    {
+      "repeat": 1,
+      "scenario": "default-history",
+      "closed": false,
+      "snapshotBytes": 43075,
+      "readyAfterTwoFramesMs": 55,
+      "elapsedMs": 56.40000009536743,
+      "frames": {
+        "n": 2,
+        "median": 16.60000000000582,
+        "p95": 16.70000000001164,
+        "max": 16.70000000001164
+      },
+      "frameGapsOver34Ms": 0,
+      "longTasks": 0,
+      "longTaskMs": 0,
+      "longestTaskMs": 0,
+      "visibility": "visible",
+      "domElements": 429,
+      "rows": 50,
+      "outputs": 3,
+      "animatedDots": 3,
+      "canvasHeight": "520px",
+      "zoom": "17%",
+      "viewport": [
+        1710,
+        961
+      ],
+      "drawerHeight": 420,
+      "idle": {
+        "elapsedMs": 1039.5,
+        "frames": {
+          "n": 54,
+          "median": 16.699999999982538,
+          "p95": 33.39999999999418,
+          "max": 33.39999999999418
+        },
+        "frameGapsOver34Ms": 0,
+        "longTasks": 0,
+        "longTaskMs": 0,
+        "longestTaskMs": 0,
+        "visibility": "visible"
+      }
+    },
+    {
+      "repeat": 1,
+      "scenario": "max-history",
+      "closed": false,
+      "snapshotBytes": 172458,
+      "readyAfterTwoFramesMs": 76.90000009536743,
+      "elapsedMs": 76.90000009536743,
+      "frames": {
+        "n": 3,
+        "median": 16.699999999982538,
+        "p95": 16.70000000001164,
+        "max": 16.70000000001164
+      },
+      "frameGapsOver34Ms": 0,
+      "longTasks": 0,
+      "longTaskMs": 0,
+      "longestTaskMs": 0,
+      "visibility": "visible",
+      "domElements": 1329,
+      "rows": 200,
+      "outputs": 3,
+      "animatedDots": 3,
+      "canvasHeight": "520px",
+      "zoom": "17%",
+      "viewport": [
+        1710,
+        961
+      ],
+      "drawerHeight": 420,
+      "idle": {
+        "elapsedMs": 1010.5,
+        "frames": {
+          "n": 49,
+          "median": 16.70000000001164,
+          "p95": 33.40000000002328,
+          "max": 50
+        },
+        "frameGapsOver34Ms": 2,
+        "longTasks": 2,
+        "longTaskMs": 101,
+        "longestTaskMs": 51,
+        "visibility": "visible"
+      }
+    },
+    {
+      "repeat": 1,
+      "scenario": "wide-choice",
+      "closed": false,
+      "snapshotBytes": 10308,
+      "readyAfterTwoFramesMs": 209.39999985694885,
+      "elapsedMs": 209.5,
+      "frames": {
+        "n": 4,
+        "median": 17.300000000017462,
+        "p95": 115.89999999999418,
+        "max": 115.89999999999418
+      },
+      "frameGapsOver34Ms": 2,
+      "longTasks": 1,
+      "longTaskMs": 113,
+      "longestTaskMs": 113,
+      "visibility": "visible",
+      "domElements": 1899,
+      "rows": 1,
+      "outputs": 150,
+      "animatedDots": 3,
+      "canvasHeight": "20460px",
+      "zoom": "10%",
+      "viewport": [
+        1710,
+        961
+      ],
+      "drawerHeight": 420,
+      "idle": {
+        "elapsedMs": 1016.2000000476837,
+        "frames": {
+          "n": 50,
+          "median": 16.70000000001164,
+          "p95": 49.89999999999418,
+          "max": 100
+        },
+        "frameGapsOver34Ms": 3,
+        "longTasks": 2,
+        "longTaskMs": 149,
+        "longestTaskMs": 95,
+        "visibility": "visible"
+      }
+    },
+    {
+      "repeat": 1,
+      "scenario": "many-questions",
+      "closed": false,
+      "snapshotBytes": 46898,
+      "readyAfterTwoFramesMs": 59.700000047683716,
+      "elapsedMs": 59.80000019073486,
+      "frames": {
+        "n": 3,
+        "median": 16.699999999982538,
+        "p95": 16.89999999999418,
+        "max": 16.89999999999418
+      },
+      "frameGapsOver34Ms": 0,
+      "longTasks": 0,
+      "longTaskMs": 0,
+      "longestTaskMs": 0,
+      "visibility": "visible",
+      "domElements": 284,
+      "rows": 1,
+      "outputs": 3,
+      "animatedDots": 3,
+      "canvasHeight": "520px",
+      "zoom": "17%",
+      "viewport": [
+        1710,
+        961
+      ],
+      "drawerHeight": 420,
+      "idle": {
+        "elapsedMs": 1000.5,
+        "frames": {
+          "n": 56,
+          "median": 16.70000000001164,
+          "p95": 32.40000000002328,
+          "max": 33.39999999999418
+        },
+        "frameGapsOver34Ms": 0,
+        "longTasks": 0,
+        "longTaskMs": 0,
+        "longestTaskMs": 0,
+        "visibility": "visible"
+      }
+    },
+    {
+      "repeat": 1,
+      "scenario": "large-state",
+      "closed": false,
+      "snapshotBytes": 16166510,
+      "readyAfterTwoFramesMs": 306.40000009536743,
+      "elapsedMs": 306.5,
+      "frames": {
+        "n": 8,
+        "median": 16.70000000001164,
+        "p95": 100,
+        "max": 100
+      },
+      "frameGapsOver34Ms": 2,
+      "longTasks": 2,
+      "longTaskMs": 118,
+      "longestTaskMs": 61,
+      "visibility": "visible",
+      "domElements": 1329,
+      "rows": 200,
+      "outputs": 3,
+      "animatedDots": 3,
+      "canvasHeight": "520px",
+      "zoom": "17%",
+      "viewport": [
+        1710,
+        961
+      ],
+      "drawerHeight": 420,
+      "idle": {
+        "elapsedMs": 1009.4000000953674,
+        "frames": {
+          "n": 60,
+          "median": 16.699999999982538,
+          "p95": 16.89999999999418,
+          "max": 17.599999999976717
+        },
+        "frameGapsOver34Ms": 0,
+        "longTasks": 0,
+        "longTaskMs": 0,
+        "longestTaskMs": 0,
+        "visibility": "visible"
+      }
+    },
+    {
+      "repeat": 1,
+      "scenario": "combined",
+      "closed": false,
+      "snapshotBytes": 18051250,
+      "readyAfterTwoFramesMs": 393.59999990463257,
+      "elapsedMs": 393.59999990463257,
+      "frames": {
+        "n": 10,
+        "median": 16.70000000001164,
+        "p95": 150,
+        "max": 150
+      },
+      "frameGapsOver34Ms": 2,
+      "longTasks": 2,
+      "longTaskMs": 200,
+      "longestTaskMs": 148,
+      "visibility": "visible",
+      "domElements": 3093,
+      "rows": 200,
+      "outputs": 150,
+      "animatedDots": 3,
+      "canvasHeight": "20460px",
+      "zoom": "10%",
+      "viewport": [
+        1710,
+        961
+      ],
+      "drawerHeight": 420,
+      "idle": {
+        "elapsedMs": 1005.2999999523163,
+        "frames": {
+          "n": 55,
+          "median": 16.699999999982538,
+          "p95": 33.39999999999418,
+          "max": 33.40000000002328
+        },
+        "frameGapsOver34Ms": 0,
+        "longTasks": 0,
+        "longTaskMs": 0,
+        "longestTaskMs": 0,
+        "visibility": "visible"
+      }
+    },
+    {
+      "repeat": 2,
+      "scenario": "small",
+      "closed": false,
+      "snapshotBytes": 881,
+      "readyAfterTwoFramesMs": 44.09999990463257,
+      "elapsedMs": 44.19999980926514,
+      "frames": {
+        "n": 2,
+        "median": 15.599999999976717,
+        "p95": 16.70000000001164,
+        "max": 16.70000000001164
+      },
+      "frameGapsOver34Ms": 0,
+      "longTasks": 0,
+      "longTaskMs": 0,
+      "longestTaskMs": 0,
+      "visibility": "visible",
+      "domElements": 135,
+      "rows": 1,
+      "outputs": 3,
+      "animatedDots": 3,
+      "canvasHeight": "520px",
+      "zoom": "17%",
+      "viewport": [
+        1710,
+        961
+      ],
+      "drawerHeight": 420,
+      "idle": {
+        "elapsedMs": 1016.2999999523163,
+        "frames": {
+          "n": 60,
+          "median": 16.699999999982538,
+          "p95": 17.5,
+          "max": 17.60000000000582
+        },
+        "frameGapsOver34Ms": 0,
+        "longTasks": 0,
+        "longTaskMs": 0,
+        "longestTaskMs": 0,
+        "visibility": "visible"
+      }
+    },
+    {
+      "repeat": 2,
+      "scenario": "default-history",
+      "closed": false,
+      "snapshotBytes": 43075,
+      "readyAfterTwoFramesMs": 65,
+      "elapsedMs": 66.5,
+      "frames": {
+        "n": 2,
+        "median": 16.70000000001164,
+        "p95": 33.29999999998836,
+        "max": 33.29999999998836
+      },
+      "frameGapsOver34Ms": 0,
+      "longTasks": 0,
+      "longTaskMs": 0,
+      "longestTaskMs": 0,
+      "visibility": "visible",
+      "domElements": 429,
+      "rows": 50,
+      "outputs": 3,
+      "animatedDots": 3,
+      "canvasHeight": "520px",
+      "zoom": "17%",
+      "viewport": [
+        1710,
+        961
+      ],
+      "drawerHeight": 420,
+      "idle": {
+        "elapsedMs": 1016.4000000953674,
+        "frames": {
+          "n": 56,
+          "median": 16.699999999982538,
+          "p95": 33.30000000001746,
+          "max": 33.39999999999418
+        },
+        "frameGapsOver34Ms": 0,
+        "longTasks": 0,
+        "longTaskMs": 0,
+        "longestTaskMs": 0,
+        "visibility": "visible"
+      }
+    },
+    {
+      "repeat": 2,
+      "scenario": "max-history",
+      "closed": false,
+      "snapshotBytes": 172458,
+      "readyAfterTwoFramesMs": 107.20000004768372,
+      "elapsedMs": 107.29999995231628,
+      "frames": {
+        "n": 3,
+        "median": 33.30000000001746,
+        "p95": 33.39999999999418,
+        "max": 33.39999999999418
+      },
+      "frameGapsOver34Ms": 0,
+      "longTasks": 1,
+      "longTaskMs": 60,
+      "longestTaskMs": 60,
+      "visibility": "visible",
+      "domElements": 1329,
+      "rows": 200,
+      "outputs": 3,
+      "animatedDots": 3,
+      "canvasHeight": "520px",
+      "zoom": "17%",
+      "viewport": [
+        1710,
+        961
+      ],
+      "drawerHeight": 420,
+      "idle": {
+        "elapsedMs": 1006.2000000476837,
+        "frames": {
+          "n": 56,
+          "median": 16.699999999982538,
+          "p95": 33.30000000001746,
+          "max": 33.39999999999418
+        },
+        "frameGapsOver34Ms": 0,
+        "longTasks": 0,
+        "longTaskMs": 0,
+        "longestTaskMs": 0,
+        "visibility": "visible"
+      }
+    },
+    {
+      "repeat": 2,
+      "scenario": "wide-choice",
+      "closed": false,
+      "snapshotBytes": 10308,
+      "readyAfterTwoFramesMs": 163.59999990463257,
+      "elapsedMs": 163.70000004768372,
+      "frames": {
+        "n": 3,
+        "median": 50.79999999998836,
+        "p95": 65.80000000001746,
+        "max": 65.80000000001746
+      },
+      "frameGapsOver34Ms": 2,
+      "longTasks": 1,
+      "longTaskMs": 73,
+      "longestTaskMs": 73,
+      "visibility": "visible",
+      "domElements": 1899,
+      "rows": 1,
+      "outputs": 150,
+      "animatedDots": 3,
+      "canvasHeight": "20460px",
+      "zoom": "10%",
+      "viewport": [
+        1710,
+        961
+      ],
+      "drawerHeight": 420,
+      "idle": {
+        "elapsedMs": 1004.7000000476837,
+        "frames": {
+          "n": 59,
+          "median": 16.699999999982538,
+          "p95": 16.800000000017462,
+          "max": 17.5
+        },
+        "frameGapsOver34Ms": 0,
+        "longTasks": 0,
+        "longTaskMs": 0,
+        "longestTaskMs": 0,
+        "visibility": "visible"
+      }
+    },
+    {
+      "repeat": 2,
+      "scenario": "many-questions",
+      "closed": false,
+      "snapshotBytes": 46898,
+      "readyAfterTwoFramesMs": 51.299999952316284,
+      "elapsedMs": 51.40000009536743,
+      "frames": {
+        "n": 2,
+        "median": 16.699999999982538,
+        "p95": 16.70000000001164,
+        "max": 16.70000000001164
+      },
+      "frameGapsOver34Ms": 0,
+      "longTasks": 0,
+      "longTaskMs": 0,
+      "longestTaskMs": 0,
+      "visibility": "visible",
+      "domElements": 284,
+      "rows": 1,
+      "outputs": 3,
+      "animatedDots": 3,
+      "canvasHeight": "520px",
+      "zoom": "17%",
+      "viewport": [
+        1710,
+        961
+      ],
+      "drawerHeight": 420,
+      "idle": {
+        "elapsedMs": 1003.8999998569489,
+        "frames": {
+          "n": 59,
+          "median": 16.699999999982538,
+          "p95": 17.39999999999418,
+          "max": 17.599999999976717
+        },
+        "frameGapsOver34Ms": 0,
+        "longTasks": 0,
+        "longTaskMs": 0,
+        "longestTaskMs": 0,
+        "visibility": "visible"
+      }
+    },
+    {
+      "repeat": 2,
+      "scenario": "large-state",
+      "closed": false,
+      "snapshotBytes": 16166510,
+      "readyAfterTwoFramesMs": 380.10000014305115,
+      "elapsedMs": 380.30000019073486,
+      "frames": {
+        "n": 9,
+        "median": 16.70000000001164,
+        "p95": 133.29999999998836,
+        "max": 133.29999999998836
+      },
+      "frameGapsOver34Ms": 2,
+      "longTasks": 2,
+      "longTaskMs": 157,
+      "longestTaskMs": 105,
+      "visibility": "visible",
+      "domElements": 1329,
+      "rows": 200,
+      "outputs": 3,
+      "animatedDots": 3,
+      "canvasHeight": "520px",
+      "zoom": "17%",
+      "viewport": [
+        1710,
+        961
+      ],
+      "drawerHeight": 420,
+      "idle": {
+        "elapsedMs": 1007.9000000953674,
+        "frames": {
+          "n": 60,
+          "median": 16.699999999982538,
+          "p95": 17.60000000000582,
+          "max": 17.699999999982538
+        },
+        "frameGapsOver34Ms": 0,
+        "longTasks": 0,
+        "longTaskMs": 0,
+        "longestTaskMs": 0,
+        "visibility": "visible"
+      }
+    },
+    {
+      "repeat": 2,
+      "scenario": "combined",
+      "closed": false,
+      "snapshotBytes": 18051250,
+      "readyAfterTwoFramesMs": 392,
+      "elapsedMs": 392,
+      "frames": {
+        "n": 9,
+        "median": 16.70000000001164,
+        "p95": 133.29999999998836,
+        "max": 133.29999999998836
+      },
+      "frameGapsOver34Ms": 2,
+      "longTasks": 2,
+      "longTaskMs": 193,
+      "longestTaskMs": 141,
+      "visibility": "visible",
+      "domElements": 3093,
+      "rows": 200,
+      "outputs": 150,
+      "animatedDots": 3,
+      "canvasHeight": "20460px",
+      "zoom": "10%",
+      "viewport": [
+        1710,
+        961
+      ],
+      "drawerHeight": 420,
+      "idle": {
+        "elapsedMs": 1003.3000001907349,
+        "frames": {
+          "n": 57,
+          "median": 16.699999999982538,
+          "p95": 32.5,
+          "max": 33.39999999999418
+        },
+        "frameGapsOver34Ms": 0,
+        "longTasks": 0,
+        "longTaskMs": 0,
+        "longestTaskMs": 0,
+        "visibility": "visible"
+      }
+    }
+  ],
+  "streams": [
+    {
+      "scenario": "max-history",
+      "closed": false,
+      "pulses": 5,
+      "calls": 5,
+      "sent": 5,
+      "bytes": 863276,
+      "elapsedMs": 5068.700000047684,
+      "frames": {
+        "n": 302,
+        "median": 16.699999999999818,
+        "p95": 17.299999999999272,
+        "max": 33.30000000000018
+      },
+      "frameGapsOver34Ms": 0,
+      "longTasks": 0,
+      "longTaskMs": 0,
+      "longestTaskMs": 0,
+      "visibility": "visible",
+      "achievedHz": 0.9864462288067873
+    },
+    {
+      "scenario": "max-history",
+      "closed": false,
+      "pulses": 5,
+      "calls": 5,
+      "sent": 5,
+      "bytes": 863204,
+      "elapsedMs": 5079.299999952316,
+      "frames": {
+        "n": 277,
+        "median": 16.69999999999891,
+        "p95": 33.30000000000109,
+        "max": 33.5
+      },
+      "frameGapsOver34Ms": 0,
+      "longTasks": 0,
+      "longTaskMs": 0,
+      "longestTaskMs": 0,
+      "visibility": "visible",
+      "achievedHz": 0.984387612475526
+    },
+    {
+      "scenario": "max-history",
+      "closed": false,
+      "pulses": 5,
+      "calls": 5,
+      "sent": 5,
+      "bytes": 863138,
+      "elapsedMs": 5070.200000047684,
+      "frames": {
+        "n": 299,
+        "median": 16.700000000000728,
+        "p95": 17.400000000001455,
+        "max": 33.400000000001455
+      },
+      "frameGapsOver34Ms": 0,
+      "longTasks": 0,
+      "longTaskMs": 0,
+      "longestTaskMs": 0,
+      "visibility": "visible",
+      "achievedHz": 0.986154392322389
+    },
+    {
+      "scenario": "combined",
+      "closed": false,
+      "pulses": 5,
+      "calls": 5,
+      "sent": 10,
+      "bytes": 180486653,
+      "elapsedMs": 5067.599999904633,
+      "frames": {
+        "n": 271,
+        "median": 16.69999999999709,
+        "p95": 17.69999999999709,
+        "max": 83.39999999999782
+      },
+      "frameGapsOver34Ms": 9,
+      "longTasks": 4,
+      "longTaskMs": 252,
+      "longestTaskMs": 66,
+      "visibility": "visible",
+      "achievedHz": 1.9733207041179632
+    },
+    {
+      "scenario": "combined",
+      "closed": false,
+      "pulses": 5,
+      "calls": 5,
+      "sent": 10,
+      "bytes": 180486562,
+      "elapsedMs": 5054.200000047684,
+      "frames": {
+        "n": 269,
+        "median": 16.700000000000728,
+        "p95": 33.29999999999927,
+        "max": 83.30000000000291
+      },
+      "frameGapsOver34Ms": 8,
+      "longTasks": 4,
+      "longTaskMs": 244,
+      "longestTaskMs": 75,
+      "visibility": "visible",
+      "achievedHz": 1.9785524909789196
+    },
+    {
+      "scenario": "combined",
+      "closed": false,
+      "pulses": 5,
+      "calls": 5,
+      "sent": 10,
+      "bytes": 180486481,
+      "elapsedMs": 5057.700000047684,
+      "frames": {
+        "n": 270,
+        "median": 16.69999999999709,
+        "p95": 33.29999999999927,
+        "max": 83.29999999999927
+      },
+      "frameGapsOver34Ms": 9,
+      "longTasks": 6,
+      "longTaskMs": 334,
+      "longestTaskMs": 65,
+      "visibility": "visible",
+      "achievedHz": 1.9771833046455347
+    }
+  ],
+  "interactions": [],
+  "transportMode": "adapter",
+  "revision": "batched-pr14-round2",
+  "provenance": {
+    "runtimeCommit": "4df055705b0b63e62171eedb6179c7ae5a12b738",
+    "runtime": "Frozen PR #14 build; server and (for browser runs) client."
+  }
+}

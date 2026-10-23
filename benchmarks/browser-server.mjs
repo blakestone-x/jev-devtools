@@ -6,8 +6,11 @@ import { build } from "vite";
 import { scenarios, recordedFixture, fixture, invoke } from "./fixtures.mjs";
 const root = dirname(fileURLToPath(import.meta.url));
 const port = Number(process.env.BENCH_PORT || 4190);
+// Keep paired revisions from overwriting each other's production assets.
+const outDir = join(root, "results", `browser-${port}`);
 const transportMode = process.env.BENCH_LIVE === "1" ? "adapter" : "replay";
 const revision = process.env.BENCH_REVISION || "working-tree";
+const profiling = process.env.BENCH_PROFILE === "1";
 const { createJevDevtools } = await import(
   process.env.BENCH_SERVER_ENTRY
     ? pathToFileURL(process.env.BENCH_SERVER_ENTRY).href
@@ -29,19 +32,54 @@ for (const spec of scenarios) {
       limit: spec.history,
     });
     const { request, clientOptions } = fixture(spec);
+    let sequence = 0;
+    const fetchSample = clientOptions.fetch;
+    clientOptions.fetch = async (...args) => {
+      const response = await fetchSample(...args);
+      response.headers.set("x-typesafe-request-id", `benchmark-${++sequence}`);
+      return response;
+    };
     const client = adapter.createClient(clientOptions, {
       source: "sample",
       label: `Sample ${spec.history}`,
     });
     for (let i = 0; i < spec.history; i++) await invoke(client, request);
-    adapters.set(spec.id, { adapter, client, request });
+    adapters.set(spec.id, {
+      adapter,
+      client,
+      request,
+      requestId: () => `benchmark-${sequence}`,
+    });
   }
 }
 await build({
   root: join(root, "browser"),
   configFile: false,
-  build: { outDir: "dist", emptyOutDir: true },
-  define: { "process.env.NODE_ENV": '"production"' },
+  resolve: {
+    alias: [
+      ...(process.env.BENCH_CLIENT_ENTRY
+        ? [
+            {
+              find: /^jev-devtools$/,
+              replacement: process.env.BENCH_CLIENT_ENTRY,
+            },
+          ]
+        : []),
+      ...(profiling
+        ? [{ find: /^react-dom\/client$/, replacement: "react-dom/profiling" }]
+        : []),
+    ],
+  },
+  build: {
+    outDir,
+    emptyOutDir: true,
+    sourcemap: true,
+    minify: profiling ? false : undefined,
+  },
+  define: {
+    "process.env.NODE_ENV": '"production"',
+    __BENCH_PROFILE__: JSON.stringify(profiling),
+  },
 });
 const streams = new Set();
 const server = createServer(async (req, res) => {
@@ -56,6 +94,7 @@ const server = createServer(async (req, res) => {
             bytes: d.bytes,
             transportMode,
             revision,
+            profiling,
           })),
         ),
       );
@@ -83,11 +122,11 @@ const server = createServer(async (req, res) => {
       res.setHeader("cache-control", "no-store");
       return res.end(JSON.stringify(counters));
     }
-    const match = url.pathname.match(/^\/api\/([a-z-]+)(\/events)?$/);
+    const match = url.pathname.match(/^\/api\/([a-z-]+)(\/events|\/clear)?$/);
     if (match && datasets.has(match[1])) {
       const dataset = datasets.get(match[1]);
       if (transportMode === "adapter") {
-        if (match[2]) {
+        if (match[2] === "/events") {
           const id = match[1];
           active.set(id, (active.get(id) || 0) + 1);
           req.on("close", () => {
@@ -99,7 +138,11 @@ const server = createServer(async (req, res) => {
           res.write = (chunk, ...args) => {
             const bytes = Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk);
             counters.bytes += bytes.byteLength;
-            if (bytes.subarray(0, 15).toString() === "event: snapshot")
+            if (
+              /^event: (snapshot|delta)\n/.test(
+                bytes.subarray(0, 20).toString(),
+              )
+            )
               counters.sent++;
             return write(chunk, ...args);
           };
@@ -108,6 +151,10 @@ const server = createServer(async (req, res) => {
           .get(match[1])
           .adapter.middleware(req, res, () => res.writeHead(404).end());
         return;
+      }
+      if (match[2] === "/clear") {
+        res.writeHead(405);
+        return res.end("Replay fixtures cannot be cleared");
       }
       if (!match[2]) {
         res.setHeader("content-type", "application/json");
@@ -130,13 +177,15 @@ const server = createServer(async (req, res) => {
       }
       if (transportMode === "adapter") {
         let calls = 0;
+        const completed = {};
         for (const id of active.keys()) {
           const { client, request } = adapters.get(id);
           await invoke(client, request);
           calls++;
+          completed[id] = adapters.get(id).requestId();
         }
         res.setHeader("content-type", "application/json");
-        return res.end(JSON.stringify({ sent: 0, bytes: 0, calls }));
+        return res.end(JSON.stringify({ sent: 0, bytes: 0, calls, completed }));
       }
       let sent = 0,
         bytes = 0;
@@ -159,11 +208,13 @@ const server = createServer(async (req, res) => {
       "content-type",
       file.endsWith(".js")
         ? "text/javascript"
-        : file.endsWith(".css")
-          ? "text/css"
-          : "text/html",
+        : file.endsWith(".map")
+          ? "application/json"
+          : file.endsWith(".css")
+            ? "text/css"
+            : "text/html",
     );
-    res.end(await readFile(join(root, "browser/dist", file)));
+    res.end(await readFile(join(outDir, file)));
   } catch (error) {
     res.writeHead(500);
     res.end(String(error));

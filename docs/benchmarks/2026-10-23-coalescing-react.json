@@ -1,0 +1,1116 @@
+{
+  "timestamp": "2026-10-23T18:21:26.221Z",
+  "environment": {
+    "platform": "darwin",
+    "arch": "arm64",
+    "cpus": 8,
+    "cpu": "Apple M2",
+    "node": "v24.19.0",
+    "headless": true,
+    "viewport": [
+      1710,
+      961
+    ],
+    "dpr": 2,
+    "profiling": true
+  },
+  "runs": [
+    {
+      "round": 0,
+      "url": "http://127.0.0.1:4211",
+      "revision": "base-a8a01d3",
+      "scenario": "combined",
+      "chromium": "151.0.7922.34",
+      "mount": {
+        "scenario": "combined",
+        "closed": false,
+        "snapshotBytes": 18051353,
+        "readyAfterTwoFramesMs": 569,
+        "elapsedMs": 569.1000001430511,
+        "frames": {
+          "n": 28,
+          "median": 16.69999999999999,
+          "p95": 33.39999999999998,
+          "max": 66.60000000000002
+        },
+        "frameGapsOver34Ms": 1,
+        "longTasks": 0,
+        "longTaskMs": 0,
+        "longestTaskMs": 0,
+        "visibility": "visible",
+        "commits": [
+          {
+            "phase": "mount",
+            "actualDuration": 0.09999990463256836,
+            "baseDuration": 0.09999990463256836,
+            "start": 114.80000019073486,
+            "commitTime": 114.90000009536743
+          },
+          {
+            "phase": "update",
+            "actualDuration": 1.1999998092651367,
+            "baseDuration": 0,
+            "start": 116.80000019073486,
+            "commitTime": 118.30000019073486
+          },
+          {
+            "phase": "update",
+            "actualDuration": 0.39999985694885254,
+            "baseDuration": 0.39999985694885254,
+            "start": 120.20000004768372,
+            "commitTime": 419.7000000476837
+          },
+          {
+            "phase": "update",
+            "actualDuration": 5.200000047683716,
+            "baseDuration": 1.7000000476837158,
+            "start": 428.5,
+            "commitTime": 433.80000019073486
+          },
+          {
+            "phase": "update",
+            "actualDuration": 13.699999809265137,
+            "baseDuration": 9.200000047683716,
+            "start": 635.8000001907349,
+            "commitTime": 650.5
+          },
+          {
+            "phase": "update",
+            "actualDuration": 1.1999998092651367,
+            "baseDuration": 8.900000095367432,
+            "start": 680.5,
+            "commitTime": 682.1000001430511
+          }
+        ],
+        "domElements": 3093,
+        "rows": 200,
+        "outputs": 150,
+        "animatedDots": 3,
+        "canvasHeight": "20460px",
+        "zoom": "10%",
+        "viewport": [
+          1710,
+          961
+        ],
+        "drawerHeight": 420,
+        "idle": {
+          "elapsedMs": 1001.1000001430511,
+          "frames": {
+            "n": 59,
+            "median": 16.699999999999818,
+            "p95": 17.700000000000045,
+            "max": 17.700000000000045
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "commits": [
+            {
+              "phase": "update",
+              "actualDuration": 0,
+              "baseDuration": 8.900000095367432,
+              "start": 684.7000000476837,
+              "commitTime": 685.2000000476837
+            }
+          ]
+        }
+      },
+      "stream": {
+        "scenario": "combined",
+        "expectedRequestId": "benchmark-210",
+        "visibleRequestId": "benchmark-210",
+        "closed": false,
+        "pulses": 5,
+        "calls": 5,
+        "sent": 10,
+        "bytes": 953703,
+        "elapsedMs": 5055.5,
+        "frames": {
+          "n": 302,
+          "median": 16.69999999999891,
+          "p95": 17.600000000000364,
+          "max": 17.700000000000728
+        },
+        "frameGapsOver34Ms": 0,
+        "longTasks": 0,
+        "longTaskMs": 0,
+        "longestTaskMs": 0,
+        "visibility": "visible",
+        "commits": [
+          {
+            "phase": "update",
+            "actualDuration": 1.3999998569488525,
+            "baseDuration": 1.0999996662139893,
+            "start": 6917.700000047684,
+            "commitTime": 6919.900000095367
+          },
+          {
+            "phase": "update",
+            "actualDuration": 2.500000238418579,
+            "baseDuration": 1.5,
+            "start": 6934.400000095367,
+            "commitTime": 6937.400000095367
+          },
+          {
+            "phase": "update",
+            "actualDuration": 0.6000001430511475,
+            "baseDuration": 0.9000000953674316,
+            "start": 6951.200000047684,
+            "commitTime": 6952
+          },
+          {
+            "phase": "update",
+            "actualDuration": 0,
+            "baseDuration": 0.9000000953674316,
+            "start": 6965.5,
+            "commitTime": 6965.600000143051
+          },
+          {
+            "phase": "update",
+            "actualDuration": 2.0999996662139893,
+            "baseDuration": 1.000000238418579,
+            "start": 7924.800000190735,
+            "commitTime": 7927.700000047684
+          },
+          {
+            "phase": "update",
+            "actualDuration": 3.799999713897705,
+            "baseDuration": 1,
+            "start": 7949.200000047684,
+            "commitTime": 7953.600000143051
+          },
+          {
+            "phase": "update",
+            "actualDuration": 0,
+            "baseDuration": 1,
+            "start": 7963.800000190735,
+            "commitTime": 7964.200000047684
+          },
+          {
+            "phase": "update",
+            "actualDuration": 0.7999997138977051,
+            "baseDuration": 1.1999998092651367,
+            "start": 7966.800000190735,
+            "commitTime": 7967.900000095367
+          },
+          {
+            "phase": "update",
+            "actualDuration": 0,
+            "baseDuration": 1.1999998092651367,
+            "start": 7982.400000095367,
+            "commitTime": 7982.700000047684
+          },
+          {
+            "phase": "update",
+            "actualDuration": 2.500000238418579,
+            "baseDuration": 1.9000003337860107,
+            "start": 8928.900000095367,
+            "commitTime": 8932
+          },
+          {
+            "phase": "update",
+            "actualDuration": 2.799999475479126,
+            "baseDuration": 1.0999996662139893,
+            "start": 8954.100000143051,
+            "commitTime": 8958
+          },
+          {
+            "phase": "update",
+            "actualDuration": 0.7000000476837158,
+            "baseDuration": 1,
+            "start": 8969.200000047684,
+            "commitTime": 8970.100000143051
+          },
+          {
+            "phase": "update",
+            "actualDuration": 0.7999999523162842,
+            "baseDuration": 1.0999996662139893,
+            "start": 8973.300000190735,
+            "commitTime": 8974.200000047684
+          },
+          {
+            "phase": "update",
+            "actualDuration": 0,
+            "baseDuration": 1.0999996662139893,
+            "start": 8981.400000095367,
+            "commitTime": 8981.5
+          },
+          {
+            "phase": "update",
+            "actualDuration": 2.299999952316284,
+            "baseDuration": 1.5999996662139893,
+            "start": 9922.900000095367,
+            "commitTime": 9925.900000095367
+          },
+          {
+            "phase": "update",
+            "actualDuration": 3.3000001907348633,
+            "baseDuration": 1.3000001907348633,
+            "start": 9948.300000190735,
+            "commitTime": 9952.100000143051
+          },
+          {
+            "phase": "update",
+            "actualDuration": 0,
+            "baseDuration": 1.200000286102295,
+            "start": 9962.400000095367,
+            "commitTime": 9962.5
+          },
+          {
+            "phase": "update",
+            "actualDuration": 0.6000003814697266,
+            "baseDuration": 1.1000003814697266,
+            "start": 9965.700000047684,
+            "commitTime": 9966.600000143051
+          },
+          {
+            "phase": "update",
+            "actualDuration": 0,
+            "baseDuration": 1.1000003814697266,
+            "start": 9981.400000095367,
+            "commitTime": 9981.700000047684
+          },
+          {
+            "phase": "update",
+            "actualDuration": 2.1999995708465576,
+            "baseDuration": 1.5,
+            "start": 10923.600000143051,
+            "commitTime": 10926.5
+          },
+          {
+            "phase": "update",
+            "actualDuration": 3.200000047683716,
+            "baseDuration": 1.3999998569488525,
+            "start": 10949.200000047684,
+            "commitTime": 10953.100000143051
+          },
+          {
+            "phase": "update",
+            "actualDuration": 0.09999990463256836,
+            "baseDuration": 1.499999761581421,
+            "start": 10963.800000190735,
+            "commitTime": 10964.100000143051
+          },
+          {
+            "phase": "update",
+            "actualDuration": 0.7000002861022949,
+            "baseDuration": 1.200000286102295,
+            "start": 10966.700000047684,
+            "commitTime": 10967.700000047684
+          },
+          {
+            "phase": "update",
+            "actualDuration": 0,
+            "baseDuration": 1.200000286102295,
+            "start": 10981.300000190735,
+            "commitTime": 10981.5
+          }
+        ],
+        "achievedHz": 1.9780437147660963
+      },
+      "cpu": {
+        "TaskDurationMs": 1095.086,
+        "ScriptDurationMs": 70.748,
+        "LayoutDurationMs": 96.44900000000001,
+        "RecalcStyleDurationMs": 12.957999999999997
+      },
+      "errors": [],
+      "profile": "0-base-a8a01d3-combined.cpuprofile"
+    },
+    {
+      "round": 0,
+      "url": "http://127.0.0.1:4212",
+      "revision": "head-a8a01d3-working-tree",
+      "scenario": "combined",
+      "chromium": "151.0.7922.34",
+      "mount": {
+        "scenario": "combined",
+        "closed": false,
+        "snapshotBytes": 18051339,
+        "readyAfterTwoFramesMs": 554,
+        "elapsedMs": 554.0999999046326,
+        "frames": {
+          "n": 28,
+          "median": 16.69999999999999,
+          "p95": 33.30000000000001,
+          "max": 50
+        },
+        "frameGapsOver34Ms": 1,
+        "longTasks": 0,
+        "longTaskMs": 0,
+        "longestTaskMs": 0,
+        "visibility": "visible",
+        "commits": [
+          {
+            "phase": "mount",
+            "actualDuration": 0.09999990463256836,
+            "baseDuration": 0.09999990463256836,
+            "start": 107.40000009536743,
+            "commitTime": 107.5
+          },
+          {
+            "phase": "update",
+            "actualDuration": 1.4000000953674316,
+            "baseDuration": 0.3000001907348633,
+            "start": 108.60000014305115,
+            "commitTime": 110.20000004768372
+          },
+          {
+            "phase": "update",
+            "actualDuration": 0.9000000953674316,
+            "baseDuration": 1.1000001430511475,
+            "start": 112,
+            "commitTime": 411.10000014305115
+          },
+          {
+            "phase": "update",
+            "actualDuration": 4.700000047683716,
+            "baseDuration": 2.1000003814697266,
+            "start": 419.2000000476837,
+            "commitTime": 424
+          },
+          {
+            "phase": "update",
+            "actualDuration": 12.800000429153442,
+            "baseDuration": 9.000000238418579,
+            "start": 617.2000000476837,
+            "commitTime": 631.6000001430511
+          },
+          {
+            "phase": "update",
+            "actualDuration": 1.1999998092651367,
+            "baseDuration": 8.399999856948853,
+            "start": 658.5,
+            "commitTime": 660
+          }
+        ],
+        "domElements": 3093,
+        "rows": 200,
+        "outputs": 150,
+        "animatedDots": 3,
+        "canvasHeight": "20460px",
+        "zoom": "10%",
+        "viewport": [
+          1710,
+          961
+        ],
+        "drawerHeight": 420,
+        "idle": {
+          "elapsedMs": 1000.7000000476837,
+          "frames": {
+            "n": 59,
+            "median": 16.699999999999932,
+            "p95": 17.700000000000045,
+            "max": 17.700000000000045
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "commits": [
+            {
+              "phase": "update",
+              "actualDuration": 0,
+              "baseDuration": 8.399999856948853,
+              "start": 662.4000000953674,
+              "commitTime": 662.7000000476837
+            }
+          ]
+        }
+      },
+      "stream": {
+        "scenario": "combined",
+        "expectedRequestId": "benchmark-210",
+        "visibleRequestId": "benchmark-210",
+        "closed": false,
+        "pulses": 5,
+        "calls": 5,
+        "sent": 10,
+        "bytes": 953699,
+        "elapsedMs": 5053.899999856949,
+        "frames": {
+          "n": 302,
+          "median": 16.69999999999891,
+          "p95": 17.600000000000364,
+          "max": 17.700000000000728
+        },
+        "frameGapsOver34Ms": 0,
+        "longTasks": 0,
+        "longTaskMs": 0,
+        "longestTaskMs": 0,
+        "visibility": "visible",
+        "commits": [
+          {
+            "phase": "update",
+            "actualDuration": 3.8000001907348633,
+            "baseDuration": 1.8999996185302734,
+            "start": 6890.200000047684,
+            "commitTime": 6894.600000143051
+          },
+          {
+            "phase": "update",
+            "actualDuration": 0.4999997615814209,
+            "baseDuration": 1.299999713897705,
+            "start": 6915.600000143051,
+            "commitTime": 6916.400000095367
+          },
+          {
+            "phase": "update",
+            "actualDuration": 0.10000014305114746,
+            "baseDuration": 1.299999713897705,
+            "start": 6923.600000143051,
+            "commitTime": 6923.800000190735
+          },
+          {
+            "phase": "update",
+            "actualDuration": 7,
+            "baseDuration": 2.999999761581421,
+            "start": 7890.300000190735,
+            "commitTime": 7899.100000143051
+          },
+          {
+            "phase": "update",
+            "actualDuration": 0.7999999523162842,
+            "baseDuration": 2.5999996662139893,
+            "start": 7929.400000095367,
+            "commitTime": 7930.400000095367
+          },
+          {
+            "phase": "update",
+            "actualDuration": 0,
+            "baseDuration": 2.5999996662139893,
+            "start": 7932.100000143051,
+            "commitTime": 7932.300000190735
+          },
+          {
+            "phase": "update",
+            "actualDuration": 7.799999952316284,
+            "baseDuration": 3.6999998092651367,
+            "start": 8890.200000047684,
+            "commitTime": 8898.900000095367
+          },
+          {
+            "phase": "update",
+            "actualDuration": 0.7999997138977051,
+            "baseDuration": 2.59999942779541,
+            "start": 8929.100000143051,
+            "commitTime": 8930.100000143051
+          },
+          {
+            "phase": "update",
+            "actualDuration": 0,
+            "baseDuration": 2.59999942779541,
+            "start": 8931.800000190735,
+            "commitTime": 8932.100000143051
+          },
+          {
+            "phase": "update",
+            "actualDuration": 6.299999475479126,
+            "baseDuration": 2.299999475479126,
+            "start": 9890.300000190735,
+            "commitTime": 9898.300000190735
+          },
+          {
+            "phase": "update",
+            "actualDuration": 0.7000002861022949,
+            "baseDuration": 1.799999475479126,
+            "start": 9929.400000095367,
+            "commitTime": 9930.400000095367
+          },
+          {
+            "phase": "update",
+            "actualDuration": 0,
+            "baseDuration": 1.799999475479126,
+            "start": 9932.200000047684,
+            "commitTime": 9932.300000190735
+          },
+          {
+            "phase": "update",
+            "actualDuration": 6.399999380111694,
+            "baseDuration": 2.8999996185302734,
+            "start": 10890.200000047684,
+            "commitTime": 10897.700000047684
+          },
+          {
+            "phase": "update",
+            "actualDuration": 0.6999998092651367,
+            "baseDuration": 2.4999992847442627,
+            "start": 10927.400000095367,
+            "commitTime": 10928.400000095367
+          },
+          {
+            "phase": "update",
+            "actualDuration": 0,
+            "baseDuration": 2.4999992847442627,
+            "start": 10930.100000143051,
+            "commitTime": 10930.400000095367
+          }
+        ],
+        "achievedHz": 1.9786699381236375
+      },
+      "cpu": {
+        "TaskDurationMs": 277.783,
+        "ScriptDurationMs": 75.00300000000001,
+        "LayoutDurationMs": 76.862,
+        "RecalcStyleDurationMs": 16.629
+      },
+      "errors": [],
+      "profile": "0-head-a8a01d3-working-tree-combined.cpuprofile"
+    },
+    {
+      "round": 1,
+      "url": "http://127.0.0.1:4212",
+      "revision": "head-a8a01d3-working-tree",
+      "scenario": "combined",
+      "chromium": "151.0.7922.34",
+      "mount": {
+        "scenario": "combined",
+        "closed": false,
+        "snapshotBytes": 18051339,
+        "readyAfterTwoFramesMs": 555.6000001430511,
+        "elapsedMs": 555.7000000476837,
+        "frames": {
+          "n": 28,
+          "median": 16.69999999999999,
+          "p95": 33.39999999999998,
+          "max": 49.89999999999998
+        },
+        "frameGapsOver34Ms": 1,
+        "longTasks": 0,
+        "longTaskMs": 0,
+        "longestTaskMs": 0,
+        "visibility": "visible",
+        "commits": [
+          {
+            "phase": "mount",
+            "actualDuration": 0.20000004768371582,
+            "baseDuration": 0.20000004768371582,
+            "start": 116.70000004768372,
+            "commitTime": 117
+          },
+          {
+            "phase": "update",
+            "actualDuration": 1.2000000476837158,
+            "baseDuration": 0.19999980926513672,
+            "start": 118.20000004768372,
+            "commitTime": 119.90000009536743
+          },
+          {
+            "phase": "update",
+            "actualDuration": 0.6000001430511475,
+            "baseDuration": 0.7999999523162842,
+            "start": 122.29999995231628,
+            "commitTime": 420.7000000476837
+          },
+          {
+            "phase": "update",
+            "actualDuration": 5.099999904632568,
+            "baseDuration": 1.6999995708465576,
+            "start": 428.40000009536743,
+            "commitTime": 433.60000014305115
+          },
+          {
+            "phase": "update",
+            "actualDuration": 13.099999904632568,
+            "baseDuration": 9.300000190734863,
+            "start": 627.7999999523163,
+            "commitTime": 642.2999999523163
+          },
+          {
+            "phase": "update",
+            "actualDuration": 0.9000000953674316,
+            "baseDuration": 8.300000190734863,
+            "start": 669.4000000953674,
+            "commitTime": 670.9000000953674
+          }
+        ],
+        "domElements": 3093,
+        "rows": 200,
+        "outputs": 150,
+        "animatedDots": 3,
+        "canvasHeight": "20460px",
+        "zoom": "10%",
+        "viewport": [
+          1710,
+          961
+        ],
+        "drawerHeight": 420,
+        "idle": {
+          "elapsedMs": 1001.3000001907349,
+          "frames": {
+            "n": 59,
+            "median": 16.699999999999932,
+            "p95": 17.600000000000023,
+            "max": 17.700000000000045
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "commits": [
+            {
+              "phase": "update",
+              "actualDuration": 0,
+              "baseDuration": 8.300000190734863,
+              "start": 673.2000000476837,
+              "commitTime": 673.5
+            }
+          ]
+        }
+      },
+      "stream": {
+        "scenario": "combined",
+        "expectedRequestId": "benchmark-220",
+        "visibleRequestId": "benchmark-220",
+        "closed": false,
+        "pulses": 5,
+        "calls": 5,
+        "sent": 10,
+        "bytes": 953701,
+        "elapsedMs": 5055.700000047684,
+        "frames": {
+          "n": 302,
+          "median": 16.69999999999891,
+          "p95": 17.600000000000364,
+          "max": 17.700000000000728
+        },
+        "frameGapsOver34Ms": 0,
+        "longTasks": 0,
+        "longTaskMs": 0,
+        "longestTaskMs": 0,
+        "visibility": "visible",
+        "commits": [
+          {
+            "phase": "update",
+            "actualDuration": 4.000000238418579,
+            "baseDuration": 2.000000238418579,
+            "start": 6916.5,
+            "commitTime": 6921.299999952316
+          },
+          {
+            "phase": "update",
+            "actualDuration": 0.5,
+            "baseDuration": 1.6999998092651367,
+            "start": 6943.200000047684,
+            "commitTime": 6944.100000143051
+          },
+          {
+            "phase": "update",
+            "actualDuration": 0,
+            "baseDuration": 1.6999998092651367,
+            "start": 6950.600000143051,
+            "commitTime": 6950.799999952316
+          },
+          {
+            "phase": "update",
+            "actualDuration": 8.5,
+            "baseDuration": 4.1000001430511475,
+            "start": 7917.700000047684,
+            "commitTime": 7927.5
+          },
+          {
+            "phase": "update",
+            "actualDuration": 0.5999999046325684,
+            "baseDuration": 3.4000000953674316,
+            "start": 7958.100000143051,
+            "commitTime": 7959.200000047684
+          },
+          {
+            "phase": "update",
+            "actualDuration": 0,
+            "baseDuration": 3.4000000953674316,
+            "start": 7960.900000095367,
+            "commitTime": 7961.100000143051
+          },
+          {
+            "phase": "update",
+            "actualDuration": 7.099999904632568,
+            "baseDuration": 3.0999996662139893,
+            "start": 8916.200000047684,
+            "commitTime": 8924.900000095367
+          },
+          {
+            "phase": "update",
+            "actualDuration": 0.5999999046325684,
+            "baseDuration": 2.0999999046325684,
+            "start": 8954.400000095367,
+            "commitTime": 8955.600000143051
+          },
+          {
+            "phase": "update",
+            "actualDuration": 0.10000014305114746,
+            "baseDuration": 2.0999999046325684,
+            "start": 8957.299999952316,
+            "commitTime": 8957.600000143051
+          },
+          {
+            "phase": "update",
+            "actualDuration": 6.200000286102295,
+            "baseDuration": 2.8999996185302734,
+            "start": 9916.5,
+            "commitTime": 9924
+          },
+          {
+            "phase": "update",
+            "actualDuration": 1.1000001430511475,
+            "baseDuration": 2.5999996662139893,
+            "start": 9954.299999952316,
+            "commitTime": 9955.5
+          },
+          {
+            "phase": "update",
+            "actualDuration": 0,
+            "baseDuration": 2.5999996662139893,
+            "start": 9957.200000047684,
+            "commitTime": 9957.400000095367
+          },
+          {
+            "phase": "update",
+            "actualDuration": 7.699999809265137,
+            "baseDuration": 2.999999761581421,
+            "start": 10916.600000143051,
+            "commitTime": 10925.100000143051
+          },
+          {
+            "phase": "update",
+            "actualDuration": 0.5999999046325684,
+            "baseDuration": 2.299999713897705,
+            "start": 10944.100000143051,
+            "commitTime": 10945
+          },
+          {
+            "phase": "update",
+            "actualDuration": 0.09999990463256836,
+            "baseDuration": 2.299999713897705,
+            "start": 10949.600000143051,
+            "commitTime": 10949.799999952316
+          }
+        ],
+        "achievedHz": 1.9779654647043305
+      },
+      "cpu": {
+        "TaskDurationMs": 264.197,
+        "ScriptDurationMs": 74.248,
+        "LayoutDurationMs": 72.26299999999999,
+        "RecalcStyleDurationMs": 14.56
+      },
+      "errors": [],
+      "profile": "1-head-a8a01d3-working-tree-combined.cpuprofile"
+    },
+    {
+      "round": 1,
+      "url": "http://127.0.0.1:4211",
+      "revision": "base-a8a01d3",
+      "scenario": "combined",
+      "chromium": "151.0.7922.34",
+      "mount": {
+        "scenario": "combined",
+        "closed": false,
+        "snapshotBytes": 18051353,
+        "readyAfterTwoFramesMs": 556,
+        "elapsedMs": 556.2000000476837,
+        "frames": {
+          "n": 28,
+          "median": 16.69999999999999,
+          "p95": 33.40000000000009,
+          "max": 49.89999999999998
+        },
+        "frameGapsOver34Ms": 1,
+        "longTasks": 0,
+        "longTaskMs": 0,
+        "longestTaskMs": 0,
+        "visibility": "visible",
+        "commits": [
+          {
+            "phase": "mount",
+            "actualDuration": 0.09999990463256836,
+            "baseDuration": 0.09999990463256836,
+            "start": 115.79999995231628,
+            "commitTime": 116
+          },
+          {
+            "phase": "update",
+            "actualDuration": 1.4000003337860107,
+            "baseDuration": 0.20000028610229492,
+            "start": 117.19999980926514,
+            "commitTime": 118.89999985694885
+          },
+          {
+            "phase": "update",
+            "actualDuration": 0.5999999046325684,
+            "baseDuration": 0.7000000476837158,
+            "start": 122,
+            "commitTime": 420.09999990463257
+          },
+          {
+            "phase": "update",
+            "actualDuration": 4.700000047683716,
+            "baseDuration": 1.6000003814697266,
+            "start": 428.39999985694885,
+            "commitTime": 433.2999999523163
+          },
+          {
+            "phase": "update",
+            "actualDuration": 13.700000047683716,
+            "baseDuration": 9.599999904632568,
+            "start": 625.7999999523163,
+            "commitTime": 641
+          },
+          {
+            "phase": "update",
+            "actualDuration": 1.500000238418579,
+            "baseDuration": 8.800000190734863,
+            "start": 668,
+            "commitTime": 669.7999999523163
+          }
+        ],
+        "domElements": 3093,
+        "rows": 200,
+        "outputs": 150,
+        "animatedDots": 3,
+        "canvasHeight": "20460px",
+        "zoom": "10%",
+        "viewport": [
+          1710,
+          961
+        ],
+        "drawerHeight": 420,
+        "idle": {
+          "elapsedMs": 1002,
+          "frames": {
+            "n": 59,
+            "median": 16.699999999999932,
+            "p95": 17.600000000000136,
+            "max": 17.700000000000045
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "commits": [
+            {
+              "phase": "update",
+              "actualDuration": 0.10000014305114746,
+              "baseDuration": 8.90000033378601,
+              "start": 672.6999998092651,
+              "commitTime": 673
+            }
+          ]
+        }
+      },
+      "stream": {
+        "scenario": "combined",
+        "expectedRequestId": "benchmark-220",
+        "visibleRequestId": "benchmark-220",
+        "closed": false,
+        "pulses": 5,
+        "calls": 5,
+        "sent": 10,
+        "bytes": 953702,
+        "elapsedMs": 5054.700000047684,
+        "frames": {
+          "n": 302,
+          "median": 16.69999999999891,
+          "p95": 17.600000000000364,
+          "max": 17.700000000000728
+        },
+        "frameGapsOver34Ms": 0,
+        "longTasks": 0,
+        "longTaskMs": 0,
+        "longestTaskMs": 0,
+        "visibility": "visible",
+        "commits": [
+          {
+            "phase": "update",
+            "actualDuration": 1.4000003337860107,
+            "baseDuration": 0.8000006675720215,
+            "start": 6901.099999904633,
+            "commitTime": 6903.399999856949
+          },
+          {
+            "phase": "update",
+            "actualDuration": 2.3999998569488525,
+            "baseDuration": 0.8000001907348633,
+            "start": 6918.699999809265,
+            "commitTime": 6921.799999952316
+          },
+          {
+            "phase": "update",
+            "actualDuration": 0.9000000953674316,
+            "baseDuration": 1.4000003337860107,
+            "start": 6935.699999809265,
+            "commitTime": 6936.599999904633
+          },
+          {
+            "phase": "update",
+            "actualDuration": 0.09999990463256836,
+            "baseDuration": 1.4000003337860107,
+            "start": 6948.799999952316,
+            "commitTime": 6949.099999904633
+          },
+          {
+            "phase": "update",
+            "actualDuration": 2.500000238418579,
+            "baseDuration": 1.9000000953674316,
+            "start": 7907,
+            "commitTime": 7910.099999904633
+          },
+          {
+            "phase": "update",
+            "actualDuration": 3.200000047683716,
+            "baseDuration": 0.9000005722045898,
+            "start": 7931.799999952316,
+            "commitTime": 7936.299999952316
+          },
+          {
+            "phase": "update",
+            "actualDuration": 0,
+            "baseDuration": 0.9000005722045898,
+            "start": 7946.5,
+            "commitTime": 7946.699999809265
+          },
+          {
+            "phase": "update",
+            "actualDuration": 0.8999998569488525,
+            "baseDuration": 1.200000286102295,
+            "start": 7950.799999952316,
+            "commitTime": 7951.699999809265
+          },
+          {
+            "phase": "update",
+            "actualDuration": 0,
+            "baseDuration": 1.200000286102295,
+            "start": 7966.599999904633,
+            "commitTime": 7966.699999809265
+          },
+          {
+            "phase": "update",
+            "actualDuration": 2.0999999046325684,
+            "baseDuration": 1.499999761581421,
+            "start": 8907.599999904633,
+            "commitTime": 8910.699999809265
+          },
+          {
+            "phase": "update",
+            "actualDuration": 3.5,
+            "baseDuration": 1.700000524520874,
+            "start": 8932.699999809265,
+            "commitTime": 8936.699999809265
+          },
+          {
+            "phase": "update",
+            "actualDuration": 0,
+            "baseDuration": 1.700000524520874,
+            "start": 8947.599999904633,
+            "commitTime": 8947.899999856949
+          },
+          {
+            "phase": "update",
+            "actualDuration": 0.4999997615814209,
+            "baseDuration": 1.2000000476837158,
+            "start": 8952,
+            "commitTime": 8952.899999856949
+          },
+          {
+            "phase": "update",
+            "actualDuration": 0,
+            "baseDuration": 1.2000000476837158,
+            "start": 8966.599999904633,
+            "commitTime": 8966.799999952316
+          },
+          {
+            "phase": "update",
+            "actualDuration": 1.2999999523162842,
+            "baseDuration": 1.1000001430511475,
+            "start": 9901.799999952316,
+            "commitTime": 9903.199999809265
+          },
+          {
+            "phase": "update",
+            "actualDuration": 1.9000000953674316,
+            "baseDuration": 0.5999999046325684,
+            "start": 9914,
+            "commitTime": 9916.799999952316
+          },
+          {
+            "phase": "update",
+            "actualDuration": 0.7000000476837158,
+            "baseDuration": 0.9000000953674316,
+            "start": 9926.399999856949,
+            "commitTime": 9927.199999809265
+          },
+          {
+            "phase": "update",
+            "actualDuration": 0.5999999046325684,
+            "baseDuration": 0.9000000953674316,
+            "start": 9934,
+            "commitTime": 9934.799999952316
+          },
+          {
+            "phase": "update",
+            "actualDuration": 0,
+            "baseDuration": 0.9000000953674316,
+            "start": 9948.599999904633,
+            "commitTime": 9948.799999952316
+          },
+          {
+            "phase": "update",
+            "actualDuration": 2.200000047683716,
+            "baseDuration": 1.4000000953674316,
+            "start": 10908.699999809265,
+            "commitTime": 10911.599999904633
+          },
+          {
+            "phase": "update",
+            "actualDuration": 3.1000008583068848,
+            "baseDuration": 1.000000238418579,
+            "start": 10932.599999904633,
+            "commitTime": 10936.5
+          },
+          {
+            "phase": "update",
+            "actualDuration": 0,
+            "baseDuration": 1.000000238418579,
+            "start": 10947.399999856949,
+            "commitTime": 10947.599999904633
+          },
+          {
+            "phase": "update",
+            "actualDuration": 0.9000000953674316,
+            "baseDuration": 1.1000003814697266,
+            "start": 10950.599999904633,
+            "commitTime": 10951.599999904633
+          },
+          {
+            "phase": "update",
+            "actualDuration": 0,
+            "baseDuration": 1.1000003814697266,
+            "start": 10966.599999904633,
+            "commitTime": 10966.799999952316
+          }
+        ],
+        "achievedHz": 1.9783567768424761
+      },
+      "cpu": {
+        "TaskDurationMs": 989.282,
+        "ScriptDurationMs": 65.438,
+        "LayoutDurationMs": 87.219,
+        "RecalcStyleDurationMs": 12.206000000000001
+      },
+      "errors": [],
+      "profile": "1-base-a8a01d3-combined.cpuprofile"
+    }
+  ],
+  "provenance": {
+    "base": "a8a01d307a8af736fdf6d3d055addeb52982b217",
+    "head": "a8a01d307a8af736fdf6d3d055addeb52982b217",
+    "dirty": true,
+    "candidateLabel": "head-a8a01d3-working-tree",
+    "packageDiffSha256": "435d6469e7a6cc483e13f1f39be4082c11c8830afc7aacd382ea96bfa4fb73b9"
+  }
+}
