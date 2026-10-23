@@ -1,6 +1,7 @@
 import { useEffect, useId, useRef, useState, type ReactNode } from "react";
 import { TypeSafeMark } from "./TypeSafeMark.js";
 import { createPortal } from "react-dom";
+import { inspectorStyles } from "./inspector-styles.js";
 
 const heightKey = "jev-inspector-drawer-height";
 const viewportHeight = () =>
@@ -33,17 +34,33 @@ export function JevDrawer({
   defaultOpen?: boolean;
 }) {
   const id = useId();
+  const [root, setRoot] = useState<ShadowRoot | null>(null);
   const [open, setOpen] = useState(defaultOpen);
   const [expanded, setExpanded] = useState(false);
   const [viewport, setViewport] = useState(viewportHeight);
   const [height, setHeight] = useState(initialHeight);
   const trigger = useRef<HTMLButtonElement>(null);
   const closeButton = useRef<HTMLButtonElement>(null);
-  const panel = useRef<HTMLElement>(null);
+  const panel = useRef<HTMLDivElement>(null);
   const interacted = useRef(false);
   const drag = useRef<{ y: number; height: number } | null>(null);
   const { min, max } = limits(viewport);
   const visibleHeight = expanded ? max : clamp(height, viewport);
+
+  useEffect(() => {
+    const host = document.createElement("jev-devtools-root");
+    // The host is the only element exposed to page selectors. The overlay itself
+    // lives in the shadow tree, with its own typography and component styles.
+    host.style.cssText =
+      "all: initial !important; position: fixed !important; inset: 0 !important; pointer-events: none !important; z-index: 2147483000 !important;";
+    const shadow = host.attachShadow({ mode: "open" });
+    const style = document.createElement("style");
+    style.textContent = inspectorStyles;
+    shadow.append(style);
+    document.body.append(host);
+    setRoot(shadow);
+    return () => host.remove();
+  }, []);
 
   useEffect(() => {
     const resize = () => setViewport(viewportHeight());
@@ -64,7 +81,7 @@ export function JevDrawer({
   useEffect(() => {
     if (interacted.current)
       (open ? closeButton.current : trigger.current)?.focus();
-  }, [open]);
+  }, [open, root]);
   const toggle = (value: boolean) => {
     interacted.current = true;
     setOpen(value);
@@ -74,6 +91,7 @@ export function JevDrawer({
     setHeight(clamp(value, viewport));
   };
 
+  if (!root) return null;
   return createPortal(
     <>
       <button
@@ -87,11 +105,12 @@ export function JevDrawer({
       >
         <TypeSafeMark /> Jev DevTools
       </button>
-      <section
+      <div
         ref={panel}
         id={id}
         className="jev-devtools jev-drawer"
         hidden={!open}
+        role="region"
         aria-label="Jev DevTools"
         style={{ height: visibleHeight }}
         onKeyDown={(event) => {
@@ -182,8 +201,8 @@ export function JevDrawer({
           </div>
         </header>
         <div className="jev-drawer-content">{children}</div>
-      </section>
+      </div>
     </>,
-    document.body,
+    root,
   );
 }

@@ -41,7 +41,7 @@ export function Root() {
 }
 ```
 
-For the complete Next.js App Router setup, see [the Next.js guide](nextjs.md), including `getJevDevtools` for shared history across module reloads and the SDK externalization setting. Mount it in a client component and use `enabled={process.env.NODE_ENV === 'development'}`. CSS is scoped to the drawer; it doesn't restyle your application. Server rendering produces no inspector markup, and browser code is loaded after mounting when enabled. `enabled` defaults to **false**. Disabled components open no connections. This is a runtime opt-in, not a guarantee that every bundler removes inspector assets from production output.
+For the complete Next.js App Router setup, see [the Next.js guide](nextjs.md), including `getJevDevtools` for shared history across module reloads and the SDK externalization setting. Mount it in a client component and use `enabled={process.env.NODE_ENV === 'development'}`. The drawer and launcher render inside a `jev-devtools-root` Shadow DOM boundary with their own stylesheet and typography reset. Host rules such as `section`, `button`, or `.eyebrow` cannot style the inspector's internals. The package injects its built CSS into that boundary; existing `jev-devtools/styles.css` imports remain supported, but are not required to style the drawer. Page CSS overrides cannot reach inside the shadow tree. Server rendering produces no inspector markup, and browser code is loaded after mounting when enabled. `enabled` defaults to **false**. Disabled components open no connections. This is a runtime opt-in, not a guarantee that every bundler removes inspector assets from production output.
 
 | Prop | Default | Purpose |
 | --- | --- | --- |
@@ -102,7 +102,7 @@ Credential-named fields are redacted recursively. Custom `redact(path, value)` a
 
 ## Diagrams and request capture
 
-The Flow tab follows the lab's `jev-choice` layout: shared context and question cards feed a result card, then branch into output cards. Select any question from the batch, zoom or fit the diagram, and pause the synchronized flow dots.
+The Flow tab follows the lab's `jev-choice` layout: shared context and question cards feed a result card, then branch into output cards. Select any question from the batch and explore a dot-grid canvas: drag to pan, scroll or pinch to zoom around the pointer, and use Fit to center the complete diagram in the available width and height. Arrow keys pan, +/− zoom, and 0/Home fit when the canvas is focused. The camera follows drawer resizing; pause the synchronized flow dots with the toolbar.
 
 - **Choice:** exact returned choice, candidate distribution, and confidence. Alternatives stay visible; the inspector doesn't replace the returned choice with its own argmax decision.
 - **Score:** returned score, distribution, legend, and confidence.
