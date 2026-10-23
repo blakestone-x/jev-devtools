@@ -8,7 +8,7 @@ Dates below use UTC and were checked against npm's publication history. The hist
 
 | Version | Published (UTC) | Highlights |
 | --- | --- | --- |
-| [Unreleased](#unreleased) | Not published | Batched updates, changed-trace streaming, frame-coalesced rendering, and less work while the drawer is closed. |
+| [Unreleased](#unreleased) | Not published | Batched updates, changed-trace streaming, frame-coalesced rendering, less work while the drawer is closed, and virtualized Questions. |
 | [0.1.3](#013--october-23-2026-experimental) | 2026-10-23 | Isolated drawer styles, diagram pan/zoom, and version-specific npm links. |
 | [0.1.2](#012--october-23-2026-experimental) | 2026-10-23 | Bundled AI setup skill and framework recipes. |
 | [0.1.1](#011--october-23-2026-experimental) | 2026-10-23 | Full inline demo GIF and published-package installation instructions. |
@@ -17,6 +17,8 @@ Dates below use UTC and were checked against npm's publication history. The hist
 ## Unreleased
 
 ### Performance
+
+- Virtualize the Questions tab and show lightweight previews during rapid scrolling. Preserve the complete picker, keyboard navigation, focused controls, expanded legends, and scroll position; restore full answers as scrolling slows or stops. This reduces opening work but moves some work to scrolling; browser Find and screen-reader document browsing see only mounted cards, with all answers still accessible through the picker and Raw. ([#17](https://github.com/diegoag64/jev-devtools/pull/17))
 
 - Batch outgoing inspector updates and share serialization across viewers in the same session, reducing repeated server work. Recording stays immediate; very fast calls can appear directly as completed. ([#14](https://github.com/diegoag64/jev-devtools/pull/14))
 - After the initial snapshot, stream changed traces instead of resending the full history. Keep compatibility with older clients and servers, and recover interrupted streams with a fresh snapshot. ([#15](https://github.com/diegoag64/jev-devtools/pull/15))

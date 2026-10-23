@@ -1040,3 +1040,80 @@
   width: auto;
   max-width: none;
 }
+
+.jev-devtools .detail-body-questions {
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
+}
+.jev-devtools .questions-list {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 180px;
+}
+.jev-devtools .questions-navigation {
+  display: flex;
+  align-items: end;
+  gap: 8px;
+  flex-wrap: wrap;
+  flex-shrink: 0;
+}
+.jev-devtools .questions-navigation label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+  flex: 1;
+  min-width: 240px;
+  max-width: 480px;
+  font-size: 11px;
+  color: #bc9db5;
+}
+.jev-devtools .questions-navigation select {
+  display: block;
+  min-width: 0;
+}
+.jev-devtools .questions-navigation > span {
+  align-self: center;
+  color: #a89bac;
+}
+.jev-devtools .questions-help {
+  margin: 8px 0;
+  flex-shrink: 0;
+}
+.jev-devtools .questions-viewport {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  overflow-anchor: none;
+  scrollbar-gutter: stable;
+  padding: 3px;
+}
+.jev-devtools .questions-spacer {
+  position: relative;
+  width: 100%;
+}
+.jev-devtools .questions-row {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding-bottom: 14px;
+}
+.jev-devtools .questions-row .standalone {
+  margin-bottom: 0;
+}
+.jev-devtools .questions-viewport:focus-visible,
+.jev-devtools .questions-row article:focus-visible {
+  outline: 2px solid #e551ba;
+  outline-offset: -2px;
+}
+
+/* Reserve measured card geometry while rapid scrolling uses a light preview. */
+.jev-devtools .questions-row[data-preview="true"] article {
+  height: 100%;
+}
+.jev-devtools .question-scroll-preview p {
+  margin-top: 16px;
+}

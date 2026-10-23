@@ -111,6 +111,10 @@ The Flow tab follows the lab's `jev-choice` layout: shared context and question 
 
 Connections illustrate data structure, not hidden model reasoning or per-question timing. Application routes/thresholds are not captured. Full instructions and criteria remain in Questions, and full state remains in Context. Cards follow the lab's visual language, but do not apply its illustrative routing policies to real requests.
 
+The Questions tab renders a measured window of cards as you scroll. **Jump to question** lists every captured question; Previous/Next and the focused list's Up/Down and Home/End keys reach every answer. Choice probabilities, Score legends, Noul values, Box previews, and captured instructions are unchanged. A focused control stays mounted when scrolled offscreen, and expanded Score legends survive row recycling. Closing and reopening the drawer preserves the Questions scroll position and navigation state. Switching tabs or requests creates a fresh Questions view, as before.
+
+Only visible and nearby cards (plus any focused card) are in the DOM. Browser Find and a screen reader's document browse mode therefore do not search the entire collection at once; use the question picker or the Raw tab for the complete captured payload. Virtualization does not change capture limits or truncate answers. The view uses the headless TanStack Virtual library, loaded on first opening Questions; it does not add the TanStack DevTools shell.
+
 The recorder preserves the original SDK APIPromise, including response helpers and cancellation. It observes a cloned response without consuming the caller's body. AsyncLocalStorage correlates transport attempts/retries with their logical request. Total latency covers the logical call; attempt latency ends at response headers.
 
 ## Local playground and independent example
