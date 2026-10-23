@@ -1,6 +1,8 @@
 # README demo media
 
-- `jev-devtools-demo.mp4`: the full 28-second screen recording supplied by the project owner, remuxed from MOV to MP4 without re-encoding. The original 3420 × 1914, 60 fps H.264 video is preserved; container metadata is removed and fast-start enabled. There is no audio track.
-- `jev-devtools-preview.gif`: a lightweight, looping excerpt from seconds 8–15 of that recording, at 1000 px wide and 8 fps. The root README links this preview to the full MP4.
+- `jev-devtools-demo.mp4`: the complete 28-second recording supplied by the project owner, resized to 1280 × 716 at 30 fps with H.264/yuv420p, CRF 25, and fast-start enabled. About 530 KB, down from the original 8.9 MB. No audio or container metadata.
+- `jev-devtools-preview.gif`: despite the retained filename, this is the **complete recording**, not an excerpt. It loops at 1000 × 560 and 8 fps with a 96-color palette; about 1.6 MB. Both READMEs embed it inline.
 
-The recording uses sample responses. These are documentation assets only and are excluded from the library's published file allowlist.
+The MP4 links point to the raw download rather than GitHub’s repository file viewer. The npm README uses absolute URLs to the assets on `main`; release changes must be merged before publication so those URLs resolve to the reviewed media. Neither media file is bundled in the npm package.
+
+These assets show sample responses. The original recording remains available to the project owner; the documentation copies are optimized for viewing in a README.

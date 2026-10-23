@@ -24,7 +24,7 @@ npm run pack:devtools
 From your React project, install the generated archive:
 
 ```sh
-npm install /absolute/path/to/jev-devtools/jev-devtools-0.1.0.tgz
+npm install /absolute/path/to/jev-devtools/jev-devtools-0.1.1.tgz
 ```
 
 Mount once near the root. No provider, client object, trace props, or application hook is needed:

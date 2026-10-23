@@ -20,11 +20,11 @@ Follow the context, explore each question, and see the answers come together.
 
 ## See it in motion
 
-[![Animated preview of Jev DevTools showing the request drawer, inspection tabs, and a connected Choice probability diagram. Watch the full demo.](docs/assets/jev-devtools-preview.gif)](docs/assets/jev-devtools-demo.mp4)
+![Full 28-second Jev DevTools demo showing sample results, the request drawer, inspection tabs, and animated diagrams.](docs/assets/jev-devtools-preview.gif)
 
 <p align="center">
-  <a href="docs/assets/jev-devtools-demo.mp4"><strong>▶ Watch the full 28-second demo</strong></a><br />
-  <sub>Recorded in the sample playground. The preview loops; the full video preserves the original resolution.</sub>
+  <a href="docs/assets/jev-devtools-demo.mp4?raw=1"><strong>Download the MP4 · 530 KB</strong></a><br />
+  <sub>The complete 28-second sample demo plays above and loops automatically.</sub>
 </p>
 
 ## Why Jev DevTools?
@@ -80,7 +80,7 @@ For optional live mode, copy `apps/playground/.env.example` to `apps/playground/
 
 ## Install in another React app
 
-**[Jev DevTools 0.1.0 is available on npm](https://www.npmjs.com/package/jev-devtools).** This is an experimental release; APIs may change before 1.0.
+**[Jev DevTools is available on npm](https://www.npmjs.com/package/jev-devtools).** This is an experimental release; APIs may change before 1.0.
 
 ```sh
 npm install jev-devtools
@@ -97,7 +97,7 @@ npm ci
 npm run pack:devtools
 
 # In your React application:
-npm install /absolute/path/to/jev-devtools/jev-devtools-0.1.0.tgz
+npm install /absolute/path/to/jev-devtools/jev-devtools-0.1.1.tgz
 ```
 
 </details>
