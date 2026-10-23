@@ -18,7 +18,7 @@ Dates below use UTC and were checked against npm's publication history. The hist
 
 ### Performance
 
-- Reuse unchanged request rows and the selected detail view during incoming updates. Keep changed responses, selection, filtering, and tab navigation live; tab changes no longer rerender the request list. Public APIs are unchanged.
+- Reuse unchanged request rows and the selected detail view during incoming updates. Keep changed responses, selection, filtering, and tab navigation live; tab changes no longer rerender the request list. Public APIs are unchanged. ([#20](https://github.com/diegoag64/jev-devtools/pull/20))
 
 - Show a compact Flow overview for Choice responses with more than six categories: the top three probabilities, the returned choice when different, **Show More** to reveal three additional branches per click, and access to every captured probability through a searchable, paginated table. **Show fewer** resets the overview; opening the table preserves expanded branches. Newly revealed cards and connections animate in with a short stagger (disabled for reduced motion). Expanding or collapsing preserves pan and zoom; **Fit** explicitly reframes the diagram. Exact captured values remain available; summaries do not renormalize probabilities. ([#19](https://github.com/diegoag64/jev-devtools/pull/19))
 
