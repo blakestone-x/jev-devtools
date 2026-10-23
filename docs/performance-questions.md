@@ -1,5 +1,7 @@
 # Questions virtualization — October 23, 2026
 
+Historical results for the initial PR implementation. See the [scrolling follow-up](performance-questions-scroll.md) for the final candidate, library research, and fresh comparisons against this version and main.
+
 Virtualizing Questions reduced repeat-open main-thread work by **62% for 150 Choice questions** and **60% for 150 mixed questions** against current main. It mounts two cards at entry instead of 150, while preserving access to every captured answer. Full-list sweeps cost more CPU, and first-time loading and far-end jumps each cost about one extra frame.
 
 ## Behavior and scope

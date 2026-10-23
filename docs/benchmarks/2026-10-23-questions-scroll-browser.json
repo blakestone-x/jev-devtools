@@ -1,0 +1,5995 @@
+{
+  "timestamp": "2026-10-23T20:27:50.581Z",
+  "environment": {
+    "platform": "darwin",
+    "arch": "arm64",
+    "cpu": "Apple M2",
+    "cpus": 8,
+    "node": "v24.19.0",
+    "viewport": [
+      1710,
+      961
+    ],
+    "dpr": 2,
+    "headless": true,
+    "profiling": false
+  },
+  "runs": [
+    {
+      "round": 0,
+      "url": "http://127.0.0.1:4211",
+      "revision": "base-866f9b5",
+      "chromium": "151.0.7922.34",
+      "scenario": "small",
+      "coldOpen": {
+        "scenario": "small",
+        "action": "open",
+        "target": 0,
+        "previewSteps": 0,
+        "readyAfterTwoFramesMs": 47,
+        "mountedQuestions": 1,
+        "questionElements": 27,
+        "elapsedMs": 47,
+        "frames": {
+          "n": 2,
+          "median": 16.600000000000136,
+          "p95": 16.699999999999818,
+          "max": 16.699999999999818
+        },
+        "frameGapsOver34Ms": 0,
+        "longTasks": 0,
+        "longTaskMs": 0,
+        "longestTaskMs": 0,
+        "visibility": "visible"
+      },
+      "actions": {
+        "open": {
+          "scenario": "small",
+          "action": "open",
+          "target": 0,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 48.299999952316284,
+          "mountedQuestions": 1,
+          "questionElements": 27,
+          "elapsedMs": 48.299999952316284,
+          "frames": {
+            "n": 2,
+            "median": 16.600000000000136,
+            "p95": 17.59999999999991,
+            "max": 17.59999999999991
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 5.680999999999992,
+            "ScriptDurationMs": 0.7329999999999975,
+            "LayoutDurationMs": 0.41300000000000364,
+            "RecalcStyleDurationMs": 0.14799999999999883
+          }
+        },
+        "last": {
+          "scenario": "small",
+          "action": "last",
+          "target": 0,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 48.60000014305115,
+          "mountedQuestions": 1,
+          "questionElements": 27,
+          "elapsedMs": 48.60000014305115,
+          "frames": {
+            "n": 2,
+            "median": 16.700000000000045,
+            "p95": 16.700000000000045,
+            "max": 16.700000000000045
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 4.752000000000034,
+            "ScriptDurationMs": 1.0180000000000051,
+            "LayoutDurationMs": 0.24399999999999422,
+            "RecalcStyleDurationMs": 0.056000000000000494
+          }
+        },
+        "first": {
+          "scenario": "small",
+          "action": "first",
+          "target": 0,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 48.19999980926514,
+          "mountedQuestions": 1,
+          "questionElements": 27,
+          "elapsedMs": 48.19999980926514,
+          "frames": {
+            "n": 2,
+            "median": 16.600000000000136,
+            "p95": 16.700000000000045,
+            "max": 16.700000000000045
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 4.710999999999965,
+            "ScriptDurationMs": 0.21199999999998997,
+            "LayoutDurationMs": 0.35400000000000015,
+            "RecalcStyleDurationMs": 0.07100000000000162
+          }
+        },
+        "sweep": {
+          "scenario": "small",
+          "action": "sweep",
+          "target": 0,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 4082.0999999046326,
+          "mountedQuestions": 1,
+          "questionElements": 27,
+          "elapsedMs": 4082.0999999046326,
+          "frames": {
+            "n": 244,
+            "median": 16.699999999999818,
+            "p95": 17.59999999999991,
+            "max": 17.699999999999818
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 87.77200000000002,
+            "ScriptDurationMs": 9.536000000000003,
+            "LayoutDurationMs": 0.6480000000000028,
+            "RecalcStyleDurationMs": 0.11199999999999752
+          }
+        },
+        "read": {
+          "scenario": "small",
+          "action": "read",
+          "target": null,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 4281.200000047684,
+          "mountedQuestions": 1,
+          "questionElements": 27,
+          "elapsedMs": 4281.400000095367,
+          "frames": {
+            "n": 256,
+            "median": 16.699999999999818,
+            "p95": 17.599999999999454,
+            "max": 17.699999999999818
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 63.49199999999999,
+            "ScriptDurationMs": 5.960000000000007,
+            "LayoutDurationMs": 0.7180000000000033,
+            "RecalcStyleDurationMs": 0.11700000000000252
+          }
+        }
+      },
+      "errors": []
+    },
+    {
+      "round": 0,
+      "url": "http://127.0.0.1:4211",
+      "revision": "base-866f9b5",
+      "chromium": "151.0.7922.34",
+      "scenario": "many-questions",
+      "coldOpen": {
+        "scenario": "many-questions",
+        "action": "open",
+        "target": 0,
+        "previewSteps": 0,
+        "readyAfterTwoFramesMs": 47.299999952316284,
+        "mountedQuestions": 150,
+        "questionElements": 4050,
+        "elapsedMs": 47.5,
+        "frames": {
+          "n": 2,
+          "median": 16.600000000000364,
+          "p95": 16.69999999999891,
+          "max": 16.69999999999891
+        },
+        "frameGapsOver34Ms": 0,
+        "longTasks": 0,
+        "longTaskMs": 0,
+        "longestTaskMs": 0,
+        "visibility": "visible"
+      },
+      "actions": {
+        "open": {
+          "scenario": "many-questions",
+          "action": "open",
+          "target": 0,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 48.39999985694885,
+          "mountedQuestions": 150,
+          "questionElements": 4050,
+          "elapsedMs": 48.5,
+          "frames": {
+            "n": 2,
+            "median": 16.700000000000728,
+            "p95": 16.799999999999272,
+            "max": 16.799999999999272
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 27.467999999999936,
+            "ScriptDurationMs": 5.676,
+            "LayoutDurationMs": 9.859,
+            "RecalcStyleDurationMs": 4.132999999999997
+          }
+        },
+        "last": {
+          "scenario": "many-questions",
+          "action": "last",
+          "target": 149,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 48.5,
+          "mountedQuestions": 150,
+          "questionElements": 4050,
+          "elapsedMs": 48.799999952316284,
+          "frames": {
+            "n": 2,
+            "median": 16.69999999999891,
+            "p95": 16.700000000000728,
+            "max": 16.700000000000728
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 7.041000000000075,
+            "ScriptDurationMs": 0.1719999999999916,
+            "LayoutDurationMs": 0.19399999999999973,
+            "RecalcStyleDurationMs": 0.05400000000000543
+          }
+        },
+        "first": {
+          "scenario": "many-questions",
+          "action": "first",
+          "target": 0,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 48.5,
+          "mountedQuestions": 150,
+          "questionElements": 4050,
+          "elapsedMs": 48.700000047683716,
+          "frames": {
+            "n": 2,
+            "median": 16.600000000000364,
+            "p95": 16.700000000000728,
+            "max": 16.700000000000728
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 8.028999999999954,
+            "ScriptDurationMs": 0.1890000000000086,
+            "LayoutDurationMs": 0.27499999999999747,
+            "RecalcStyleDurationMs": 0.059999999999997555
+          }
+        },
+        "sweep": {
+          "scenario": "many-questions",
+          "action": "sweep",
+          "target": 149,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 4081,
+          "mountedQuestions": 150,
+          "questionElements": 4050,
+          "elapsedMs": 4081.199999809265,
+          "frames": {
+            "n": 244,
+            "median": 16.69999999999891,
+            "p95": 17.600000000000364,
+            "max": 17.700000000000728
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 278.25699999999995,
+            "ScriptDurationMs": 7.533999999999985,
+            "LayoutDurationMs": 0.17500000000000154,
+            "RecalcStyleDurationMs": 0.06799999999999862
+          }
+        },
+        "read": {
+          "scenario": "many-questions",
+          "action": "read",
+          "target": null,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 4282.100000143051,
+          "mountedQuestions": 150,
+          "questionElements": 4050,
+          "elapsedMs": 4282.900000095367,
+          "frames": {
+            "n": 256,
+            "median": 16.700000000000728,
+            "p95": 17.599999999998545,
+            "max": 17.600000000002183
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 112.81299999999995,
+            "ScriptDurationMs": 5.898000000000014,
+            "LayoutDurationMs": 0.6470000000000018,
+            "RecalcStyleDurationMs": 0.0910000000000008
+          }
+        }
+      },
+      "errors": []
+    },
+    {
+      "round": 0,
+      "url": "http://127.0.0.1:4211",
+      "revision": "base-866f9b5",
+      "chromium": "151.0.7922.34",
+      "scenario": "mixed-questions",
+      "coldOpen": {
+        "scenario": "mixed-questions",
+        "action": "open",
+        "target": 0,
+        "previewSteps": 0,
+        "readyAfterTwoFramesMs": 48.09999990463257,
+        "mountedQuestions": 150,
+        "questionElements": 2716,
+        "elapsedMs": 48.200000047683716,
+        "frames": {
+          "n": 2,
+          "median": 16.600000000002183,
+          "p95": 16.700000000000728,
+          "max": 16.700000000000728
+        },
+        "frameGapsOver34Ms": 0,
+        "longTasks": 0,
+        "longTaskMs": 0,
+        "longestTaskMs": 0,
+        "visibility": "visible"
+      },
+      "actions": {
+        "open": {
+          "scenario": "mixed-questions",
+          "action": "open",
+          "target": 0,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 48.09999990463257,
+          "mountedQuestions": 150,
+          "questionElements": 2716,
+          "elapsedMs": 48.299999952316284,
+          "frames": {
+            "n": 2,
+            "median": 16.600000000002183,
+            "p95": 16.700000000000728,
+            "max": 16.700000000000728
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 25.88999999999997,
+            "ScriptDurationMs": 6.575999999999999,
+            "LayoutDurationMs": 8.474000000000009,
+            "RecalcStyleDurationMs": 3.5600000000000005
+          }
+        },
+        "last": {
+          "scenario": "mixed-questions",
+          "action": "last",
+          "target": 149,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 48,
+          "mountedQuestions": 150,
+          "questionElements": 2716,
+          "elapsedMs": 48.200000047683716,
+          "frames": {
+            "n": 2,
+            "median": 16.600000000002183,
+            "p95": 16.69999999999709,
+            "max": 16.69999999999709
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 6.283999999999956,
+            "ScriptDurationMs": 0.2520000000000022,
+            "LayoutDurationMs": 0.2400000000000041,
+            "RecalcStyleDurationMs": 0.07599999999999968
+          }
+        },
+        "first": {
+          "scenario": "mixed-questions",
+          "action": "first",
+          "target": 0,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 47.80000019073486,
+          "mountedQuestions": 150,
+          "questionElements": 2716,
+          "elapsedMs": 47.90000009536743,
+          "frames": {
+            "n": 2,
+            "median": 16.599999999998545,
+            "p95": 16.700000000000728,
+            "max": 16.700000000000728
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 7.865000000000011,
+            "ScriptDurationMs": 0.28800000000001047,
+            "LayoutDurationMs": 0.32699999999999396,
+            "RecalcStyleDurationMs": 0.07300000000000362
+          }
+        },
+        "sweep": {
+          "scenario": "mixed-questions",
+          "action": "sweep",
+          "target": 149,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 4080.7000000476837,
+          "mountedQuestions": 150,
+          "questionElements": 2716,
+          "elapsedMs": 4080.9000000953674,
+          "frames": {
+            "n": 244,
+            "median": 16.69999999999709,
+            "p95": 17.599999999998545,
+            "max": 17.600000000002183
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 248.92600000000022,
+            "ScriptDurationMs": 6.583999999999978,
+            "LayoutDurationMs": 0.37500000000000033,
+            "RecalcStyleDurationMs": 0.09299999999999586
+          }
+        },
+        "read": {
+          "scenario": "mixed-questions",
+          "action": "read",
+          "target": null,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 4280.100000143051,
+          "mountedQuestions": 150,
+          "questionElements": 2716,
+          "elapsedMs": 4280.400000095367,
+          "frames": {
+            "n": 256,
+            "median": 16.69999999999709,
+            "p95": 17.600000000002183,
+            "max": 17.700000000000728
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 177.29099999999985,
+            "ScriptDurationMs": 8.33600000000001,
+            "LayoutDurationMs": 0.4839999999999983,
+            "RecalcStyleDurationMs": 0.10299999999999893
+          }
+        }
+      },
+      "errors": []
+    },
+    {
+      "round": 0,
+      "url": "http://127.0.0.1:4212",
+      "revision": "base-e5e8f11",
+      "chromium": "151.0.7922.34",
+      "scenario": "small",
+      "coldOpen": {
+        "scenario": "small",
+        "action": "open",
+        "target": 0,
+        "previewSteps": 0,
+        "readyAfterTwoFramesMs": 63.09999990463257,
+        "mountedQuestions": 1,
+        "questionElements": 27,
+        "elapsedMs": 63.200000047683716,
+        "frames": {
+          "n": 3,
+          "median": 16.700000000000045,
+          "p95": 16.700000000000045,
+          "max": 16.700000000000045
+        },
+        "frameGapsOver34Ms": 0,
+        "longTasks": 0,
+        "longTaskMs": 0,
+        "longestTaskMs": 0,
+        "visibility": "visible"
+      },
+      "actions": {
+        "open": {
+          "scenario": "small",
+          "action": "open",
+          "target": 0,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 47.799999952316284,
+          "mountedQuestions": 1,
+          "questionElements": 27,
+          "elapsedMs": 47.90000009536743,
+          "frames": {
+            "n": 2,
+            "median": 16.700000000000045,
+            "p95": 16.700000000000045,
+            "max": 16.700000000000045
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 7.676999999999989,
+            "ScriptDurationMs": 1.670999999999999,
+            "LayoutDurationMs": 0.6929999999999992,
+            "RecalcStyleDurationMs": 0.364999999999999
+          }
+        },
+        "last": {
+          "scenario": "small",
+          "action": "last",
+          "target": 0,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 47.299999952316284,
+          "mountedQuestions": 1,
+          "questionElements": 27,
+          "elapsedMs": 47.39999985694885,
+          "frames": {
+            "n": 2,
+            "median": 16.59999999999991,
+            "p95": 16.700000000000045,
+            "max": 16.700000000000045
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 5.634,
+            "ScriptDurationMs": 1.0900000000000007,
+            "LayoutDurationMs": 0.3240000000000014,
+            "RecalcStyleDurationMs": 0.07000000000000062
+          }
+        },
+        "first": {
+          "scenario": "small",
+          "action": "first",
+          "target": 0,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 48.09999990463257,
+          "mountedQuestions": 1,
+          "questionElements": 27,
+          "elapsedMs": 48.200000047683716,
+          "frames": {
+            "n": 2,
+            "median": 16.700000000000045,
+            "p95": 16.700000000000045,
+            "max": 16.700000000000045
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 5.402999999999992,
+            "ScriptDurationMs": 0.31799999999999884,
+            "LayoutDurationMs": 0.3249999999999989,
+            "RecalcStyleDurationMs": 0.085
+          }
+        },
+        "sweep": {
+          "scenario": "small",
+          "action": "sweep",
+          "target": 0,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 4080.7000000476837,
+          "mountedQuestions": 1,
+          "questionElements": 27,
+          "elapsedMs": 4080.800000190735,
+          "frames": {
+            "n": 244,
+            "median": 16.699999999999818,
+            "p95": 17.600000000000364,
+            "max": 17.699999999999818
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 106.235,
+            "ScriptDurationMs": 18.91500000000001,
+            "LayoutDurationMs": 0.675000000000002,
+            "RecalcStyleDurationMs": 0.10500000000000093
+          }
+        },
+        "read": {
+          "scenario": "small",
+          "action": "read",
+          "target": null,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 4279.200000047684,
+          "mountedQuestions": 1,
+          "questionElements": 27,
+          "elapsedMs": 4279.200000047684,
+          "frames": {
+            "n": 256,
+            "median": 16.699999999999818,
+            "p95": 17.600000000000364,
+            "max": 17.700000000000728
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 73.21099999999997,
+            "ScriptDurationMs": 9.778999999999996,
+            "LayoutDurationMs": 0.41099999999999814,
+            "RecalcStyleDurationMs": 0.12199999999999885
+          }
+        }
+      },
+      "errors": []
+    },
+    {
+      "round": 0,
+      "url": "http://127.0.0.1:4212",
+      "revision": "base-e5e8f11",
+      "chromium": "151.0.7922.34",
+      "scenario": "many-questions",
+      "coldOpen": {
+        "scenario": "many-questions",
+        "action": "open",
+        "target": 0,
+        "previewSteps": 0,
+        "readyAfterTwoFramesMs": 47.299999952316284,
+        "mountedQuestions": 2,
+        "questionElements": 54,
+        "elapsedMs": 47.40000009536743,
+        "frames": {
+          "n": 2,
+          "median": 16.600000000000364,
+          "p95": 16.700000000000728,
+          "max": 16.700000000000728
+        },
+        "frameGapsOver34Ms": 0,
+        "longTasks": 0,
+        "longTaskMs": 0,
+        "longestTaskMs": 0,
+        "visibility": "visible"
+      },
+      "actions": {
+        "open": {
+          "scenario": "many-questions",
+          "action": "open",
+          "target": 0,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 47.80000019073486,
+          "mountedQuestions": 2,
+          "questionElements": 54,
+          "elapsedMs": 47.80000019073486,
+          "frames": {
+            "n": 2,
+            "median": 16.700000000000728,
+            "p95": 16.700000000000728,
+            "max": 16.700000000000728
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 11.290000000000022,
+            "ScriptDurationMs": 4.1120000000000045,
+            "LayoutDurationMs": 0.8839999999999959,
+            "RecalcStyleDurationMs": 1.0050000000000008
+          }
+        },
+        "last": {
+          "scenario": "many-questions",
+          "action": "last",
+          "target": 149,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 65.20000004768372,
+          "mountedQuestions": 2,
+          "questionElements": 54,
+          "elapsedMs": 65.29999995231628,
+          "frames": {
+            "n": 3,
+            "median": 16.69999999999891,
+            "p95": 16.700000000000728,
+            "max": 16.700000000000728
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 8.757999999999988,
+            "ScriptDurationMs": 1.4490000000000058,
+            "LayoutDurationMs": 1.0450000000000044,
+            "RecalcStyleDurationMs": 0.3429999999999995
+          }
+        },
+        "first": {
+          "scenario": "many-questions",
+          "action": "first",
+          "target": 0,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 48,
+          "mountedQuestions": 2,
+          "questionElements": 54,
+          "elapsedMs": 48,
+          "frames": {
+            "n": 2,
+            "median": 16.600000000000364,
+            "p95": 16.69999999999891,
+            "max": 16.69999999999891
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 6.510000000000016,
+            "ScriptDurationMs": 0.9409999999999974,
+            "LayoutDurationMs": 0.6049999999999944,
+            "RecalcStyleDurationMs": 0.2509999999999978
+          }
+        },
+        "sweep": {
+          "scenario": "many-questions",
+          "action": "sweep",
+          "target": 149,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 4081.5,
+          "mountedQuestions": 2,
+          "questionElements": 54,
+          "elapsedMs": 4081.5,
+          "frames": {
+            "n": 244,
+            "median": 16.69999999999891,
+            "p95": 17.5,
+            "max": 17.700000000000728
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 451.65099999999995,
+            "ScriptDurationMs": 128.998,
+            "LayoutDurationMs": 72.747,
+            "RecalcStyleDurationMs": 33.489000000000004
+          }
+        },
+        "read": {
+          "scenario": "many-questions",
+          "action": "read",
+          "target": null,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 4280.900000095367,
+          "mountedQuestions": 3,
+          "questionElements": 81,
+          "elapsedMs": 4281,
+          "frames": {
+            "n": 256,
+            "median": 16.700000000000728,
+            "p95": 17.600000000000364,
+            "max": 17.700000000000728
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 169.79700000000008,
+            "ScriptDurationMs": 35.609,
+            "LayoutDurationMs": 9.77900000000001,
+            "RecalcStyleDurationMs": 3.608999999999994
+          }
+        }
+      },
+      "errors": []
+    },
+    {
+      "round": 0,
+      "url": "http://127.0.0.1:4212",
+      "revision": "base-e5e8f11",
+      "chromium": "151.0.7922.34",
+      "scenario": "mixed-questions",
+      "coldOpen": {
+        "scenario": "mixed-questions",
+        "action": "open",
+        "target": 0,
+        "previewSteps": 0,
+        "readyAfterTwoFramesMs": 45.299999952316284,
+        "mountedQuestions": 2,
+        "questionElements": 52,
+        "elapsedMs": 45.299999952316284,
+        "frames": {
+          "n": 2,
+          "median": 16.599999999998545,
+          "p95": 16.700000000000728,
+          "max": 16.700000000000728
+        },
+        "frameGapsOver34Ms": 0,
+        "longTasks": 0,
+        "longTaskMs": 0,
+        "longestTaskMs": 0,
+        "visibility": "visible"
+      },
+      "actions": {
+        "open": {
+          "scenario": "mixed-questions",
+          "action": "open",
+          "target": 0,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 48.10000014305115,
+          "mountedQuestions": 2,
+          "questionElements": 52,
+          "elapsedMs": 48.10000014305115,
+          "frames": {
+            "n": 2,
+            "median": 16.599999999998545,
+            "p95": 16.700000000000728,
+            "max": 16.700000000000728
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 10.046,
+            "ScriptDurationMs": 2.935999999999994,
+            "LayoutDurationMs": 0.8530000000000065,
+            "RecalcStyleDurationMs": 1.0729999999999975
+          }
+        },
+        "last": {
+          "scenario": "mixed-questions",
+          "action": "last",
+          "target": 149,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 64.79999995231628,
+          "mountedQuestions": 2,
+          "questionElements": 52,
+          "elapsedMs": 64.90000009536743,
+          "frames": {
+            "n": 3,
+            "median": 16.700000000000728,
+            "p95": 16.700000000000728,
+            "max": 16.700000000000728
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 7.772000000000112,
+            "ScriptDurationMs": 1.1440000000000339,
+            "LayoutDurationMs": 0.896999999999995,
+            "RecalcStyleDurationMs": 0.4940000000000014
+          }
+        },
+        "first": {
+          "scenario": "mixed-questions",
+          "action": "first",
+          "target": 0,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 47.59999990463257,
+          "mountedQuestions": 2,
+          "questionElements": 52,
+          "elapsedMs": 47.59999990463257,
+          "frames": {
+            "n": 2,
+            "median": 16.599999999998545,
+            "p95": 16.700000000000728,
+            "max": 16.700000000000728
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 8.564000000000016,
+            "ScriptDurationMs": 1.1719999999999509,
+            "LayoutDurationMs": 0.8990000000000109,
+            "RecalcStyleDurationMs": 0.6199999999999956
+          }
+        },
+        "sweep": {
+          "scenario": "mixed-questions",
+          "action": "sweep",
+          "target": 149,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 4081.100000143051,
+          "mountedQuestions": 2,
+          "questionElements": 52,
+          "elapsedMs": 4081.2000000476837,
+          "frames": {
+            "n": 244,
+            "median": 16.700000000000728,
+            "p95": 17.599999999998545,
+            "max": 17.700000000000728
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 505.92100000000005,
+            "ScriptDurationMs": 149.60500000000005,
+            "LayoutDurationMs": 75.36599999999999,
+            "RecalcStyleDurationMs": 45.06699999999999
+          }
+        },
+        "read": {
+          "scenario": "mixed-questions",
+          "action": "read",
+          "target": null,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 4280.700000047684,
+          "mountedQuestions": 3,
+          "questionElements": 47,
+          "elapsedMs": 4280.799999952316,
+          "frames": {
+            "n": 256,
+            "median": 16.69999999999709,
+            "p95": 17.599999999998545,
+            "max": 17.700000000000728
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 192.469,
+            "ScriptDurationMs": 39.95099999999996,
+            "LayoutDurationMs": 11.072,
+            "RecalcStyleDurationMs": 5.684000000000008
+          }
+        }
+      },
+      "errors": []
+    },
+    {
+      "round": 0,
+      "url": "http://127.0.0.1:4213",
+      "revision": "head-b044617",
+      "chromium": "151.0.7922.34",
+      "scenario": "small",
+      "coldOpen": {
+        "scenario": "small",
+        "action": "open",
+        "target": 0,
+        "previewSteps": 0,
+        "readyAfterTwoFramesMs": 64.29999995231628,
+        "mountedQuestions": 1,
+        "questionElements": 27,
+        "elapsedMs": 64.40000009536743,
+        "frames": {
+          "n": 3,
+          "median": 16.700000000000045,
+          "p95": 16.700000000000045,
+          "max": 16.700000000000045
+        },
+        "frameGapsOver34Ms": 0,
+        "longTasks": 0,
+        "longTaskMs": 0,
+        "longestTaskMs": 0,
+        "visibility": "visible"
+      },
+      "actions": {
+        "open": {
+          "scenario": "small",
+          "action": "open",
+          "target": 0,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 48,
+          "mountedQuestions": 1,
+          "questionElements": 27,
+          "elapsedMs": 48,
+          "frames": {
+            "n": 2,
+            "median": 16.59999999999991,
+            "p95": 16.600000000000136,
+            "max": 16.600000000000136
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 7.954999999999989,
+            "ScriptDurationMs": 1.7169999999999963,
+            "LayoutDurationMs": 0.7369999999999981,
+            "RecalcStyleDurationMs": 0.3839999999999989
+          }
+        },
+        "last": {
+          "scenario": "small",
+          "action": "last",
+          "target": 0,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 47.90000009536743,
+          "mountedQuestions": 1,
+          "questionElements": 27,
+          "elapsedMs": 47.90000009536743,
+          "frames": {
+            "n": 2,
+            "median": 16.600000000000136,
+            "p95": 16.699999999999818,
+            "max": 16.699999999999818
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 6.311999999999984,
+            "ScriptDurationMs": 1.2050000000000047,
+            "LayoutDurationMs": 0.3490000000000021,
+            "RecalcStyleDurationMs": 0.08100000000000121
+          }
+        },
+        "first": {
+          "scenario": "small",
+          "action": "first",
+          "target": 0,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 48.200000047683716,
+          "mountedQuestions": 1,
+          "questionElements": 27,
+          "elapsedMs": 48.200000047683716,
+          "frames": {
+            "n": 2,
+            "median": 16.700000000000045,
+            "p95": 16.700000000000045,
+            "max": 16.700000000000045
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 6.7089999999999925,
+            "ScriptDurationMs": 0.5169999999999966,
+            "LayoutDurationMs": 0.5269999999999997,
+            "RecalcStyleDurationMs": 0.10699999999999946
+          }
+        },
+        "sweep": {
+          "scenario": "small",
+          "action": "sweep",
+          "target": 0,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 4081.5,
+          "mountedQuestions": 1,
+          "questionElements": 27,
+          "elapsedMs": 4081.600000143051,
+          "frames": {
+            "n": 244,
+            "median": 16.699999999999818,
+            "p95": 17.599999999999454,
+            "max": 17.799999999999727
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 105.82600000000001,
+            "ScriptDurationMs": 24.336000000000002,
+            "LayoutDurationMs": 0.8179999999999993,
+            "RecalcStyleDurationMs": 0.10800000000000046
+          }
+        },
+        "read": {
+          "scenario": "small",
+          "action": "read",
+          "target": null,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 4281,
+          "mountedQuestions": 1,
+          "questionElements": 27,
+          "elapsedMs": 4281.099999904633,
+          "frames": {
+            "n": 256,
+            "median": 16.69999999999891,
+            "p95": 17.600000000000364,
+            "max": 17.700000000000728
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 72.07799999999997,
+            "ScriptDurationMs": 10.204000000000004,
+            "LayoutDurationMs": 0.6689999999999995,
+            "RecalcStyleDurationMs": 0.13099999999999917
+          }
+        }
+      },
+      "errors": []
+    },
+    {
+      "round": 0,
+      "url": "http://127.0.0.1:4213",
+      "revision": "head-b044617",
+      "chromium": "151.0.7922.34",
+      "scenario": "many-questions",
+      "coldOpen": {
+        "scenario": "many-questions",
+        "action": "open",
+        "target": 0,
+        "previewSteps": 0,
+        "readyAfterTwoFramesMs": 47.09999990463257,
+        "mountedQuestions": 2,
+        "questionElements": 54,
+        "elapsedMs": 47.09999990463257,
+        "frames": {
+          "n": 2,
+          "median": 16.600000000000364,
+          "p95": 16.69999999999891,
+          "max": 16.69999999999891
+        },
+        "frameGapsOver34Ms": 0,
+        "longTasks": 0,
+        "longTaskMs": 0,
+        "longestTaskMs": 0,
+        "visibility": "visible"
+      },
+      "actions": {
+        "open": {
+          "scenario": "many-questions",
+          "action": "open",
+          "target": 0,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 47.799999952316284,
+          "mountedQuestions": 2,
+          "questionElements": 54,
+          "elapsedMs": 47.799999952316284,
+          "frames": {
+            "n": 2,
+            "median": 16.600000000000364,
+            "p95": 16.69999999999891,
+            "max": 16.69999999999891
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 10.838999999999988,
+            "ScriptDurationMs": 3.1230000000000007,
+            "LayoutDurationMs": 0.8840000000000028,
+            "RecalcStyleDurationMs": 0.9850000000000015
+          }
+        },
+        "last": {
+          "scenario": "many-questions",
+          "action": "last",
+          "target": 149,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 65.29999995231628,
+          "mountedQuestions": 2,
+          "questionElements": 54,
+          "elapsedMs": 65.29999995231628,
+          "frames": {
+            "n": 3,
+            "median": 16.69999999999891,
+            "p95": 16.700000000000728,
+            "max": 16.700000000000728
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 8.588999999999958,
+            "ScriptDurationMs": 1.490000000000005,
+            "LayoutDurationMs": 1.0020000000000029,
+            "RecalcStyleDurationMs": 0.34
+          }
+        },
+        "first": {
+          "scenario": "many-questions",
+          "action": "first",
+          "target": 0,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 49.39999985694885,
+          "mountedQuestions": 2,
+          "questionElements": 54,
+          "elapsedMs": 49.39999985694885,
+          "frames": {
+            "n": 2,
+            "median": 16.600000000000364,
+            "p95": 16.600000000000364,
+            "max": 16.600000000000364
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 7.591000000000014,
+            "ScriptDurationMs": 1.0889999999999929,
+            "LayoutDurationMs": 0.7239999999999955,
+            "RecalcStyleDurationMs": 0.2599999999999998
+          }
+        },
+        "sweep": {
+          "scenario": "many-questions",
+          "action": "sweep",
+          "target": 149,
+          "previewSteps": 119,
+          "readyAfterTwoFramesMs": 4181.900000095367,
+          "mountedQuestions": 2,
+          "questionElements": 54,
+          "elapsedMs": 4181.900000095367,
+          "frames": {
+            "n": 250,
+            "median": 16.69999999999891,
+            "p95": 17.5,
+            "max": 17.700000000000728
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 388.20199999999994,
+            "ScriptDurationMs": 113.67099999999999,
+            "LayoutDurationMs": 42.153,
+            "RecalcStyleDurationMs": 20.701999999999998
+          }
+        },
+        "read": {
+          "scenario": "many-questions",
+          "action": "read",
+          "target": null,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 4280.600000143051,
+          "mountedQuestions": 3,
+          "questionElements": 81,
+          "elapsedMs": 4280.700000047684,
+          "frames": {
+            "n": 256,
+            "median": 16.700000000000728,
+            "p95": 17.599999999998545,
+            "max": 17.700000000000728
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 177.54800000000003,
+            "ScriptDurationMs": 43.61999999999999,
+            "LayoutDurationMs": 11.66700000000001,
+            "RecalcStyleDurationMs": 4.618000000000004
+          }
+        }
+      },
+      "errors": []
+    },
+    {
+      "round": 0,
+      "url": "http://127.0.0.1:4213",
+      "revision": "head-b044617",
+      "chromium": "151.0.7922.34",
+      "scenario": "mixed-questions",
+      "coldOpen": {
+        "scenario": "mixed-questions",
+        "action": "open",
+        "target": 0,
+        "previewSteps": 0,
+        "readyAfterTwoFramesMs": 45.700000047683716,
+        "mountedQuestions": 2,
+        "questionElements": 52,
+        "elapsedMs": 45.80000019073486,
+        "frames": {
+          "n": 2,
+          "median": 16.599999999998545,
+          "p95": 16.80000000000291,
+          "max": 16.80000000000291
+        },
+        "frameGapsOver34Ms": 0,
+        "longTasks": 0,
+        "longTaskMs": 0,
+        "longestTaskMs": 0,
+        "visibility": "visible"
+      },
+      "actions": {
+        "open": {
+          "scenario": "mixed-questions",
+          "action": "open",
+          "target": 0,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 48.200000047683716,
+          "mountedQuestions": 2,
+          "questionElements": 52,
+          "elapsedMs": 48.200000047683716,
+          "frames": {
+            "n": 2,
+            "median": 16.69999999999709,
+            "p95": 16.700000000000728,
+            "max": 16.700000000000728
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 10.401000000000105,
+            "ScriptDurationMs": 3.008999999999984,
+            "LayoutDurationMs": 0.8479999999999877,
+            "RecalcStyleDurationMs": 1.0919999999999956
+          }
+        },
+        "last": {
+          "scenario": "mixed-questions",
+          "action": "last",
+          "target": 149,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 64.70000004768372,
+          "mountedQuestions": 2,
+          "questionElements": 52,
+          "elapsedMs": 64.70000004768372,
+          "frames": {
+            "n": 3,
+            "median": 16.700000000000728,
+            "p95": 16.700000000000728,
+            "max": 16.700000000000728
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 7.962999999999942,
+            "ScriptDurationMs": 1.1970000000000036,
+            "LayoutDurationMs": 0.8980000000000099,
+            "RecalcStyleDurationMs": 0.47799999999999926
+          }
+        },
+        "first": {
+          "scenario": "mixed-questions",
+          "action": "first",
+          "target": 0,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 47.700000047683716,
+          "mountedQuestions": 2,
+          "questionElements": 52,
+          "elapsedMs": 47.700000047683716,
+          "frames": {
+            "n": 2,
+            "median": 16.700000000000728,
+            "p95": 16.700000000000728,
+            "max": 16.700000000000728
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 9.354000000000084,
+            "ScriptDurationMs": 1.1809999999999876,
+            "LayoutDurationMs": 0.9659999999999946,
+            "RecalcStyleDurationMs": 0.5320000000000047
+          }
+        },
+        "sweep": {
+          "scenario": "mixed-questions",
+          "action": "sweep",
+          "target": 149,
+          "previewSteps": 119,
+          "readyAfterTwoFramesMs": 4182.600000143051,
+          "mountedQuestions": 2,
+          "questionElements": 52,
+          "elapsedMs": 4182.700000047684,
+          "frames": {
+            "n": 250,
+            "median": 16.69999999999709,
+            "p95": 17.599999999998545,
+            "max": 17.600000000002183
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 429.875,
+            "ScriptDurationMs": 120.446,
+            "LayoutDurationMs": 44.05600000000001,
+            "RecalcStyleDurationMs": 22.12
+          }
+        },
+        "read": {
+          "scenario": "mixed-questions",
+          "action": "read",
+          "target": null,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 4279.5,
+          "mountedQuestions": 3,
+          "questionElements": 47,
+          "elapsedMs": 4279.600000143051,
+          "frames": {
+            "n": 256,
+            "median": 16.700000000000728,
+            "p95": 17.599999999998545,
+            "max": 17.69999999999709
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 198.94800000000012,
+            "ScriptDurationMs": 46.46500000000003,
+            "LayoutDurationMs": 10.38699999999998,
+            "RecalcStyleDurationMs": 5.255999999999997
+          }
+        }
+      },
+      "errors": []
+    },
+    {
+      "round": 1,
+      "url": "http://127.0.0.1:4213",
+      "revision": "head-b044617",
+      "chromium": "151.0.7922.34",
+      "scenario": "small",
+      "coldOpen": {
+        "scenario": "small",
+        "action": "open",
+        "target": 0,
+        "previewSteps": 0,
+        "readyAfterTwoFramesMs": 64.29999995231628,
+        "mountedQuestions": 1,
+        "questionElements": 27,
+        "elapsedMs": 64.29999995231628,
+        "frames": {
+          "n": 3,
+          "median": 16.699999999999818,
+          "p95": 16.700000000000045,
+          "max": 16.700000000000045
+        },
+        "frameGapsOver34Ms": 0,
+        "longTasks": 0,
+        "longTaskMs": 0,
+        "longestTaskMs": 0,
+        "visibility": "visible"
+      },
+      "actions": {
+        "open": {
+          "scenario": "small",
+          "action": "open",
+          "target": 0,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 48.59999990463257,
+          "mountedQuestions": 1,
+          "questionElements": 27,
+          "elapsedMs": 48.69999980926514,
+          "frames": {
+            "n": 2,
+            "median": 16.600000000000136,
+            "p95": 16.700000000000045,
+            "max": 16.700000000000045
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 6.419000000000008,
+            "ScriptDurationMs": 1.451999999999995,
+            "LayoutDurationMs": 0.6430000000000012,
+            "RecalcStyleDurationMs": 0.3299999999999987
+          }
+        },
+        "last": {
+          "scenario": "small",
+          "action": "last",
+          "target": 0,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 48.40000009536743,
+          "mountedQuestions": 1,
+          "questionElements": 27,
+          "elapsedMs": 48.40000009536743,
+          "frames": {
+            "n": 2,
+            "median": 16.59999999999991,
+            "p95": 16.700000000000045,
+            "max": 16.700000000000045
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 5.28300000000001,
+            "ScriptDurationMs": 1.1570000000000054,
+            "LayoutDurationMs": 0.2459999999999997,
+            "RecalcStyleDurationMs": 0.07100000000000162
+          }
+        },
+        "first": {
+          "scenario": "small",
+          "action": "first",
+          "target": 0,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 48.5,
+          "mountedQuestions": 1,
+          "questionElements": 27,
+          "elapsedMs": 48.5,
+          "frames": {
+            "n": 2,
+            "median": 16.59999999999991,
+            "p95": 16.700000000000045,
+            "max": 16.700000000000045
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 4.476000000000008,
+            "ScriptDurationMs": 0.34799999999999415,
+            "LayoutDurationMs": 0.2920000000000006,
+            "RecalcStyleDurationMs": 0.06499999999999909
+          }
+        },
+        "sweep": {
+          "scenario": "small",
+          "action": "sweep",
+          "target": 0,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 4082,
+          "mountedQuestions": 1,
+          "questionElements": 27,
+          "elapsedMs": 4082,
+          "frames": {
+            "n": 244,
+            "median": 16.699999999999818,
+            "p95": 17.5,
+            "max": 17.600000000000364
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 76.604,
+            "ScriptDurationMs": 18.178,
+            "LayoutDurationMs": 0.3429999999999995,
+            "RecalcStyleDurationMs": 0.07500000000000041
+          }
+        },
+        "read": {
+          "scenario": "small",
+          "action": "read",
+          "target": null,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 4281.900000095367,
+          "mountedQuestions": 1,
+          "questionElements": 27,
+          "elapsedMs": 4281.900000095367,
+          "frames": {
+            "n": 256,
+            "median": 16.69999999999891,
+            "p95": 17.599999999999454,
+            "max": 17.699999999999818
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 60.89699999999998,
+            "ScriptDurationMs": 9.751999999999997,
+            "LayoutDurationMs": 0.8149999999999997,
+            "RecalcStyleDurationMs": 0.13200000000000017
+          }
+        }
+      },
+      "errors": []
+    },
+    {
+      "round": 1,
+      "url": "http://127.0.0.1:4213",
+      "revision": "head-b044617",
+      "chromium": "151.0.7922.34",
+      "scenario": "many-questions",
+      "coldOpen": {
+        "scenario": "many-questions",
+        "action": "open",
+        "target": 0,
+        "previewSteps": 0,
+        "readyAfterTwoFramesMs": 47,
+        "mountedQuestions": 2,
+        "questionElements": 54,
+        "elapsedMs": 47.09999990463257,
+        "frames": {
+          "n": 2,
+          "median": 16.69999999999891,
+          "p95": 16.700000000000728,
+          "max": 16.700000000000728
+        },
+        "frameGapsOver34Ms": 0,
+        "longTasks": 0,
+        "longTaskMs": 0,
+        "longestTaskMs": 0,
+        "visibility": "visible"
+      },
+      "actions": {
+        "open": {
+          "scenario": "many-questions",
+          "action": "open",
+          "target": 0,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 47.89999985694885,
+          "mountedQuestions": 2,
+          "questionElements": 54,
+          "elapsedMs": 47.89999985694885,
+          "frames": {
+            "n": 2,
+            "median": 16.600000000000364,
+            "p95": 16.69999999999891,
+            "max": 16.69999999999891
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 11.337999999999958,
+            "ScriptDurationMs": 3.9769999999999945,
+            "LayoutDurationMs": 0.906000000000004,
+            "RecalcStyleDurationMs": 1.0170000000000006
+          }
+        },
+        "last": {
+          "scenario": "many-questions",
+          "action": "last",
+          "target": 149,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 64.79999995231628,
+          "mountedQuestions": 2,
+          "questionElements": 54,
+          "elapsedMs": 64.79999995231628,
+          "frames": {
+            "n": 3,
+            "median": 16.69999999999891,
+            "p95": 16.700000000000728,
+            "max": 16.700000000000728
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 8.247999999999978,
+            "ScriptDurationMs": 1.5490000000000088,
+            "LayoutDurationMs": 1.0699999999999945,
+            "RecalcStyleDurationMs": 0.37399999999999933
+          }
+        },
+        "first": {
+          "scenario": "many-questions",
+          "action": "first",
+          "target": 0,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 47.60000014305115,
+          "mountedQuestions": 2,
+          "questionElements": 54,
+          "elapsedMs": 47.60000014305115,
+          "frames": {
+            "n": 2,
+            "median": 16.69999999999891,
+            "p95": 16.700000000000728,
+            "max": 16.700000000000728
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 8.32900000000003,
+            "ScriptDurationMs": 1.1810000000000014,
+            "LayoutDurationMs": 0.8800000000000058,
+            "RecalcStyleDurationMs": 0.3450000000000015
+          }
+        },
+        "sweep": {
+          "scenario": "many-questions",
+          "action": "sweep",
+          "target": 149,
+          "previewSteps": 119,
+          "readyAfterTwoFramesMs": 4180.400000095367,
+          "mountedQuestions": 2,
+          "questionElements": 54,
+          "elapsedMs": 4180.400000095367,
+          "frames": {
+            "n": 250,
+            "median": 16.69999999999891,
+            "p95": 17.5,
+            "max": 17.600000000000364
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 344.7420000000001,
+            "ScriptDurationMs": 102.62599999999999,
+            "LayoutDurationMs": 37.462,
+            "RecalcStyleDurationMs": 18.73
+          }
+        },
+        "read": {
+          "scenario": "many-questions",
+          "action": "read",
+          "target": null,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 4282.899999856949,
+          "mountedQuestions": 3,
+          "questionElements": 81,
+          "elapsedMs": 4282.899999856949,
+          "frames": {
+            "n": 256,
+            "median": 16.700000000000728,
+            "p95": 17.599999999998545,
+            "max": 17.700000000000728
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 171.87599999999992,
+            "ScriptDurationMs": 41.045,
+            "LayoutDurationMs": 10.798000000000002,
+            "RecalcStyleDurationMs": 4.206999999999995
+          }
+        }
+      },
+      "errors": []
+    },
+    {
+      "round": 1,
+      "url": "http://127.0.0.1:4213",
+      "revision": "head-b044617",
+      "chromium": "151.0.7922.34",
+      "scenario": "mixed-questions",
+      "coldOpen": {
+        "scenario": "mixed-questions",
+        "action": "open",
+        "target": 0,
+        "previewSteps": 0,
+        "readyAfterTwoFramesMs": 46.10000014305115,
+        "mountedQuestions": 2,
+        "questionElements": 52,
+        "elapsedMs": 46.200000047683716,
+        "frames": {
+          "n": 2,
+          "median": 16.69999999999709,
+          "p95": 17.5,
+          "max": 17.5
+        },
+        "frameGapsOver34Ms": 0,
+        "longTasks": 0,
+        "longTaskMs": 0,
+        "longestTaskMs": 0,
+        "visibility": "visible"
+      },
+      "actions": {
+        "open": {
+          "scenario": "mixed-questions",
+          "action": "open",
+          "target": 0,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 48.200000047683716,
+          "mountedQuestions": 2,
+          "questionElements": 52,
+          "elapsedMs": 48.200000047683716,
+          "frames": {
+            "n": 2,
+            "median": 16.69999999999709,
+            "p95": 16.700000000000728,
+            "max": 16.700000000000728
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 9.82800000000006,
+            "ScriptDurationMs": 2.8910000000000324,
+            "LayoutDurationMs": 0.8510000000000045,
+            "RecalcStyleDurationMs": 1.0989999999999958
+          }
+        },
+        "last": {
+          "scenario": "mixed-questions",
+          "action": "last",
+          "target": 149,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 65,
+          "mountedQuestions": 2,
+          "questionElements": 52,
+          "elapsedMs": 65,
+          "frames": {
+            "n": 3,
+            "median": 16.69999999999709,
+            "p95": 16.700000000000728,
+            "max": 16.700000000000728
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 7.947000000000148,
+            "ScriptDurationMs": 1.3799999999999923,
+            "LayoutDurationMs": 0.9119999999999961,
+            "RecalcStyleDurationMs": 0.5190000000000056
+          }
+        },
+        "first": {
+          "scenario": "mixed-questions",
+          "action": "first",
+          "target": 0,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 47.90000009536743,
+          "mountedQuestions": 2,
+          "questionElements": 52,
+          "elapsedMs": 48,
+          "frames": {
+            "n": 2,
+            "median": 16.600000000002183,
+            "p95": 16.700000000000728,
+            "max": 16.700000000000728
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 8.410000000000029,
+            "ScriptDurationMs": 1.2150000000000216,
+            "LayoutDurationMs": 0.9249999999999953,
+            "RecalcStyleDurationMs": 0.5469999999999988
+          }
+        },
+        "sweep": {
+          "scenario": "mixed-questions",
+          "action": "sweep",
+          "target": 149,
+          "previewSteps": 119,
+          "readyAfterTwoFramesMs": 4181.300000190735,
+          "mountedQuestions": 2,
+          "questionElements": 52,
+          "elapsedMs": 4181.300000190735,
+          "frames": {
+            "n": 250,
+            "median": 16.69999999999709,
+            "p95": 17.599999999998545,
+            "max": 17.700000000000728
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 366.56700000000006,
+            "ScriptDurationMs": 105.045,
+            "LayoutDurationMs": 38.666999999999994,
+            "RecalcStyleDurationMs": 18.939000000000004
+          }
+        },
+        "read": {
+          "scenario": "mixed-questions",
+          "action": "read",
+          "target": null,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 4281.399999856949,
+          "mountedQuestions": 3,
+          "questionElements": 47,
+          "elapsedMs": 4281.399999856949,
+          "frames": {
+            "n": 256,
+            "median": 16.700000000000728,
+            "p95": 17.599999999998545,
+            "max": 17.700000000000728
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 182.0360000000001,
+            "ScriptDurationMs": 45.736,
+            "LayoutDurationMs": 11.354000000000003,
+            "RecalcStyleDurationMs": 5.495999999999987
+          }
+        }
+      },
+      "errors": []
+    },
+    {
+      "round": 1,
+      "url": "http://127.0.0.1:4212",
+      "revision": "base-e5e8f11",
+      "chromium": "151.0.7922.34",
+      "scenario": "small",
+      "coldOpen": {
+        "scenario": "small",
+        "action": "open",
+        "target": 0,
+        "previewSteps": 0,
+        "readyAfterTwoFramesMs": 63.799999952316284,
+        "mountedQuestions": 1,
+        "questionElements": 27,
+        "elapsedMs": 63.89999985694885,
+        "frames": {
+          "n": 3,
+          "median": 16.700000000000045,
+          "p95": 17.199999999999818,
+          "max": 17.199999999999818
+        },
+        "frameGapsOver34Ms": 0,
+        "longTasks": 0,
+        "longTaskMs": 0,
+        "longestTaskMs": 0,
+        "visibility": "visible"
+      },
+      "actions": {
+        "open": {
+          "scenario": "small",
+          "action": "open",
+          "target": 0,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 49.09999990463257,
+          "mountedQuestions": 1,
+          "questionElements": 27,
+          "elapsedMs": 49.200000047683716,
+          "frames": {
+            "n": 2,
+            "median": 16.699999999999818,
+            "p95": 17.700000000000045,
+            "max": 17.700000000000045
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 6.598999999999994,
+            "ScriptDurationMs": 1.471,
+            "LayoutDurationMs": 0.5880000000000017,
+            "RecalcStyleDurationMs": 0.37199999999999905
+          }
+        },
+        "last": {
+          "scenario": "small",
+          "action": "last",
+          "target": 0,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 48.799999952316284,
+          "mountedQuestions": 1,
+          "questionElements": 27,
+          "elapsedMs": 48.799999952316284,
+          "frames": {
+            "n": 2,
+            "median": 16.700000000000045,
+            "p95": 16.700000000000045,
+            "max": 16.700000000000045
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 4.394999999999982,
+            "ScriptDurationMs": 0.789999999999999,
+            "LayoutDurationMs": 0.19399999999999973,
+            "RecalcStyleDurationMs": 0.06300000000000056
+          }
+        },
+        "first": {
+          "scenario": "small",
+          "action": "first",
+          "target": 0,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 47.700000047683716,
+          "mountedQuestions": 1,
+          "questionElements": 27,
+          "elapsedMs": 47.700000047683716,
+          "frames": {
+            "n": 2,
+            "median": 15.699999999999818,
+            "p95": 17.700000000000045,
+            "max": 17.700000000000045
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 3.365000000000007,
+            "ScriptDurationMs": 0.22199999999999998,
+            "LayoutDurationMs": 0.20599999999999785,
+            "RecalcStyleDurationMs": 0.054999999999999494
+          }
+        },
+        "sweep": {
+          "scenario": "small",
+          "action": "sweep",
+          "target": 0,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 4082.0999999046326,
+          "mountedQuestions": 1,
+          "questionElements": 27,
+          "elapsedMs": 4082.2000000476837,
+          "frames": {
+            "n": 244,
+            "median": 16.699999999999818,
+            "p95": 17.600000000000364,
+            "max": 17.700000000000728
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 105.74,
+            "ScriptDurationMs": 18.278000000000002,
+            "LayoutDurationMs": 0.896000000000001,
+            "RecalcStyleDurationMs": 0.10399999999999993
+          }
+        },
+        "read": {
+          "scenario": "small",
+          "action": "read",
+          "target": null,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 4280.799999952316,
+          "mountedQuestions": 1,
+          "questionElements": 27,
+          "elapsedMs": 4280.799999952316,
+          "frames": {
+            "n": 256,
+            "median": 16.699999999999818,
+            "p95": 17.5,
+            "max": 17.800000000000182
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 73.59199999999998,
+            "ScriptDurationMs": 10.137000000000008,
+            "LayoutDurationMs": 0.4949999999999989,
+            "RecalcStyleDurationMs": 0.1660000000000012
+          }
+        }
+      },
+      "errors": []
+    },
+    {
+      "round": 1,
+      "url": "http://127.0.0.1:4212",
+      "revision": "base-e5e8f11",
+      "chromium": "151.0.7922.34",
+      "scenario": "many-questions",
+      "coldOpen": {
+        "scenario": "many-questions",
+        "action": "open",
+        "target": 0,
+        "previewSteps": 0,
+        "readyAfterTwoFramesMs": 45.59999990463257,
+        "mountedQuestions": 2,
+        "questionElements": 54,
+        "elapsedMs": 45.59999990463257,
+        "frames": {
+          "n": 2,
+          "median": 16.600000000000364,
+          "p95": 16.700000000000728,
+          "max": 16.700000000000728
+        },
+        "frameGapsOver34Ms": 0,
+        "longTasks": 0,
+        "longTaskMs": 0,
+        "longestTaskMs": 0,
+        "visibility": "visible"
+      },
+      "actions": {
+        "open": {
+          "scenario": "many-questions",
+          "action": "open",
+          "target": 0,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 47.700000047683716,
+          "mountedQuestions": 2,
+          "questionElements": 54,
+          "elapsedMs": 47.799999952316284,
+          "frames": {
+            "n": 2,
+            "median": 16.69999999999891,
+            "p95": 16.700000000000728,
+            "max": 16.700000000000728
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 11.880000000000003,
+            "ScriptDurationMs": 4.425999999999999,
+            "LayoutDurationMs": 0.9410000000000043,
+            "RecalcStyleDurationMs": 1.072
+          }
+        },
+        "last": {
+          "scenario": "many-questions",
+          "action": "last",
+          "target": 149,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 64.70000004768372,
+          "mountedQuestions": 2,
+          "questionElements": 54,
+          "elapsedMs": 64.70000004768372,
+          "frames": {
+            "n": 3,
+            "median": 16.600000000000364,
+            "p95": 16.69999999999891,
+            "max": 16.69999999999891
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 7.717000000000029,
+            "ScriptDurationMs": 1.3179999999999996,
+            "LayoutDurationMs": 0.8429999999999965,
+            "RecalcStyleDurationMs": 0.30300000000000116
+          }
+        },
+        "first": {
+          "scenario": "many-questions",
+          "action": "first",
+          "target": 0,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 47.89999985694885,
+          "mountedQuestions": 2,
+          "questionElements": 54,
+          "elapsedMs": 47.89999985694885,
+          "frames": {
+            "n": 2,
+            "median": 16.600000000000364,
+            "p95": 16.69999999999891,
+            "max": 16.69999999999891
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 7.498000000000005,
+            "ScriptDurationMs": 1.1600000000000081,
+            "LayoutDurationMs": 0.8240000000000053,
+            "RecalcStyleDurationMs": 0.3069999999999983
+          }
+        },
+        "sweep": {
+          "scenario": "many-questions",
+          "action": "sweep",
+          "target": 149,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 4081.2000000476837,
+          "mountedQuestions": 2,
+          "questionElements": 54,
+          "elapsedMs": 4081.2999999523163,
+          "frames": {
+            "n": 244,
+            "median": 16.69999999999891,
+            "p95": 16.900000000001455,
+            "max": 17.69999999999891
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 495.0030000000001,
+            "ScriptDurationMs": 139.346,
+            "LayoutDurationMs": 79.556,
+            "RecalcStyleDurationMs": 37.336000000000006
+          }
+        },
+        "read": {
+          "scenario": "many-questions",
+          "action": "read",
+          "target": null,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 4280.599999904633,
+          "mountedQuestions": 3,
+          "questionElements": 81,
+          "elapsedMs": 4280.599999904633,
+          "frames": {
+            "n": 256,
+            "median": 16.700000000000728,
+            "p95": 17.299999999999272,
+            "max": 17.700000000000728
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 175.23199999999994,
+            "ScriptDurationMs": 36.81499999999998,
+            "LayoutDurationMs": 10.02199999999999,
+            "RecalcStyleDurationMs": 3.6819999999999977
+          }
+        }
+      },
+      "errors": []
+    },
+    {
+      "round": 1,
+      "url": "http://127.0.0.1:4212",
+      "revision": "base-e5e8f11",
+      "chromium": "151.0.7922.34",
+      "scenario": "mixed-questions",
+      "coldOpen": {
+        "scenario": "mixed-questions",
+        "action": "open",
+        "target": 0,
+        "previewSteps": 0,
+        "readyAfterTwoFramesMs": 46.90000009536743,
+        "mountedQuestions": 2,
+        "questionElements": 52,
+        "elapsedMs": 46.90000009536743,
+        "frames": {
+          "n": 2,
+          "median": 16.69999999999709,
+          "p95": 16.700000000000728,
+          "max": 16.700000000000728
+        },
+        "frameGapsOver34Ms": 0,
+        "longTasks": 0,
+        "longTaskMs": 0,
+        "longestTaskMs": 0,
+        "visibility": "visible"
+      },
+      "actions": {
+        "open": {
+          "scenario": "mixed-questions",
+          "action": "open",
+          "target": 0,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 47.80000019073486,
+          "mountedQuestions": 2,
+          "questionElements": 52,
+          "elapsedMs": 47.80000019073486,
+          "frames": {
+            "n": 2,
+            "median": 16.69999999999709,
+            "p95": 16.700000000000728,
+            "max": 16.700000000000728
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 10.224999999999929,
+            "ScriptDurationMs": 3.0569999999999764,
+            "LayoutDurationMs": 0.8650000000000047,
+            "RecalcStyleDurationMs": 1.0980000000000016
+          }
+        },
+        "last": {
+          "scenario": "mixed-questions",
+          "action": "last",
+          "target": 149,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 65.40000009536743,
+          "mountedQuestions": 2,
+          "questionElements": 52,
+          "elapsedMs": 65.40000009536743,
+          "frames": {
+            "n": 3,
+            "median": 16.69999999999709,
+            "p95": 16.700000000000728,
+            "max": 16.700000000000728
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 7.994999999999974,
+            "ScriptDurationMs": 1.1400000000000299,
+            "LayoutDurationMs": 0.9480000000000044,
+            "RecalcStyleDurationMs": 0.5180000000000046
+          }
+        },
+        "first": {
+          "scenario": "mixed-questions",
+          "action": "first",
+          "target": 0,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 48.40000009536743,
+          "mountedQuestions": 2,
+          "questionElements": 52,
+          "elapsedMs": 48.5,
+          "frames": {
+            "n": 2,
+            "median": 16.600000000002183,
+            "p95": 16.69999999999709,
+            "max": 16.69999999999709
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 10.094000000000047,
+            "ScriptDurationMs": 1.5089999999999826,
+            "LayoutDurationMs": 1.1839999999999906,
+            "RecalcStyleDurationMs": 0.685000000000005
+          }
+        },
+        "sweep": {
+          "scenario": "mixed-questions",
+          "action": "sweep",
+          "target": 149,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 4081.2000000476837,
+          "mountedQuestions": 2,
+          "questionElements": 52,
+          "elapsedMs": 4081.2000000476837,
+          "frames": {
+            "n": 244,
+            "median": 16.69999999999709,
+            "p95": 17.200000000000728,
+            "max": 17.700000000000728
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 476.09599999999983,
+            "ScriptDurationMs": 144.01199999999997,
+            "LayoutDurationMs": 70.325,
+            "RecalcStyleDurationMs": 42.931999999999995
+          }
+        },
+        "read": {
+          "scenario": "mixed-questions",
+          "action": "read",
+          "target": null,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 4281.199999809265,
+          "mountedQuestions": 3,
+          "questionElements": 47,
+          "elapsedMs": 4281.399999856949,
+          "frames": {
+            "n": 256,
+            "median": 16.700000000000728,
+            "p95": 17.5,
+            "max": 17.600000000002183
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 191.411,
+            "ScriptDurationMs": 39.685000000000024,
+            "LayoutDurationMs": 10.632000000000003,
+            "RecalcStyleDurationMs": 5.124999999999991
+          }
+        }
+      },
+      "errors": []
+    },
+    {
+      "round": 1,
+      "url": "http://127.0.0.1:4211",
+      "revision": "base-866f9b5",
+      "chromium": "151.0.7922.34",
+      "scenario": "small",
+      "coldOpen": {
+        "scenario": "small",
+        "action": "open",
+        "target": 0,
+        "previewSteps": 0,
+        "readyAfterTwoFramesMs": 47.5,
+        "mountedQuestions": 1,
+        "questionElements": 27,
+        "elapsedMs": 47.5,
+        "frames": {
+          "n": 2,
+          "median": 16.699999999999818,
+          "p95": 16.700000000000045,
+          "max": 16.700000000000045
+        },
+        "frameGapsOver34Ms": 0,
+        "longTasks": 0,
+        "longTaskMs": 0,
+        "longestTaskMs": 0,
+        "visibility": "visible"
+      },
+      "actions": {
+        "open": {
+          "scenario": "small",
+          "action": "open",
+          "target": 0,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 48.30000019073486,
+          "mountedQuestions": 1,
+          "questionElements": 27,
+          "elapsedMs": 48.30000019073486,
+          "frames": {
+            "n": 2,
+            "median": 16.699999999999818,
+            "p95": 16.700000000000045,
+            "max": 16.700000000000045
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 6.2590000000000146,
+            "ScriptDurationMs": 0.8930000000000049,
+            "LayoutDurationMs": 0.5230000000000026,
+            "RecalcStyleDurationMs": 0.168999999999999
+          }
+        },
+        "last": {
+          "scenario": "small",
+          "action": "last",
+          "target": 0,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 48.5,
+          "mountedQuestions": 1,
+          "questionElements": 27,
+          "elapsedMs": 48.5,
+          "frames": {
+            "n": 2,
+            "median": 16.600000000000136,
+            "p95": 16.799999999999955,
+            "max": 16.799999999999955
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 4.958000000000018,
+            "ScriptDurationMs": 0.336999999999997,
+            "LayoutDurationMs": 0.3129999999999973,
+            "RecalcStyleDurationMs": 0.07400000000000115
+          }
+        },
+        "first": {
+          "scenario": "small",
+          "action": "first",
+          "target": 0,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 48.09999990463257,
+          "mountedQuestions": 1,
+          "questionElements": 27,
+          "elapsedMs": 48.19999980926514,
+          "frames": {
+            "n": 2,
+            "median": 16.59999999999991,
+            "p95": 16.700000000000045,
+            "max": 16.700000000000045
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 4.5680000000000165,
+            "ScriptDurationMs": 0.21100000000000285,
+            "LayoutDurationMs": 0.2690000000000019,
+            "RecalcStyleDurationMs": 0.085
+          }
+        },
+        "sweep": {
+          "scenario": "small",
+          "action": "sweep",
+          "target": 0,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 4082,
+          "mountedQuestions": 1,
+          "questionElements": 27,
+          "elapsedMs": 4082.0999999046326,
+          "frames": {
+            "n": 244,
+            "median": 16.699999999999818,
+            "p95": 17.40000000000009,
+            "max": 17.700000000000273
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 90.84699999999998,
+            "ScriptDurationMs": 10.506999999999996,
+            "LayoutDurationMs": 0.5250000000000011,
+            "RecalcStyleDurationMs": 0.07999999999999848
+          }
+        },
+        "read": {
+          "scenario": "small",
+          "action": "read",
+          "target": null,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 4280.299999952316,
+          "mountedQuestions": 1,
+          "questionElements": 27,
+          "elapsedMs": 4280.299999952316,
+          "frames": {
+            "n": 256,
+            "median": 16.699999999999818,
+            "p95": 17.5,
+            "max": 17.700000000000728
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 69.46599999999997,
+            "ScriptDurationMs": 6.819999999999999,
+            "LayoutDurationMs": 0.34799999999999764,
+            "RecalcStyleDurationMs": 0.0960000000000006
+          }
+        }
+      },
+      "errors": []
+    },
+    {
+      "round": 1,
+      "url": "http://127.0.0.1:4211",
+      "revision": "base-866f9b5",
+      "chromium": "151.0.7922.34",
+      "scenario": "many-questions",
+      "coldOpen": {
+        "scenario": "many-questions",
+        "action": "open",
+        "target": 0,
+        "previewSteps": 0,
+        "readyAfterTwoFramesMs": 45.700000047683716,
+        "mountedQuestions": 150,
+        "questionElements": 4050,
+        "elapsedMs": 45.90000009536743,
+        "frames": {
+          "n": 2,
+          "median": 16.69999999999891,
+          "p95": 16.700000000000728,
+          "max": 16.700000000000728
+        },
+        "frameGapsOver34Ms": 0,
+        "longTasks": 0,
+        "longTaskMs": 0,
+        "longestTaskMs": 0,
+        "visibility": "visible"
+      },
+      "actions": {
+        "open": {
+          "scenario": "many-questions",
+          "action": "open",
+          "target": 0,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 48.299999952316284,
+          "mountedQuestions": 150,
+          "questionElements": 4050,
+          "elapsedMs": 48.5,
+          "frames": {
+            "n": 2,
+            "median": 16.600000000000364,
+            "p95": 16.700000000000728,
+            "max": 16.700000000000728
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 29.363000000000028,
+            "ScriptDurationMs": 5.858000000000002,
+            "LayoutDurationMs": 10.542999999999997,
+            "RecalcStyleDurationMs": 4.122000000000001
+          }
+        },
+        "last": {
+          "scenario": "many-questions",
+          "action": "last",
+          "target": 149,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 48.30000019073486,
+          "mountedQuestions": 150,
+          "questionElements": 4050,
+          "elapsedMs": 48.5,
+          "frames": {
+            "n": 2,
+            "median": 16.69999999999891,
+            "p95": 16.700000000000728,
+            "max": 16.700000000000728
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 6.399999999999961,
+            "ScriptDurationMs": 0.1769999999999966,
+            "LayoutDurationMs": 0.16100000000000142,
+            "RecalcStyleDurationMs": 0.059999999999997555
+          }
+        },
+        "first": {
+          "scenario": "many-questions",
+          "action": "first",
+          "target": 0,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 48.40000009536743,
+          "mountedQuestions": 150,
+          "questionElements": 4050,
+          "elapsedMs": 48.60000014305115,
+          "frames": {
+            "n": 2,
+            "median": 16.69999999999891,
+            "p95": 16.700000000000728,
+            "max": 16.700000000000728
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 5.649000000000015,
+            "ScriptDurationMs": 0.1729999999999926,
+            "LayoutDurationMs": 0.15199999999999936,
+            "RecalcStyleDurationMs": 0.05500000000000296
+          }
+        },
+        "sweep": {
+          "scenario": "many-questions",
+          "action": "sweep",
+          "target": 149,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 4080.4000000953674,
+          "mountedQuestions": 150,
+          "questionElements": 4050,
+          "elapsedMs": 4081.2999999523163,
+          "frames": {
+            "n": 244,
+            "median": 16.69999999999891,
+            "p95": 17.399999999999636,
+            "max": 17.69999999999891
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 287.73500000000007,
+            "ScriptDurationMs": 7.976000000000011,
+            "LayoutDurationMs": 0.5549999999999999,
+            "RecalcStyleDurationMs": 0.13599999999999723
+          }
+        },
+        "read": {
+          "scenario": "many-questions",
+          "action": "read",
+          "target": null,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 4280.600000143051,
+          "mountedQuestions": 150,
+          "questionElements": 4050,
+          "elapsedMs": 4281,
+          "frames": {
+            "n": 256,
+            "median": 16.700000000000728,
+            "p95": 17.299999999999272,
+            "max": 17.69999999999709
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 128.02800000000002,
+            "ScriptDurationMs": 6.598999999999994,
+            "LayoutDurationMs": 0.3970000000000015,
+            "RecalcStyleDurationMs": 0.12799999999999964
+          }
+        }
+      },
+      "errors": []
+    },
+    {
+      "round": 1,
+      "url": "http://127.0.0.1:4211",
+      "revision": "base-866f9b5",
+      "chromium": "151.0.7922.34",
+      "scenario": "mixed-questions",
+      "coldOpen": {
+        "scenario": "mixed-questions",
+        "action": "open",
+        "target": 0,
+        "previewSteps": 0,
+        "readyAfterTwoFramesMs": 48.299999952316284,
+        "mountedQuestions": 150,
+        "questionElements": 2716,
+        "elapsedMs": 48.5,
+        "frames": {
+          "n": 2,
+          "median": 16.599999999998545,
+          "p95": 16.700000000000728,
+          "max": 16.700000000000728
+        },
+        "frameGapsOver34Ms": 0,
+        "longTasks": 0,
+        "longTaskMs": 0,
+        "longestTaskMs": 0,
+        "visibility": "visible"
+      },
+      "actions": {
+        "open": {
+          "scenario": "mixed-questions",
+          "action": "open",
+          "target": 0,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 48.5,
+          "mountedQuestions": 150,
+          "questionElements": 2716,
+          "elapsedMs": 48.59999990463257,
+          "frames": {
+            "n": 2,
+            "median": 16.69999999999709,
+            "p95": 16.700000000000728,
+            "max": 16.700000000000728
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 24.130000000000095,
+            "ScriptDurationMs": 6.254999999999983,
+            "LayoutDurationMs": 7.641999999999996,
+            "RecalcStyleDurationMs": 3.027999999999996
+          }
+        },
+        "last": {
+          "scenario": "mixed-questions",
+          "action": "last",
+          "target": 149,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 48.299999952316284,
+          "mountedQuestions": 150,
+          "questionElements": 2716,
+          "elapsedMs": 48.5,
+          "frames": {
+            "n": 2,
+            "median": 16.599999999998545,
+            "p95": 16.799999999999272,
+            "max": 16.799999999999272
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 6.202000000000041,
+            "ScriptDurationMs": 0.2520000000000022,
+            "LayoutDurationMs": 0.20599999999999785,
+            "RecalcStyleDurationMs": 0.06300000000000056
+          }
+        },
+        "first": {
+          "scenario": "mixed-questions",
+          "action": "first",
+          "target": 0,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 48,
+          "mountedQuestions": 150,
+          "questionElements": 2716,
+          "elapsedMs": 48.200000047683716,
+          "frames": {
+            "n": 2,
+            "median": 16.700000000000728,
+            "p95": 16.700000000000728,
+            "max": 16.700000000000728
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 6.9390000000000285,
+            "ScriptDurationMs": 0.29300000000001547,
+            "LayoutDurationMs": 0.2339999999999981,
+            "RecalcStyleDurationMs": 0.06799999999999862
+          }
+        },
+        "sweep": {
+          "scenario": "mixed-questions",
+          "action": "sweep",
+          "target": 149,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 4081.2000000476837,
+          "mountedQuestions": 150,
+          "questionElements": 2716,
+          "elapsedMs": 4081.4000000953674,
+          "frames": {
+            "n": 244,
+            "median": 16.69999999999709,
+            "p95": 17.299999999999272,
+            "max": 17.700000000000728
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 244.40799999999996,
+            "ScriptDurationMs": 7.095999999999991,
+            "LayoutDurationMs": 0.20400000000000973,
+            "RecalcStyleDurationMs": 0.061999999999999555
+          }
+        },
+        "read": {
+          "scenario": "mixed-questions",
+          "action": "read",
+          "target": null,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 4281.5,
+          "mountedQuestions": 150,
+          "questionElements": 2716,
+          "elapsedMs": 4281.799999952316,
+          "frames": {
+            "n": 256,
+            "median": 16.700000000000728,
+            "p95": 17.600000000002183,
+            "max": 17.799999999999272
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 154.33500000000012,
+            "ScriptDurationMs": 6.939000000000001,
+            "LayoutDurationMs": 0.4610000000000031,
+            "RecalcStyleDurationMs": 0.07900000000000268
+          }
+        }
+      },
+      "errors": []
+    },
+    {
+      "round": 2,
+      "url": "http://127.0.0.1:4211",
+      "revision": "base-866f9b5",
+      "chromium": "151.0.7922.34",
+      "scenario": "small",
+      "coldOpen": {
+        "scenario": "small",
+        "action": "open",
+        "target": 0,
+        "previewSteps": 0,
+        "readyAfterTwoFramesMs": 47.10000014305115,
+        "mountedQuestions": 1,
+        "questionElements": 27,
+        "elapsedMs": 47.200000047683716,
+        "frames": {
+          "n": 2,
+          "median": 16.600000000000136,
+          "p95": 16.700000000000045,
+          "max": 16.700000000000045
+        },
+        "frameGapsOver34Ms": 0,
+        "longTasks": 0,
+        "longTaskMs": 0,
+        "longestTaskMs": 0,
+        "visibility": "visible"
+      },
+      "actions": {
+        "open": {
+          "scenario": "small",
+          "action": "open",
+          "target": 0,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 48.39999985694885,
+          "mountedQuestions": 1,
+          "questionElements": 27,
+          "elapsedMs": 48.5,
+          "frames": {
+            "n": 2,
+            "median": 16.59999999999991,
+            "p95": 16.700000000000045,
+            "max": 16.700000000000045
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 6.26400000000002,
+            "ScriptDurationMs": 0.8830000000000018,
+            "LayoutDurationMs": 0.5469999999999988,
+            "RecalcStyleDurationMs": 0.18099999999999888
+          }
+        },
+        "last": {
+          "scenario": "small",
+          "action": "last",
+          "target": 0,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 47.89999985694885,
+          "mountedQuestions": 1,
+          "questionElements": 27,
+          "elapsedMs": 47.89999985694885,
+          "frames": {
+            "n": 2,
+            "median": 16.59999999999991,
+            "p95": 17.700000000000045,
+            "max": 17.700000000000045
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 5.218,
+            "ScriptDurationMs": 0.36399999999999627,
+            "LayoutDurationMs": 0.3480000000000011,
+            "RecalcStyleDurationMs": 0.08100000000000121
+          }
+        },
+        "first": {
+          "scenario": "small",
+          "action": "first",
+          "target": 0,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 48.299999952316284,
+          "mountedQuestions": 1,
+          "questionElements": 27,
+          "elapsedMs": 48.39999985694885,
+          "frames": {
+            "n": 2,
+            "median": 16.59999999999991,
+            "p95": 16.700000000000045,
+            "max": 16.700000000000045
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 7.467000000000001,
+            "ScriptDurationMs": 0.31899999999999984,
+            "LayoutDurationMs": 0.6099999999999994,
+            "RecalcStyleDurationMs": 0.10599999999999846
+          }
+        },
+        "sweep": {
+          "scenario": "small",
+          "action": "sweep",
+          "target": 0,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 4081.7999999523163,
+          "mountedQuestions": 1,
+          "questionElements": 27,
+          "elapsedMs": 4081.7999999523163,
+          "frames": {
+            "n": 244,
+            "median": 16.699999999999818,
+            "p95": 17.699999999999818,
+            "max": 17.799999999999272
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 97.09600000000002,
+            "ScriptDurationMs": 10.571000000000003,
+            "LayoutDurationMs": 0.4959999999999999,
+            "RecalcStyleDurationMs": 0.08900000000000054
+          }
+        },
+        "read": {
+          "scenario": "small",
+          "action": "read",
+          "target": null,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 4279.5,
+          "mountedQuestions": 1,
+          "questionElements": 27,
+          "elapsedMs": 4279.600000143051,
+          "frames": {
+            "n": 256,
+            "median": 16.69999999999891,
+            "p95": 17.699999999999818,
+            "max": 17.799999999999272
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 71.52999999999999,
+            "ScriptDurationMs": 6.792999999999994,
+            "LayoutDurationMs": 0.6600000000000008,
+            "RecalcStyleDurationMs": 0.1570000000000009
+          }
+        }
+      },
+      "errors": []
+    },
+    {
+      "round": 2,
+      "url": "http://127.0.0.1:4211",
+      "revision": "base-866f9b5",
+      "chromium": "151.0.7922.34",
+      "scenario": "many-questions",
+      "coldOpen": {
+        "scenario": "many-questions",
+        "action": "open",
+        "target": 0,
+        "previewSteps": 0,
+        "readyAfterTwoFramesMs": 48,
+        "mountedQuestions": 150,
+        "questionElements": 4050,
+        "elapsedMs": 48.200000047683716,
+        "frames": {
+          "n": 2,
+          "median": 16.69999999999891,
+          "p95": 16.700000000000728,
+          "max": 16.700000000000728
+        },
+        "frameGapsOver34Ms": 0,
+        "longTasks": 0,
+        "longTaskMs": 0,
+        "longestTaskMs": 0,
+        "visibility": "visible"
+      },
+      "actions": {
+        "open": {
+          "scenario": "many-questions",
+          "action": "open",
+          "target": 0,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 48.299999952316284,
+          "mountedQuestions": 150,
+          "questionElements": 4050,
+          "elapsedMs": 48.5,
+          "frames": {
+            "n": 2,
+            "median": 16.69999999999891,
+            "p95": 16.700000000000728,
+            "max": 16.700000000000728
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 28.029000000000025,
+            "ScriptDurationMs": 5.519999999999997,
+            "LayoutDurationMs": 10.264999999999997,
+            "RecalcStyleDurationMs": 4.135000000000003
+          }
+        },
+        "last": {
+          "scenario": "many-questions",
+          "action": "last",
+          "target": 149,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 48.39999985694885,
+          "mountedQuestions": 150,
+          "questionElements": 4050,
+          "elapsedMs": 48.5,
+          "frames": {
+            "n": 2,
+            "median": 16.69999999999891,
+            "p95": 16.700000000000728,
+            "max": 16.700000000000728
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 7.4989999999999775,
+            "ScriptDurationMs": 0.18999999999999573,
+            "LayoutDurationMs": 0.21000000000000185,
+            "RecalcStyleDurationMs": 0.061999999999999555
+          }
+        },
+        "first": {
+          "scenario": "many-questions",
+          "action": "first",
+          "target": 0,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 48.299999952316284,
+          "mountedQuestions": 150,
+          "questionElements": 4050,
+          "elapsedMs": 48.60000014305115,
+          "frames": {
+            "n": 2,
+            "median": 16.600000000000364,
+            "p95": 16.700000000000728,
+            "max": 16.700000000000728
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 7.978000000000041,
+            "ScriptDurationMs": 0.20500000000001073,
+            "LayoutDurationMs": 0.27599999999999847,
+            "RecalcStyleDurationMs": 0.06399999999999809
+          }
+        },
+        "sweep": {
+          "scenario": "many-questions",
+          "action": "sweep",
+          "target": 149,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 4081.300000190735,
+          "mountedQuestions": 150,
+          "questionElements": 4050,
+          "elapsedMs": 4081.5,
+          "frames": {
+            "n": 244,
+            "median": 16.69999999999891,
+            "p95": 17.69999999999891,
+            "max": 17.799999999999272
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 282.83899999999994,
+            "ScriptDurationMs": 7.866999999999999,
+            "LayoutDurationMs": 0.1820000000000016,
+            "RecalcStyleDurationMs": 0.07100000000000162
+          }
+        },
+        "read": {
+          "scenario": "many-questions",
+          "action": "read",
+          "target": null,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 4282.700000047684,
+          "mountedQuestions": 150,
+          "questionElements": 4050,
+          "elapsedMs": 4283,
+          "frames": {
+            "n": 256,
+            "median": 16.69999999999709,
+            "p95": 17.700000000000728,
+            "max": 17.799999999999272
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 134.66900000000004,
+            "ScriptDurationMs": 7.303999999999991,
+            "LayoutDurationMs": 0.37199999999999733,
+            "RecalcStyleDurationMs": 0.07300000000000015
+          }
+        }
+      },
+      "errors": []
+    },
+    {
+      "round": 2,
+      "url": "http://127.0.0.1:4211",
+      "revision": "base-866f9b5",
+      "chromium": "151.0.7922.34",
+      "scenario": "mixed-questions",
+      "coldOpen": {
+        "scenario": "mixed-questions",
+        "action": "open",
+        "target": 0,
+        "previewSteps": 0,
+        "readyAfterTwoFramesMs": 45.799999952316284,
+        "mountedQuestions": 150,
+        "questionElements": 2716,
+        "elapsedMs": 46,
+        "frames": {
+          "n": 2,
+          "median": 16.599999999998545,
+          "p95": 16.700000000000728,
+          "max": 16.700000000000728
+        },
+        "frameGapsOver34Ms": 0,
+        "longTasks": 0,
+        "longTaskMs": 0,
+        "longestTaskMs": 0,
+        "visibility": "visible"
+      },
+      "actions": {
+        "open": {
+          "scenario": "mixed-questions",
+          "action": "open",
+          "target": 0,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 48,
+          "mountedQuestions": 150,
+          "questionElements": 2716,
+          "elapsedMs": 48.200000047683716,
+          "frames": {
+            "n": 2,
+            "median": 16.69999999999709,
+            "p95": 16.700000000000728,
+            "max": 16.700000000000728
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 26.02300000000013,
+            "ScriptDurationMs": 6.473999999999994,
+            "LayoutDurationMs": 8.448999999999998,
+            "RecalcStyleDurationMs": 3.5260000000000016
+          }
+        },
+        "last": {
+          "scenario": "mixed-questions",
+          "action": "last",
+          "target": 149,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 48.09999990463257,
+          "mountedQuestions": 150,
+          "questionElements": 2716,
+          "elapsedMs": 48.299999952316284,
+          "frames": {
+            "n": 2,
+            "median": 16.599999999998545,
+            "p95": 16.799999999999272,
+            "max": 16.799999999999272
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 6.394000000000011,
+            "ScriptDurationMs": 0.2490000000000131,
+            "LayoutDurationMs": 0.26600000000000235,
+            "RecalcStyleDurationMs": 0.061999999999999555
+          }
+        },
+        "first": {
+          "scenario": "mixed-questions",
+          "action": "first",
+          "target": 0,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 47.299999952316284,
+          "mountedQuestions": 150,
+          "questionElements": 2716,
+          "elapsedMs": 47.5,
+          "frames": {
+            "n": 2,
+            "median": 16.5,
+            "p95": 16.700000000000728,
+            "max": 16.700000000000728
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 8.27100000000014,
+            "ScriptDurationMs": 0.3439999999999971,
+            "LayoutDurationMs": 0.32699999999999396,
+            "RecalcStyleDurationMs": 0.08199999999999874
+          }
+        },
+        "sweep": {
+          "scenario": "mixed-questions",
+          "action": "sweep",
+          "target": 149,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 4081,
+          "mountedQuestions": 150,
+          "questionElements": 2716,
+          "elapsedMs": 4081.9000000953674,
+          "frames": {
+            "n": 244,
+            "median": 16.700000000000728,
+            "p95": 17.700000000000728,
+            "max": 17.80000000000291
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 302.651,
+            "ScriptDurationMs": 8.017999999999997,
+            "LayoutDurationMs": 0.6290000000000046,
+            "RecalcStyleDurationMs": 0.11099999999999999
+          }
+        },
+        "read": {
+          "scenario": "mixed-questions",
+          "action": "read",
+          "target": null,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 4280.399999856949,
+          "mountedQuestions": 150,
+          "questionElements": 2716,
+          "elapsedMs": 4280.799999952316,
+          "frames": {
+            "n": 256,
+            "median": 16.700000000000728,
+            "p95": 17.700000000000728,
+            "max": 17.799999999999272
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 214.79400000000015,
+            "ScriptDurationMs": 8.900999999999993,
+            "LayoutDurationMs": 0.44900000000000495,
+            "RecalcStyleDurationMs": 0.11200000000000099
+          }
+        }
+      },
+      "errors": []
+    },
+    {
+      "round": 2,
+      "url": "http://127.0.0.1:4212",
+      "revision": "base-e5e8f11",
+      "chromium": "151.0.7922.34",
+      "scenario": "small",
+      "coldOpen": {
+        "scenario": "small",
+        "action": "open",
+        "target": 0,
+        "previewSteps": 0,
+        "readyAfterTwoFramesMs": 63.5,
+        "mountedQuestions": 1,
+        "questionElements": 27,
+        "elapsedMs": 63.59999990463257,
+        "frames": {
+          "n": 3,
+          "median": 16.700000000000045,
+          "p95": 16.700000000000045,
+          "max": 16.700000000000045
+        },
+        "frameGapsOver34Ms": 0,
+        "longTasks": 0,
+        "longTaskMs": 0,
+        "longestTaskMs": 0,
+        "visibility": "visible"
+      },
+      "actions": {
+        "open": {
+          "scenario": "small",
+          "action": "open",
+          "target": 0,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 48.59999990463257,
+          "mountedQuestions": 1,
+          "questionElements": 27,
+          "elapsedMs": 48.59999990463257,
+          "frames": {
+            "n": 2,
+            "median": 16.700000000000045,
+            "p95": 16.700000000000045,
+            "max": 16.700000000000045
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 6.268999999999997,
+            "ScriptDurationMs": 1.2660000000000031,
+            "LayoutDurationMs": 0.5839999999999977,
+            "RecalcStyleDurationMs": 0.2870000000000008
+          }
+        },
+        "last": {
+          "scenario": "small",
+          "action": "last",
+          "target": 0,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 47.700000047683716,
+          "mountedQuestions": 1,
+          "questionElements": 27,
+          "elapsedMs": 47.700000047683716,
+          "frames": {
+            "n": 2,
+            "median": 15.700000000000045,
+            "p95": 16.59999999999991,
+            "max": 16.59999999999991
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 4.660999999999999,
+            "ScriptDurationMs": 0.8869999999999989,
+            "LayoutDurationMs": 0.2940000000000026,
+            "RecalcStyleDurationMs": 0.057999999999999025
+          }
+        },
+        "first": {
+          "scenario": "small",
+          "action": "first",
+          "target": 0,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 48.39999985694885,
+          "mountedQuestions": 1,
+          "questionElements": 27,
+          "elapsedMs": 48.5,
+          "frames": {
+            "n": 2,
+            "median": 16.59999999999991,
+            "p95": 16.700000000000045,
+            "max": 16.700000000000045
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 5.343999999999988,
+            "ScriptDurationMs": 0.27900000000000147,
+            "LayoutDurationMs": 0.3839999999999989,
+            "RecalcStyleDurationMs": 0.08100000000000121
+          }
+        },
+        "sweep": {
+          "scenario": "small",
+          "action": "sweep",
+          "target": 0,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 4081,
+          "mountedQuestions": 1,
+          "questionElements": 27,
+          "elapsedMs": 4081.0999999046326,
+          "frames": {
+            "n": 244,
+            "median": 16.699999999999818,
+            "p95": 17.699999999999818,
+            "max": 17.799999999999727
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 114.28499999999997,
+            "ScriptDurationMs": 19.783,
+            "LayoutDurationMs": 0.5280000000000007,
+            "RecalcStyleDurationMs": 0.10599999999999846
+          }
+        },
+        "read": {
+          "scenario": "small",
+          "action": "read",
+          "target": null,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 4280.800000190735,
+          "mountedQuestions": 1,
+          "questionElements": 27,
+          "elapsedMs": 4280.800000190735,
+          "frames": {
+            "n": 256,
+            "median": 16.69999999999891,
+            "p95": 17.699999999999818,
+            "max": 17.799999999999272
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 71.75799999999998,
+            "ScriptDurationMs": 10.387999999999995,
+            "LayoutDurationMs": 0.2470000000000007,
+            "RecalcStyleDurationMs": 0.10700000000000119
+          }
+        }
+      },
+      "errors": []
+    },
+    {
+      "round": 2,
+      "url": "http://127.0.0.1:4212",
+      "revision": "base-e5e8f11",
+      "chromium": "151.0.7922.34",
+      "scenario": "many-questions",
+      "coldOpen": {
+        "scenario": "many-questions",
+        "action": "open",
+        "target": 0,
+        "previewSteps": 0,
+        "readyAfterTwoFramesMs": 45,
+        "mountedQuestions": 2,
+        "questionElements": 54,
+        "elapsedMs": 45.10000014305115,
+        "frames": {
+          "n": 2,
+          "median": 16.600000000000364,
+          "p95": 17.19999999999891,
+          "max": 17.19999999999891
+        },
+        "frameGapsOver34Ms": 0,
+        "longTasks": 0,
+        "longTaskMs": 0,
+        "longestTaskMs": 0,
+        "visibility": "visible"
+      },
+      "actions": {
+        "open": {
+          "scenario": "many-questions",
+          "action": "open",
+          "target": 0,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 48,
+          "mountedQuestions": 2,
+          "questionElements": 54,
+          "elapsedMs": 48.10000014305115,
+          "frames": {
+            "n": 2,
+            "median": 16.600000000000364,
+            "p95": 16.69999999999891,
+            "max": 16.69999999999891
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 10.922000000000043,
+            "ScriptDurationMs": 3.9990000000000023,
+            "LayoutDurationMs": 0.8890000000000009,
+            "RecalcStyleDurationMs": 0.9900000000000013
+          }
+        },
+        "last": {
+          "scenario": "many-questions",
+          "action": "last",
+          "target": 149,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 65.09999990463257,
+          "mountedQuestions": 2,
+          "questionElements": 54,
+          "elapsedMs": 65.09999990463257,
+          "frames": {
+            "n": 3,
+            "median": 16.700000000000728,
+            "p95": 16.80000000000109,
+            "max": 16.80000000000109
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 7.80599999999998,
+            "ScriptDurationMs": 1.3960000000000083,
+            "LayoutDurationMs": 0.9119999999999961,
+            "RecalcStyleDurationMs": 0.3300000000000004
+          }
+        },
+        "first": {
+          "scenario": "many-questions",
+          "action": "first",
+          "target": 0,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 48.299999952316284,
+          "mountedQuestions": 2,
+          "questionElements": 54,
+          "elapsedMs": 48.299999952316284,
+          "frames": {
+            "n": 2,
+            "median": 16.599999999998545,
+            "p95": 16.600000000000364,
+            "max": 16.600000000000364
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 8.27700000000009,
+            "ScriptDurationMs": 1.1879999999999946,
+            "LayoutDurationMs": 0.9360000000000063,
+            "RecalcStyleDurationMs": 0.3339999999999975
+          }
+        },
+        "sweep": {
+          "scenario": "many-questions",
+          "action": "sweep",
+          "target": 149,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 4081.2000000476837,
+          "mountedQuestions": 2,
+          "questionElements": 54,
+          "elapsedMs": 4081.2000000476837,
+          "frames": {
+            "n": 244,
+            "median": 16.69999999999891,
+            "p95": 17.600000000000364,
+            "max": 17.700000000000728
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 502.246,
+            "ScriptDurationMs": 140.46599999999998,
+            "LayoutDurationMs": 81.91999999999999,
+            "RecalcStyleDurationMs": 37.227
+          }
+        },
+        "read": {
+          "scenario": "many-questions",
+          "action": "read",
+          "target": null,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 4281.200000047684,
+          "mountedQuestions": 3,
+          "questionElements": 81,
+          "elapsedMs": 4281.300000190735,
+          "frames": {
+            "n": 256,
+            "median": 16.69999999999709,
+            "p95": 17.700000000000728,
+            "max": 17.80000000000109
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 168.50699999999995,
+            "ScriptDurationMs": 34.382999999999996,
+            "LayoutDurationMs": 9.710999999999997,
+            "RecalcStyleDurationMs": 3.8060000000000036
+          }
+        }
+      },
+      "errors": []
+    },
+    {
+      "round": 2,
+      "url": "http://127.0.0.1:4212",
+      "revision": "base-e5e8f11",
+      "chromium": "151.0.7922.34",
+      "scenario": "mixed-questions",
+      "coldOpen": {
+        "scenario": "mixed-questions",
+        "action": "open",
+        "target": 0,
+        "previewSteps": 0,
+        "readyAfterTwoFramesMs": 46.200000047683716,
+        "mountedQuestions": 2,
+        "questionElements": 52,
+        "elapsedMs": 46.30000019073486,
+        "frames": {
+          "n": 2,
+          "median": 16.600000000002183,
+          "p95": 16.69999999999709,
+          "max": 16.69999999999709
+        },
+        "frameGapsOver34Ms": 0,
+        "longTasks": 0,
+        "longTaskMs": 0,
+        "longestTaskMs": 0,
+        "visibility": "visible"
+      },
+      "actions": {
+        "open": {
+          "scenario": "mixed-questions",
+          "action": "open",
+          "target": 0,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 48.09999990463257,
+          "mountedQuestions": 2,
+          "questionElements": 52,
+          "elapsedMs": 48.200000047683716,
+          "frames": {
+            "n": 2,
+            "median": 16.599999999998545,
+            "p95": 16.700000000000728,
+            "max": 16.700000000000728
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 10.341000000000156,
+            "ScriptDurationMs": 3.1769999999999854,
+            "LayoutDurationMs": 0.8510000000000184,
+            "RecalcStyleDurationMs": 1.0990000000000029
+          }
+        },
+        "last": {
+          "scenario": "mixed-questions",
+          "action": "last",
+          "target": 149,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 64.90000009536743,
+          "mountedQuestions": 2,
+          "questionElements": 52,
+          "elapsedMs": 65,
+          "frames": {
+            "n": 3,
+            "median": 16.700000000000728,
+            "p95": 16.700000000000728,
+            "max": 16.700000000000728
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 8.655999999999997,
+            "ScriptDurationMs": 1.226999999999978,
+            "LayoutDurationMs": 1.0229999999999961,
+            "RecalcStyleDurationMs": 0.5360000000000087
+          }
+        },
+        "first": {
+          "scenario": "mixed-questions",
+          "action": "first",
+          "target": 0,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 47.40000009536743,
+          "mountedQuestions": 2,
+          "questionElements": 52,
+          "elapsedMs": 47.5,
+          "frames": {
+            "n": 2,
+            "median": 16.599999999998545,
+            "p95": 16.700000000000728,
+            "max": 16.700000000000728
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 9.23099999999999,
+            "ScriptDurationMs": 1.2240000000000029,
+            "LayoutDurationMs": 1.0239999999999971,
+            "RecalcStyleDurationMs": 0.6039999999999934
+          }
+        },
+        "sweep": {
+          "scenario": "mixed-questions",
+          "action": "sweep",
+          "target": 149,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 4081.2999999523163,
+          "mountedQuestions": 2,
+          "questionElements": 52,
+          "elapsedMs": 4081.399999856949,
+          "frames": {
+            "n": 244,
+            "median": 16.700000000000728,
+            "p95": 17.600000000002183,
+            "max": 17.80000000000291
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 496.9540000000001,
+            "ScriptDurationMs": 146.079,
+            "LayoutDurationMs": 74.622,
+            "RecalcStyleDurationMs": 44.421
+          }
+        },
+        "read": {
+          "scenario": "mixed-questions",
+          "action": "read",
+          "target": null,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 4280.200000047684,
+          "mountedQuestions": 3,
+          "questionElements": 47,
+          "elapsedMs": 4280.200000047684,
+          "frames": {
+            "n": 256,
+            "median": 16.69999999999709,
+            "p95": 17.600000000002183,
+            "max": 17.80000000000291
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 148.43200000000013,
+            "ScriptDurationMs": 31.590000000000007,
+            "LayoutDurationMs": 8.268999999999998,
+            "RecalcStyleDurationMs": 4.141999999999993
+          }
+        }
+      },
+      "errors": []
+    },
+    {
+      "round": 2,
+      "url": "http://127.0.0.1:4213",
+      "revision": "head-b044617",
+      "chromium": "151.0.7922.34",
+      "scenario": "small",
+      "coldOpen": {
+        "scenario": "small",
+        "action": "open",
+        "target": 0,
+        "previewSteps": 0,
+        "readyAfterTwoFramesMs": 64.5,
+        "mountedQuestions": 1,
+        "questionElements": 27,
+        "elapsedMs": 64.5,
+        "frames": {
+          "n": 3,
+          "median": 16.700000000000045,
+          "p95": 16.799999999999955,
+          "max": 16.799999999999955
+        },
+        "frameGapsOver34Ms": 0,
+        "longTasks": 0,
+        "longTaskMs": 0,
+        "longestTaskMs": 0,
+        "visibility": "visible"
+      },
+      "actions": {
+        "open": {
+          "scenario": "small",
+          "action": "open",
+          "target": 0,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 47.799999952316284,
+          "mountedQuestions": 1,
+          "questionElements": 27,
+          "elapsedMs": 47.799999952316284,
+          "frames": {
+            "n": 2,
+            "median": 16.59999999999991,
+            "p95": 16.700000000000045,
+            "max": 16.700000000000045
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 7.890000000000008,
+            "ScriptDurationMs": 1.7380000000000035,
+            "LayoutDurationMs": 0.732,
+            "RecalcStyleDurationMs": 0.3789999999999991
+          }
+        },
+        "last": {
+          "scenario": "small",
+          "action": "last",
+          "target": 0,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 48.09999990463257,
+          "mountedQuestions": 1,
+          "questionElements": 27,
+          "elapsedMs": 48.200000047683716,
+          "frames": {
+            "n": 2,
+            "median": 16.59999999999991,
+            "p95": 16.700000000000045,
+            "max": 16.700000000000045
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 5.28099999999998,
+            "ScriptDurationMs": 1.0910000000000017,
+            "LayoutDurationMs": 0.2550000000000018,
+            "RecalcStyleDurationMs": 0.07000000000000062
+          }
+        },
+        "first": {
+          "scenario": "small",
+          "action": "first",
+          "target": 0,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 48.200000047683716,
+          "mountedQuestions": 1,
+          "questionElements": 27,
+          "elapsedMs": 48.200000047683716,
+          "frames": {
+            "n": 2,
+            "median": 16.600000000000136,
+            "p95": 16.700000000000045,
+            "max": 16.700000000000045
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 5.195999999999978,
+            "ScriptDurationMs": 0.4109999999999947,
+            "LayoutDurationMs": 0.38699999999999846,
+            "RecalcStyleDurationMs": 0.07799999999999994
+          }
+        },
+        "sweep": {
+          "scenario": "small",
+          "action": "sweep",
+          "target": 0,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 4081.2000000476837,
+          "mountedQuestions": 1,
+          "questionElements": 27,
+          "elapsedMs": 4081.2000000476837,
+          "frames": {
+            "n": 244,
+            "median": 16.699999999999818,
+            "p95": 17.600000000000364,
+            "max": 17.800000000000182
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 109.39599999999999,
+            "ScriptDurationMs": 24.281999999999996,
+            "LayoutDurationMs": 0.41600000000000315,
+            "RecalcStyleDurationMs": 0.09699999999999986
+          }
+        },
+        "read": {
+          "scenario": "small",
+          "action": "read",
+          "target": null,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 4280.700000047684,
+          "mountedQuestions": 1,
+          "questionElements": 27,
+          "elapsedMs": 4280.700000047684,
+          "frames": {
+            "n": 256,
+            "median": 16.699999999999818,
+            "p95": 17.699999999999818,
+            "max": 17.800000000000182
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 62.215999999999994,
+            "ScriptDurationMs": 8.386000000000005,
+            "LayoutDurationMs": 0.4019999999999996,
+            "RecalcStyleDurationMs": 0.11399999999999952
+          }
+        }
+      },
+      "errors": []
+    },
+    {
+      "round": 2,
+      "url": "http://127.0.0.1:4213",
+      "revision": "head-b044617",
+      "chromium": "151.0.7922.34",
+      "scenario": "many-questions",
+      "coldOpen": {
+        "scenario": "many-questions",
+        "action": "open",
+        "target": 0,
+        "previewSteps": 0,
+        "readyAfterTwoFramesMs": 48,
+        "mountedQuestions": 2,
+        "questionElements": 54,
+        "elapsedMs": 48.10000014305115,
+        "frames": {
+          "n": 2,
+          "median": 16.69999999999891,
+          "p95": 16.700000000000728,
+          "max": 16.700000000000728
+        },
+        "frameGapsOver34Ms": 0,
+        "longTasks": 0,
+        "longTaskMs": 0,
+        "longestTaskMs": 0,
+        "visibility": "visible"
+      },
+      "actions": {
+        "open": {
+          "scenario": "many-questions",
+          "action": "open",
+          "target": 0,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 48.799999952316284,
+          "mountedQuestions": 2,
+          "questionElements": 54,
+          "elapsedMs": 48.799999952316284,
+          "frames": {
+            "n": 2,
+            "median": 16.600000000000364,
+            "p95": 16.69999999999891,
+            "max": 16.69999999999891
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 7.918999999999954,
+            "ScriptDurationMs": 2.933999999999992,
+            "LayoutDurationMs": 0.6490000000000038,
+            "RecalcStyleDurationMs": 0.7030000000000023
+          }
+        },
+        "last": {
+          "scenario": "many-questions",
+          "action": "last",
+          "target": 149,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 65.40000009536743,
+          "mountedQuestions": 2,
+          "questionElements": 54,
+          "elapsedMs": 65.40000009536743,
+          "frames": {
+            "n": 3,
+            "median": 16.69999999999891,
+            "p95": 16.700000000000728,
+            "max": 16.700000000000728
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 5.813999999999986,
+            "ScriptDurationMs": 0.9480000000000044,
+            "LayoutDurationMs": 0.6219999999999976,
+            "RecalcStyleDurationMs": 0.22099999999999898
+          }
+        },
+        "first": {
+          "scenario": "many-questions",
+          "action": "first",
+          "target": 0,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 48.40000009536743,
+          "mountedQuestions": 2,
+          "questionElements": 54,
+          "elapsedMs": 48.40000009536743,
+          "frames": {
+            "n": 2,
+            "median": 16.600000000000364,
+            "p95": 16.700000000000728,
+            "max": 16.700000000000728
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 5.720999999999976,
+            "ScriptDurationMs": 0.8009999999999962,
+            "LayoutDurationMs": 0.5500000000000018,
+            "RecalcStyleDurationMs": 0.2160000000000009
+          }
+        },
+        "sweep": {
+          "scenario": "many-questions",
+          "action": "sweep",
+          "target": 149,
+          "previewSteps": 119,
+          "readyAfterTwoFramesMs": 4180.799999952316,
+          "mountedQuestions": 2,
+          "questionElements": 54,
+          "elapsedMs": 4180.799999952316,
+          "frames": {
+            "n": 250,
+            "median": 16.69999999999891,
+            "p95": 17.69999999999891,
+            "max": 17.799999999999272
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 365.557,
+            "ScriptDurationMs": 106.83800000000002,
+            "LayoutDurationMs": 40.47899999999999,
+            "RecalcStyleDurationMs": 18.912
+          }
+        },
+        "read": {
+          "scenario": "many-questions",
+          "action": "read",
+          "target": null,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 4279.100000143051,
+          "mountedQuestions": 3,
+          "questionElements": 81,
+          "elapsedMs": 4279.100000143051,
+          "frames": {
+            "n": 256,
+            "median": 16.700000000000728,
+            "p95": 17.700000000000728,
+            "max": 17.700000000000728
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 187.69500000000005,
+            "ScriptDurationMs": 43.288,
+            "LayoutDurationMs": 12.281,
+            "RecalcStyleDurationMs": 4.625999999999999
+          }
+        }
+      },
+      "errors": []
+    },
+    {
+      "round": 2,
+      "url": "http://127.0.0.1:4213",
+      "revision": "head-b044617",
+      "chromium": "151.0.7922.34",
+      "scenario": "mixed-questions",
+      "coldOpen": {
+        "scenario": "mixed-questions",
+        "action": "open",
+        "target": 0,
+        "previewSteps": 0,
+        "readyAfterTwoFramesMs": 47.299999952316284,
+        "mountedQuestions": 2,
+        "questionElements": 52,
+        "elapsedMs": 47.299999952316284,
+        "frames": {
+          "n": 2,
+          "median": 16.599999999998545,
+          "p95": 16.600000000002183,
+          "max": 16.600000000002183
+        },
+        "frameGapsOver34Ms": 0,
+        "longTasks": 0,
+        "longTaskMs": 0,
+        "longestTaskMs": 0,
+        "visibility": "visible"
+      },
+      "actions": {
+        "open": {
+          "scenario": "mixed-questions",
+          "action": "open",
+          "target": 0,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 47.90000009536743,
+          "mountedQuestions": 2,
+          "questionElements": 52,
+          "elapsedMs": 48,
+          "frames": {
+            "n": 2,
+            "median": 16.69999999999709,
+            "p95": 16.700000000000728,
+            "max": 16.700000000000728
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 10.658000000000056,
+            "ScriptDurationMs": 3.1100000000000017,
+            "LayoutDurationMs": 0.898999999999997,
+            "RecalcStyleDurationMs": 1.2009999999999939
+          }
+        },
+        "last": {
+          "scenario": "mixed-questions",
+          "action": "last",
+          "target": 149,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 64.70000004768372,
+          "mountedQuestions": 2,
+          "questionElements": 52,
+          "elapsedMs": 64.70000004768372,
+          "frames": {
+            "n": 3,
+            "median": 16.600000000002183,
+            "p95": 16.69999999999709,
+            "max": 16.69999999999709
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 7.840999999999987,
+            "ScriptDurationMs": 1.2800000000000034,
+            "LayoutDurationMs": 0.8500000000000035,
+            "RecalcStyleDurationMs": 0.5100000000000036
+          }
+        },
+        "first": {
+          "scenario": "mixed-questions",
+          "action": "first",
+          "target": 0,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 48.10000014305115,
+          "mountedQuestions": 2,
+          "questionElements": 52,
+          "elapsedMs": 48.200000047683716,
+          "frames": {
+            "n": 2,
+            "median": 16.69999999999709,
+            "p95": 16.700000000000728,
+            "max": 16.700000000000728
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 7.895999999999903,
+            "ScriptDurationMs": 1.0950000000000126,
+            "LayoutDurationMs": 0.7609999999999978,
+            "RecalcStyleDurationMs": 0.44399999999999995
+          }
+        },
+        "sweep": {
+          "scenario": "mixed-questions",
+          "action": "sweep",
+          "target": 149,
+          "previewSteps": 119,
+          "readyAfterTwoFramesMs": 4181.900000095367,
+          "mountedQuestions": 2,
+          "questionElements": 52,
+          "elapsedMs": 4181.900000095367,
+          "frames": {
+            "n": 250,
+            "median": 16.69999999999709,
+            "p95": 17.700000000000728,
+            "max": 17.799999999999272
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 412.755,
+            "ScriptDurationMs": 117.68299999999998,
+            "LayoutDurationMs": 43.23600000000001,
+            "RecalcStyleDurationMs": 21.983999999999998
+          }
+        },
+        "read": {
+          "scenario": "mixed-questions",
+          "action": "read",
+          "target": null,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 4279.099999904633,
+          "mountedQuestions": 3,
+          "questionElements": 47,
+          "elapsedMs": 4279.099999904633,
+          "frames": {
+            "n": 256,
+            "median": 16.69999999999709,
+            "p95": 17.700000000000728,
+            "max": 17.799999999999272
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 192.65599999999995,
+            "ScriptDurationMs": 47.36900000000005,
+            "LayoutDurationMs": 11.653999999999998,
+            "RecalcStyleDurationMs": 5.44900000000001
+          }
+        }
+      },
+      "errors": []
+    },
+    {
+      "round": 3,
+      "url": "http://127.0.0.1:4213",
+      "revision": "head-b044617",
+      "chromium": "151.0.7922.34",
+      "scenario": "small",
+      "coldOpen": {
+        "scenario": "small",
+        "action": "open",
+        "target": 0,
+        "previewSteps": 0,
+        "readyAfterTwoFramesMs": 63.89999985694885,
+        "mountedQuestions": 1,
+        "questionElements": 27,
+        "elapsedMs": 63.89999985694885,
+        "frames": {
+          "n": 3,
+          "median": 16.700000000000045,
+          "p95": 16.700000000000045,
+          "max": 16.700000000000045
+        },
+        "frameGapsOver34Ms": 0,
+        "longTasks": 0,
+        "longTaskMs": 0,
+        "longestTaskMs": 0,
+        "visibility": "visible"
+      },
+      "actions": {
+        "open": {
+          "scenario": "small",
+          "action": "open",
+          "target": 0,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 48.90000009536743,
+          "mountedQuestions": 1,
+          "questionElements": 27,
+          "elapsedMs": 49,
+          "frames": {
+            "n": 2,
+            "median": 15.700000000000045,
+            "p95": 17.59999999999991,
+            "max": 17.59999999999991
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 8.458999999999994,
+            "ScriptDurationMs": 2.0199999999999942,
+            "LayoutDurationMs": 0.8640000000000002,
+            "RecalcStyleDurationMs": 0.4159999999999997
+          }
+        },
+        "last": {
+          "scenario": "small",
+          "action": "last",
+          "target": 0,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 49.200000047683716,
+          "mountedQuestions": 1,
+          "questionElements": 27,
+          "elapsedMs": 49.200000047683716,
+          "frames": {
+            "n": 2,
+            "median": 16.799999999999955,
+            "p95": 17.600000000000136,
+            "max": 17.600000000000136
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 7.447000000000009,
+            "ScriptDurationMs": 1.4200000000000046,
+            "LayoutDurationMs": 0.4529999999999985,
+            "RecalcStyleDurationMs": 0.0960000000000006
+          }
+        },
+        "first": {
+          "scenario": "small",
+          "action": "first",
+          "target": 0,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 48.09999990463257,
+          "mountedQuestions": 1,
+          "questionElements": 27,
+          "elapsedMs": 48.09999990463257,
+          "frames": {
+            "n": 2,
+            "median": 16.700000000000045,
+            "p95": 16.700000000000045,
+            "max": 16.700000000000045
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 6.555000000000005,
+            "ScriptDurationMs": 0.5519999999999969,
+            "LayoutDurationMs": 0.48300000000000076,
+            "RecalcStyleDurationMs": 0.09699999999999986
+          }
+        },
+        "sweep": {
+          "scenario": "small",
+          "action": "sweep",
+          "target": 0,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 4081.100000143051,
+          "mountedQuestions": 1,
+          "questionElements": 27,
+          "elapsedMs": 4081.2000000476837,
+          "frames": {
+            "n": 244,
+            "median": 16.699999999999818,
+            "p95": 17.699999999999818,
+            "max": 17.800000000000182
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 121.387,
+            "ScriptDurationMs": 26.673000000000002,
+            "LayoutDurationMs": 0.8279999999999988,
+            "RecalcStyleDurationMs": 0.1389999999999985
+          }
+        },
+        "read": {
+          "scenario": "small",
+          "action": "read",
+          "target": null,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 4280.299999952316,
+          "mountedQuestions": 1,
+          "questionElements": 27,
+          "elapsedMs": 4280.400000095367,
+          "frames": {
+            "n": 256,
+            "median": 16.69999999999891,
+            "p95": 17.699999999999818,
+            "max": 17.80000000000109
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 75.36100000000002,
+            "ScriptDurationMs": 9.943999999999994,
+            "LayoutDurationMs": 0.7090000000000013,
+            "RecalcStyleDurationMs": 0.14200000000000151
+          }
+        }
+      },
+      "errors": []
+    },
+    {
+      "round": 3,
+      "url": "http://127.0.0.1:4213",
+      "revision": "head-b044617",
+      "chromium": "151.0.7922.34",
+      "scenario": "many-questions",
+      "coldOpen": {
+        "scenario": "many-questions",
+        "action": "open",
+        "target": 0,
+        "previewSteps": 0,
+        "readyAfterTwoFramesMs": 46.299999952316284,
+        "mountedQuestions": 2,
+        "questionElements": 54,
+        "elapsedMs": 46.299999952316284,
+        "frames": {
+          "n": 2,
+          "median": 16.599999999998545,
+          "p95": 16.700000000000728,
+          "max": 16.700000000000728
+        },
+        "frameGapsOver34Ms": 0,
+        "longTasks": 0,
+        "longTaskMs": 0,
+        "longestTaskMs": 0,
+        "visibility": "visible"
+      },
+      "actions": {
+        "open": {
+          "scenario": "many-questions",
+          "action": "open",
+          "target": 0,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 48.19999980926514,
+          "mountedQuestions": 2,
+          "questionElements": 54,
+          "elapsedMs": 48.19999980926514,
+          "frames": {
+            "n": 2,
+            "median": 16.69999999999891,
+            "p95": 16.80000000000109,
+            "max": 16.80000000000109
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 11.189000000000004,
+            "ScriptDurationMs": 4.027000000000003,
+            "LayoutDurationMs": 0.8869999999999989,
+            "RecalcStyleDurationMs": 0.9919999999999998
+          }
+        },
+        "last": {
+          "scenario": "many-questions",
+          "action": "last",
+          "target": 149,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 64.70000004768372,
+          "mountedQuestions": 2,
+          "questionElements": 54,
+          "elapsedMs": 64.79999995231628,
+          "frames": {
+            "n": 3,
+            "median": 16.700000000000728,
+            "p95": 16.700000000000728,
+            "max": 16.700000000000728
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 8.281000000000038,
+            "ScriptDurationMs": 1.468999999999998,
+            "LayoutDurationMs": 0.9390000000000023,
+            "RecalcStyleDurationMs": 0.3709999999999998
+          }
+        },
+        "first": {
+          "scenario": "many-questions",
+          "action": "first",
+          "target": 0,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 47.60000014305115,
+          "mountedQuestions": 2,
+          "questionElements": 54,
+          "elapsedMs": 47.60000014305115,
+          "frames": {
+            "n": 2,
+            "median": 16.700000000000728,
+            "p95": 16.700000000000728,
+            "max": 16.700000000000728
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 8.250000000000036,
+            "ScriptDurationMs": 1.1959999999999886,
+            "LayoutDurationMs": 0.8360000000000034,
+            "RecalcStyleDurationMs": 0.35699999999999965
+          }
+        },
+        "sweep": {
+          "scenario": "many-questions",
+          "action": "sweep",
+          "target": 149,
+          "previewSteps": 119,
+          "readyAfterTwoFramesMs": 4181.200000047684,
+          "mountedQuestions": 2,
+          "questionElements": 54,
+          "elapsedMs": 4181.200000047684,
+          "frames": {
+            "n": 250,
+            "median": 16.69999999999891,
+            "p95": 17.69999999999891,
+            "max": 17.80000000000109
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 438.192,
+            "ScriptDurationMs": 127.635,
+            "LayoutDurationMs": 47.495999999999995,
+            "RecalcStyleDurationMs": 22.534
+          }
+        },
+        "read": {
+          "scenario": "many-questions",
+          "action": "read",
+          "target": null,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 4278.599999904633,
+          "mountedQuestions": 3,
+          "questionElements": 81,
+          "elapsedMs": 4278.699999809265,
+          "frames": {
+            "n": 256,
+            "median": 16.69999999999709,
+            "p95": 17.69999999999709,
+            "max": 17.799999999999272
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 187.497,
+            "ScriptDurationMs": 43.96099999999997,
+            "LayoutDurationMs": 11.205999999999994,
+            "RecalcStyleDurationMs": 4.465000000000003
+          }
+        }
+      },
+      "errors": []
+    },
+    {
+      "round": 3,
+      "url": "http://127.0.0.1:4213",
+      "revision": "head-b044617",
+      "chromium": "151.0.7922.34",
+      "scenario": "mixed-questions",
+      "coldOpen": {
+        "scenario": "mixed-questions",
+        "action": "open",
+        "target": 0,
+        "previewSteps": 0,
+        "readyAfterTwoFramesMs": 47.799999952316284,
+        "mountedQuestions": 2,
+        "questionElements": 52,
+        "elapsedMs": 47.799999952316284,
+        "frames": {
+          "n": 2,
+          "median": 16.700000000000728,
+          "p95": 16.700000000000728,
+          "max": 16.700000000000728
+        },
+        "frameGapsOver34Ms": 0,
+        "longTasks": 0,
+        "longTaskMs": 0,
+        "longestTaskMs": 0,
+        "visibility": "visible"
+      },
+      "actions": {
+        "open": {
+          "scenario": "mixed-questions",
+          "action": "open",
+          "target": 0,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 47.700000047683716,
+          "mountedQuestions": 2,
+          "questionElements": 52,
+          "elapsedMs": 47.700000047683716,
+          "frames": {
+            "n": 2,
+            "median": 16.599999999998545,
+            "p95": 16.700000000000728,
+            "max": 16.700000000000728
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 9.811999999999932,
+            "ScriptDurationMs": 2.7020000000000377,
+            "LayoutDurationMs": 0.8120000000000072,
+            "RecalcStyleDurationMs": 0.9870000000000018
+          }
+        },
+        "last": {
+          "scenario": "mixed-questions",
+          "action": "last",
+          "target": 149,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 65,
+          "mountedQuestions": 2,
+          "questionElements": 52,
+          "elapsedMs": 65,
+          "frames": {
+            "n": 3,
+            "median": 16.700000000000728,
+            "p95": 16.700000000000728,
+            "max": 16.700000000000728
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 7.872999999999797,
+            "ScriptDurationMs": 1.2769999999999726,
+            "LayoutDurationMs": 0.892999999999991,
+            "RecalcStyleDurationMs": 0.4760000000000042
+          }
+        },
+        "first": {
+          "scenario": "mixed-questions",
+          "action": "first",
+          "target": 0,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 47.299999952316284,
+          "mountedQuestions": 2,
+          "questionElements": 52,
+          "elapsedMs": 47.299999952316284,
+          "frames": {
+            "n": 2,
+            "median": 16.599999999998545,
+            "p95": 17.299999999999272,
+            "max": 17.299999999999272
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 8.896000000000015,
+            "ScriptDurationMs": 1.1260000000000159,
+            "LayoutDurationMs": 0.907000000000005,
+            "RecalcStyleDurationMs": 0.5809999999999982
+          }
+        },
+        "sweep": {
+          "scenario": "mixed-questions",
+          "action": "sweep",
+          "target": 149,
+          "previewSteps": 119,
+          "readyAfterTwoFramesMs": 4181.100000143051,
+          "mountedQuestions": 2,
+          "questionElements": 52,
+          "elapsedMs": 4181.100000143051,
+          "frames": {
+            "n": 250,
+            "median": 16.700000000000728,
+            "p95": 17.700000000000728,
+            "max": 17.700000000000728
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 398.6130000000001,
+            "ScriptDurationMs": 115.78699999999998,
+            "LayoutDurationMs": 41.49699999999999,
+            "RecalcStyleDurationMs": 20.509
+          }
+        },
+        "read": {
+          "scenario": "mixed-questions",
+          "action": "read",
+          "target": null,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 4281.200000047684,
+          "mountedQuestions": 3,
+          "questionElements": 47,
+          "elapsedMs": 4281.200000047684,
+          "frames": {
+            "n": 256,
+            "median": 16.69999999999709,
+            "p95": 17.69999999999709,
+            "max": 17.799999999999272
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 116.30700000000016,
+            "ScriptDurationMs": 29.201000000000032,
+            "LayoutDurationMs": 7.220000000000004,
+            "RecalcStyleDurationMs": 3.9560000000000013
+          }
+        }
+      },
+      "errors": []
+    },
+    {
+      "round": 3,
+      "url": "http://127.0.0.1:4212",
+      "revision": "base-e5e8f11",
+      "chromium": "151.0.7922.34",
+      "scenario": "small",
+      "coldOpen": {
+        "scenario": "small",
+        "action": "open",
+        "target": 0,
+        "previewSteps": 0,
+        "readyAfterTwoFramesMs": 64.90000009536743,
+        "mountedQuestions": 1,
+        "questionElements": 27,
+        "elapsedMs": 65,
+        "frames": {
+          "n": 3,
+          "median": 16.699999999999818,
+          "p95": 16.700000000000045,
+          "max": 16.700000000000045
+        },
+        "frameGapsOver34Ms": 0,
+        "longTasks": 0,
+        "longTaskMs": 0,
+        "longestTaskMs": 0,
+        "visibility": "visible"
+      },
+      "actions": {
+        "open": {
+          "scenario": "small",
+          "action": "open",
+          "target": 0,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 48.40000009536743,
+          "mountedQuestions": 1,
+          "questionElements": 27,
+          "elapsedMs": 48.40000009536743,
+          "frames": {
+            "n": 2,
+            "median": 16.59999999999991,
+            "p95": 16.700000000000045,
+            "max": 16.700000000000045
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 7.145999999999986,
+            "ScriptDurationMs": 1.6249999999999944,
+            "LayoutDurationMs": 0.7139999999999993,
+            "RecalcStyleDurationMs": 0.37500000000000033
+          }
+        },
+        "last": {
+          "scenario": "small",
+          "action": "last",
+          "target": 0,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 48,
+          "mountedQuestions": 1,
+          "questionElements": 27,
+          "elapsedMs": 48,
+          "frames": {
+            "n": 2,
+            "median": 16.59999999999991,
+            "p95": 16.700000000000045,
+            "max": 16.700000000000045
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 6.087000000000009,
+            "ScriptDurationMs": 1.1420000000000041,
+            "LayoutDurationMs": 0.35800000000000065,
+            "RecalcStyleDurationMs": 0.08099999999999948
+          }
+        },
+        "first": {
+          "scenario": "small",
+          "action": "first",
+          "target": 0,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 47.59999990463257,
+          "mountedQuestions": 1,
+          "questionElements": 27,
+          "elapsedMs": 47.59999990463257,
+          "frames": {
+            "n": 2,
+            "median": 16.700000000000045,
+            "p95": 16.700000000000045,
+            "max": 16.700000000000045
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 6.413000000000002,
+            "ScriptDurationMs": 0.336999999999997,
+            "LayoutDurationMs": 0.5339999999999998,
+            "RecalcStyleDurationMs": 0.10600000000000019
+          }
+        },
+        "sweep": {
+          "scenario": "small",
+          "action": "sweep",
+          "target": 0,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 4081.4000000953674,
+          "mountedQuestions": 1,
+          "questionElements": 27,
+          "elapsedMs": 4081.5,
+          "frames": {
+            "n": 244,
+            "median": 16.699999999999818,
+            "p95": 17.699999999999818,
+            "max": 17.700000000000728
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 115.48799999999999,
+            "ScriptDurationMs": 20.487,
+            "LayoutDurationMs": 0.8170000000000017,
+            "RecalcStyleDurationMs": 0.11699999999999905
+          }
+        },
+        "read": {
+          "scenario": "small",
+          "action": "read",
+          "target": null,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 4277.799999952316,
+          "mountedQuestions": 1,
+          "questionElements": 27,
+          "elapsedMs": 4277.799999952316,
+          "frames": {
+            "n": 256,
+            "median": 16.69999999999891,
+            "p95": 18.600000000000364,
+            "max": 18.700000000000728
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 68.92999999999999,
+            "ScriptDurationMs": 8.659,
+            "LayoutDurationMs": 0.4709999999999992,
+            "RecalcStyleDurationMs": 0.21100000000000113
+          }
+        }
+      },
+      "errors": []
+    },
+    {
+      "round": 3,
+      "url": "http://127.0.0.1:4212",
+      "revision": "base-e5e8f11",
+      "chromium": "151.0.7922.34",
+      "scenario": "many-questions",
+      "coldOpen": {
+        "scenario": "many-questions",
+        "action": "open",
+        "target": 0,
+        "previewSteps": 0,
+        "readyAfterTwoFramesMs": 48.10000014305115,
+        "mountedQuestions": 2,
+        "questionElements": 54,
+        "elapsedMs": 48.10000014305115,
+        "frames": {
+          "n": 2,
+          "median": 16.599999999998545,
+          "p95": 16.700000000000728,
+          "max": 16.700000000000728
+        },
+        "frameGapsOver34Ms": 0,
+        "longTasks": 0,
+        "longTaskMs": 0,
+        "longestTaskMs": 0,
+        "visibility": "visible"
+      },
+      "actions": {
+        "open": {
+          "scenario": "many-questions",
+          "action": "open",
+          "target": 0,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 47.90000009536743,
+          "mountedQuestions": 2,
+          "questionElements": 54,
+          "elapsedMs": 47.90000009536743,
+          "frames": {
+            "n": 2,
+            "median": 16.599999999998545,
+            "p95": 16.700000000000728,
+            "max": 16.700000000000728
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 11.403000000000052,
+            "ScriptDurationMs": 4.145999999999997,
+            "LayoutDurationMs": 0.8799999999999988,
+            "RecalcStyleDurationMs": 1.004999999999999
+          }
+        },
+        "last": {
+          "scenario": "many-questions",
+          "action": "last",
+          "target": 149,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 64.5,
+          "mountedQuestions": 2,
+          "questionElements": 54,
+          "elapsedMs": 64.5,
+          "frames": {
+            "n": 3,
+            "median": 16.600000000000364,
+            "p95": 16.69999999999891,
+            "max": 16.69999999999891
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 7.942999999999978,
+            "ScriptDurationMs": 1.4100000000000086,
+            "LayoutDurationMs": 0.893999999999999,
+            "RecalcStyleDurationMs": 0.3310000000000014
+          }
+        },
+        "first": {
+          "scenario": "many-questions",
+          "action": "first",
+          "target": 0,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 48.10000014305115,
+          "mountedQuestions": 2,
+          "questionElements": 54,
+          "elapsedMs": 48.200000047683716,
+          "frames": {
+            "n": 2,
+            "median": 16.69999999999891,
+            "p95": 16.700000000000728,
+            "max": 16.700000000000728
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 7.865000000000011,
+            "ScriptDurationMs": 1.1459999999999941,
+            "LayoutDurationMs": 0.8379999999999985,
+            "RecalcStyleDurationMs": 0.35299999999999915
+          }
+        },
+        "sweep": {
+          "scenario": "many-questions",
+          "action": "sweep",
+          "target": 149,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 4080.9000000953674,
+          "mountedQuestions": 2,
+          "questionElements": 54,
+          "elapsedMs": 4081,
+          "frames": {
+            "n": 244,
+            "median": 16.69999999999891,
+            "p95": 18.600000000000364,
+            "max": 18.80000000000109
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 396.921,
+            "ScriptDurationMs": 114.283,
+            "LayoutDurationMs": 63.885999999999996,
+            "RecalcStyleDurationMs": 30.003999999999998
+          }
+        },
+        "read": {
+          "scenario": "many-questions",
+          "action": "read",
+          "target": null,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 4280.399999856949,
+          "mountedQuestions": 3,
+          "questionElements": 81,
+          "elapsedMs": 4280.5,
+          "frames": {
+            "n": 256,
+            "median": 16.700000000000728,
+            "p95": 18.600000000002183,
+            "max": 18.700000000000728
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 157.95899999999995,
+            "ScriptDurationMs": 32.638,
+            "LayoutDurationMs": 9.871000000000004,
+            "RecalcStyleDurationMs": 3.950000000000002
+          }
+        }
+      },
+      "errors": []
+    },
+    {
+      "round": 3,
+      "url": "http://127.0.0.1:4212",
+      "revision": "base-e5e8f11",
+      "chromium": "151.0.7922.34",
+      "scenario": "mixed-questions",
+      "coldOpen": {
+        "scenario": "mixed-questions",
+        "action": "open",
+        "target": 0,
+        "previewSteps": 0,
+        "readyAfterTwoFramesMs": 47.200000047683716,
+        "mountedQuestions": 2,
+        "questionElements": 52,
+        "elapsedMs": 47.200000047683716,
+        "frames": {
+          "n": 2,
+          "median": 16.700000000000728,
+          "p95": 16.700000000000728,
+          "max": 16.700000000000728
+        },
+        "frameGapsOver34Ms": 0,
+        "longTasks": 0,
+        "longTaskMs": 0,
+        "longestTaskMs": 0,
+        "visibility": "visible"
+      },
+      "actions": {
+        "open": {
+          "scenario": "mixed-questions",
+          "action": "open",
+          "target": 0,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 48.200000047683716,
+          "mountedQuestions": 2,
+          "questionElements": 52,
+          "elapsedMs": 48.200000047683716,
+          "frames": {
+            "n": 2,
+            "median": 16.600000000002183,
+            "p95": 16.700000000000728,
+            "max": 16.700000000000728
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 9.943000000000035,
+            "ScriptDurationMs": 2.954000000000012,
+            "LayoutDurationMs": 0.8620000000000017,
+            "RecalcStyleDurationMs": 1.0949999999999989
+          }
+        },
+        "last": {
+          "scenario": "mixed-questions",
+          "action": "last",
+          "target": 149,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 65.40000009536743,
+          "mountedQuestions": 2,
+          "questionElements": 52,
+          "elapsedMs": 65.5,
+          "frames": {
+            "n": 3,
+            "median": 16.700000000000728,
+            "p95": 16.700000000000728,
+            "max": 16.700000000000728
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 8.505000000000207,
+            "ScriptDurationMs": 1.1709999999999776,
+            "LayoutDurationMs": 0.9740000000000026,
+            "RecalcStyleDurationMs": 0.5039999999999976
+          }
+        },
+        "first": {
+          "scenario": "mixed-questions",
+          "action": "first",
+          "target": 0,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 47.799999952316284,
+          "mountedQuestions": 2,
+          "questionElements": 52,
+          "elapsedMs": 47.799999952316284,
+          "frames": {
+            "n": 2,
+            "median": 16.700000000000728,
+            "p95": 16.700000000000728,
+            "max": 16.700000000000728
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 6.336000000000119,
+            "ScriptDurationMs": 0.7860000000000089,
+            "LayoutDurationMs": 0.5850000000000022,
+            "RecalcStyleDurationMs": 0.35700000000000315
+          }
+        },
+        "sweep": {
+          "scenario": "mixed-questions",
+          "action": "sweep",
+          "target": 149,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 4083.5,
+          "mountedQuestions": 2,
+          "questionElements": 52,
+          "elapsedMs": 4083.600000143051,
+          "frames": {
+            "n": 244,
+            "median": 16.700000000000728,
+            "p95": 18.599999999998545,
+            "max": 18.799999999999272
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 442.518,
+            "ScriptDurationMs": 131.82100000000003,
+            "LayoutDurationMs": 67.19099999999999,
+            "RecalcStyleDurationMs": 40.974
+          }
+        },
+        "read": {
+          "scenario": "mixed-questions",
+          "action": "read",
+          "target": null,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 4282.400000095367,
+          "mountedQuestions": 3,
+          "questionElements": 47,
+          "elapsedMs": 4282.5,
+          "frames": {
+            "n": 256,
+            "median": 16.69999999999709,
+            "p95": 18.69999999999709,
+            "max": 18.700000000000728
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 150.54799999999992,
+            "ScriptDurationMs": 32.72799999999998,
+            "LayoutDurationMs": 8.658,
+            "RecalcStyleDurationMs": 3.967999999999999
+          }
+        }
+      },
+      "errors": []
+    },
+    {
+      "round": 3,
+      "url": "http://127.0.0.1:4211",
+      "revision": "base-866f9b5",
+      "chromium": "151.0.7922.34",
+      "scenario": "small",
+      "coldOpen": {
+        "scenario": "small",
+        "action": "open",
+        "target": 0,
+        "previewSteps": 0,
+        "readyAfterTwoFramesMs": 48,
+        "mountedQuestions": 1,
+        "questionElements": 27,
+        "elapsedMs": 48.200000047683716,
+        "frames": {
+          "n": 2,
+          "median": 16.600000000000136,
+          "p95": 16.700000000000045,
+          "max": 16.700000000000045
+        },
+        "frameGapsOver34Ms": 0,
+        "longTasks": 0,
+        "longTaskMs": 0,
+        "longestTaskMs": 0,
+        "visibility": "visible"
+      },
+      "actions": {
+        "open": {
+          "scenario": "small",
+          "action": "open",
+          "target": 0,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 45.59999990463257,
+          "mountedQuestions": 1,
+          "questionElements": 27,
+          "elapsedMs": 45.59999990463257,
+          "frames": {
+            "n": 2,
+            "median": 14.899999999999864,
+            "p95": 16.600000000000136,
+            "max": 16.600000000000136
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 7.78100000000001,
+            "ScriptDurationMs": 1.2519999999999962,
+            "LayoutDurationMs": 0.6080000000000009,
+            "RecalcStyleDurationMs": 0.23099999999999857
+          }
+        },
+        "last": {
+          "scenario": "small",
+          "action": "last",
+          "target": 0,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 48.200000047683716,
+          "mountedQuestions": 1,
+          "questionElements": 27,
+          "elapsedMs": 48.200000047683716,
+          "frames": {
+            "n": 2,
+            "median": 16.700000000000045,
+            "p95": 16.700000000000045,
+            "max": 16.700000000000045
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 5.437000000000025,
+            "ScriptDurationMs": 0.3510000000000041,
+            "LayoutDurationMs": 0.3620000000000012,
+            "RecalcStyleDurationMs": 0.07600000000000141
+          }
+        },
+        "first": {
+          "scenario": "small",
+          "action": "first",
+          "target": 0,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 50.700000047683716,
+          "mountedQuestions": 1,
+          "questionElements": 27,
+          "elapsedMs": 50.700000047683716,
+          "frames": {
+            "n": 2,
+            "median": 16.40000000000009,
+            "p95": 16.5,
+            "max": 16.5
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 5.731000000000042,
+            "ScriptDurationMs": 0.26199999999999835,
+            "LayoutDurationMs": 0.3860000000000009,
+            "RecalcStyleDurationMs": 0.09699999999999986
+          }
+        },
+        "sweep": {
+          "scenario": "small",
+          "action": "sweep",
+          "target": 0,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 4081,
+          "mountedQuestions": 1,
+          "questionElements": 27,
+          "elapsedMs": 4081,
+          "frames": {
+            "n": 244,
+            "median": 16.699999999999818,
+            "p95": 18.699999999999818,
+            "max": 18.800000000000182
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 100.13899999999998,
+            "ScriptDurationMs": 10.769,
+            "LayoutDurationMs": 0.6219999999999976,
+            "RecalcStyleDurationMs": 0.12000000000000031
+          }
+        },
+        "read": {
+          "scenario": "small",
+          "action": "read",
+          "target": null,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 4280.900000095367,
+          "mountedQuestions": 1,
+          "questionElements": 27,
+          "elapsedMs": 4281,
+          "frames": {
+            "n": 256,
+            "median": 16.699999999999818,
+            "p95": 18.699999999999818,
+            "max": 18.800000000000182
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 65.50300000000003,
+            "ScriptDurationMs": 6.468000000000002,
+            "LayoutDurationMs": 0.6429999999999978,
+            "RecalcStyleDurationMs": 0.13099999999999917
+          }
+        }
+      },
+      "errors": []
+    },
+    {
+      "round": 3,
+      "url": "http://127.0.0.1:4211",
+      "revision": "base-866f9b5",
+      "chromium": "151.0.7922.34",
+      "scenario": "many-questions",
+      "coldOpen": {
+        "scenario": "many-questions",
+        "action": "open",
+        "target": 0,
+        "previewSteps": 0,
+        "readyAfterTwoFramesMs": 47.60000014305115,
+        "mountedQuestions": 150,
+        "questionElements": 4050,
+        "elapsedMs": 47.799999952316284,
+        "frames": {
+          "n": 2,
+          "median": 15.5,
+          "p95": 17.69999999999891,
+          "max": 17.69999999999891
+        },
+        "frameGapsOver34Ms": 0,
+        "longTasks": 0,
+        "longTaskMs": 0,
+        "longestTaskMs": 0,
+        "visibility": "visible"
+      },
+      "actions": {
+        "open": {
+          "scenario": "many-questions",
+          "action": "open",
+          "target": 0,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 48.5,
+          "mountedQuestions": 150,
+          "questionElements": 4050,
+          "elapsedMs": 48.59999990463257,
+          "frames": {
+            "n": 2,
+            "median": 16.599999999998545,
+            "p95": 16.600000000000364,
+            "max": 16.600000000000364
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 28.195999999999998,
+            "ScriptDurationMs": 5.761000000000002,
+            "LayoutDurationMs": 10.231999999999998,
+            "RecalcStyleDurationMs": 4.085999999999999
+          }
+        },
+        "last": {
+          "scenario": "many-questions",
+          "action": "last",
+          "target": 149,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 48.5,
+          "mountedQuestions": 150,
+          "questionElements": 4050,
+          "elapsedMs": 48.700000047683716,
+          "frames": {
+            "n": 2,
+            "median": 16.600000000000364,
+            "p95": 16.799999999999272,
+            "max": 16.799999999999272
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 7.975999999999983,
+            "ScriptDurationMs": 0.18699999999999273,
+            "LayoutDurationMs": 0.2109999999999959,
+            "RecalcStyleDurationMs": 0.061000000000002025
+          }
+        },
+        "first": {
+          "scenario": "many-questions",
+          "action": "first",
+          "target": 0,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 48,
+          "mountedQuestions": 150,
+          "questionElements": 4050,
+          "elapsedMs": 48.200000047683716,
+          "frames": {
+            "n": 2,
+            "median": 16.600000000000364,
+            "p95": 16.69999999999891,
+            "max": 16.69999999999891
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 8.797000000000054,
+            "ScriptDurationMs": 0.23100000000000898,
+            "LayoutDurationMs": 0.26800000000000435,
+            "RecalcStyleDurationMs": 0.07199999999999915
+          }
+        },
+        "sweep": {
+          "scenario": "many-questions",
+          "action": "sweep",
+          "target": 149,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 4081.0999999046326,
+          "mountedQuestions": 150,
+          "questionElements": 4050,
+          "elapsedMs": 4081.7000000476837,
+          "frames": {
+            "n": 244,
+            "median": 16.69999999999891,
+            "p95": 18.600000000000364,
+            "max": 18.700000000000728
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 274.035,
+            "ScriptDurationMs": 7.408999999999999,
+            "LayoutDurationMs": 0.5329999999999988,
+            "RecalcStyleDurationMs": 0.10999999999999899
+          }
+        },
+        "read": {
+          "scenario": "many-questions",
+          "action": "read",
+          "target": null,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 4280.799999952316,
+          "mountedQuestions": 150,
+          "questionElements": 4050,
+          "elapsedMs": 4280.899999856949,
+          "frames": {
+            "n": 256,
+            "median": 16.700000000000728,
+            "p95": 18.599999999998545,
+            "max": 18.799999999999272
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 143.15,
+            "ScriptDurationMs": 7.895,
+            "LayoutDurationMs": 0.20499999999999685,
+            "RecalcStyleDurationMs": 0.08100000000000121
+          }
+        }
+      },
+      "errors": []
+    },
+    {
+      "round": 3,
+      "url": "http://127.0.0.1:4211",
+      "revision": "base-866f9b5",
+      "chromium": "151.0.7922.34",
+      "scenario": "mixed-questions",
+      "coldOpen": {
+        "scenario": "mixed-questions",
+        "action": "open",
+        "target": 0,
+        "previewSteps": 0,
+        "readyAfterTwoFramesMs": 46.90000009536743,
+        "mountedQuestions": 150,
+        "questionElements": 2716,
+        "elapsedMs": 47,
+        "frames": {
+          "n": 2,
+          "median": 16.600000000002183,
+          "p95": 16.69999999999709,
+          "max": 16.69999999999709
+        },
+        "frameGapsOver34Ms": 0,
+        "longTasks": 0,
+        "longTaskMs": 0,
+        "longestTaskMs": 0,
+        "visibility": "visible"
+      },
+      "actions": {
+        "open": {
+          "scenario": "mixed-questions",
+          "action": "open",
+          "target": 0,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 48,
+          "mountedQuestions": 150,
+          "questionElements": 2716,
+          "elapsedMs": 48.10000014305115,
+          "frames": {
+            "n": 2,
+            "median": 16.69999999999709,
+            "p95": 16.700000000000728,
+            "max": 16.700000000000728
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 26.436000000000128,
+            "ScriptDurationMs": 6.606000000000001,
+            "LayoutDurationMs": 8.493,
+            "RecalcStyleDurationMs": 3.6720000000000015
+          }
+        },
+        "last": {
+          "scenario": "mixed-questions",
+          "action": "last",
+          "target": 149,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 48.40000009536743,
+          "mountedQuestions": 150,
+          "questionElements": 2716,
+          "elapsedMs": 48.5,
+          "frames": {
+            "n": 2,
+            "median": 16.599999999998545,
+            "p95": 16.600000000002183,
+            "max": 16.600000000002183
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 6.30799999999998,
+            "ScriptDurationMs": 0.23800000000001598,
+            "LayoutDurationMs": 0.22800000000000598,
+            "RecalcStyleDurationMs": 0.060999999999998555
+          }
+        },
+        "first": {
+          "scenario": "mixed-questions",
+          "action": "first",
+          "target": 0,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 47.799999952316284,
+          "mountedQuestions": 150,
+          "questionElements": 2716,
+          "elapsedMs": 48.09999990463257,
+          "frames": {
+            "n": 2,
+            "median": 16.599999999998545,
+            "p95": 16.700000000000728,
+            "max": 16.700000000000728
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 7.568000000000019,
+            "ScriptDurationMs": 0.2819999999999767,
+            "LayoutDurationMs": 0.32099999999998796,
+            "RecalcStyleDurationMs": 0.07300000000000362
+          }
+        },
+        "sweep": {
+          "scenario": "mixed-questions",
+          "action": "sweep",
+          "target": 149,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 4080.800000190735,
+          "mountedQuestions": 150,
+          "questionElements": 2716,
+          "elapsedMs": 4081.100000143051,
+          "frames": {
+            "n": 244,
+            "median": 16.700000000000728,
+            "p95": 18.700000000000728,
+            "max": 18.799999999999272
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 290.10700000000014,
+            "ScriptDurationMs": 7.558000000000009,
+            "LayoutDurationMs": 0.3610000000000002,
+            "RecalcStyleDurationMs": 0.10999999999999899
+          }
+        },
+        "read": {
+          "scenario": "mixed-questions",
+          "action": "read",
+          "target": null,
+          "previewSteps": 0,
+          "readyAfterTwoFramesMs": 4280.900000095367,
+          "mountedQuestions": 150,
+          "questionElements": 2716,
+          "elapsedMs": 4281.599999904633,
+          "frames": {
+            "n": 256,
+            "median": 16.700000000000728,
+            "p95": 18.599999999998545,
+            "max": 18.700000000000728
+          },
+          "frameGapsOver34Ms": 0,
+          "longTasks": 0,
+          "longTaskMs": 0,
+          "longestTaskMs": 0,
+          "visibility": "visible",
+          "cpu": {
+            "TaskDurationMs": 173.11199999999994,
+            "ScriptDurationMs": 7.786000000000016,
+            "LayoutDurationMs": 0.6260000000000016,
+            "RecalcStyleDurationMs": 0.12199999999999711
+          }
+        }
+      },
+      "errors": []
+    }
+  ]
+}

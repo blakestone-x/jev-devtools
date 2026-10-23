@@ -1,0 +1,11 @@
+{
+  "base": "866f9b5522febda3123f5fc738fe9aef47049403",
+  "comparisonBases": [
+    "866f9b5522febda3123f5fc738fe9aef47049403",
+    "e5e8f11156c26f7ad715bf30c0596862dfd180c2"
+  ],
+  "head": "b0446170c39bee872f91649ff0ee852beb386980",
+  "dirty": false,
+  "candidateLabel": "head-b044617",
+  "packageDiffSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+}
