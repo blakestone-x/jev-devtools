@@ -1,6 +1,6 @@
 # Changelog
 
-User-facing changes, newest first. **Unreleased** means merged into `main` but not published to npm. Open PRs are not release entries; see [work in progress](https://github.com/diegoag64/jev-devtools/pulls).
+User-facing changes, newest first. **Unreleased** means not published to npm. On `main`, these changes are merged; on feature branches, they are proposed changes awaiting review. See [work in progress](https://github.com/diegoag64/jev-devtools/pulls).
 
 Dates below use UTC and were checked against npm's publication history. The historical entries were reconstructed from the release PRs and merged changes. Versions remain experimental before 1.0.
 

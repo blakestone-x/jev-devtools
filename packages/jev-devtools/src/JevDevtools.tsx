@@ -262,7 +262,10 @@ export function JevPanel({
             </button>
             <button
               aria-pressed={view === "flows"}
-              onClick={() => setView("flows")}
+              onClick={() => {
+                setView("flows");
+                if (run) setSelectedRun(run.id);
+              }}
             >
               Flows
             </button>

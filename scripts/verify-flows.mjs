@@ -11,6 +11,9 @@ try {
     errors = [];
   page.on("pageerror", (e) => errors.push(String(e)));
   await page.goto(origin);
+  await page.evaluate(() =>
+    fetch("/api/jev-devtools/clear", { method: "DELETE" }),
+  );
   await page
     .getByRole("button", { name: "Run sample flow", exact: true })
     .click();
@@ -39,6 +42,9 @@ try {
   await page.keyboard.press("ArrowRight");
   await page.keyboard.press("+");
   await page.waitForTimeout(150);
+  const initialCamera = await page
+    .locator(".flow-overview-canvas")
+    .getAttribute("style");
   await page
     .getByRole("button", { name: "Close Jev DevTools", exact: true })
     .click();
@@ -50,7 +56,17 @@ try {
   await page
     .getByRole("button", { name: "Open Jev DevTools", exact: true })
     .click();
-  // Pin the original run before checking subsequent updates.
+  assert.equal(
+    await page.locator(".flow-overview-canvas").getAttribute("style"),
+    initialCamera,
+  );
+  assert.equal(
+    await page
+      .getByRole("button", { name: "Step review, jev, completed", exact: true })
+      .getAttribute("aria-pressed"),
+    "true",
+  );
+  // Explicit row selection also persists across subsequent updates.
   const rows = page.locator(".request-row");
   await rows.last().click();
   await page

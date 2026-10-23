@@ -102,7 +102,7 @@ Definition captures contain structural IDs/dependencies and condition expression
 
 ## Drawer and samples
 
-Choose **Flows** after capturing a run. The overview shows all possible nodes and dependencies with waiting, running, completed, untaken, blocked, failed, and cancelled states. Select a node or use the Step picker. **Inspect request** opens the existing Flow/Questions/Context/Transport/Raw details for that Jev call; only the selected detail is mounted. Camera and explicit run/node selections survive incoming updates and closing/reopening the drawer. Switching to another run starts its own view. Pan/zoom and Fit use the existing diagram camera.
+Choose **Flows** after capturing a run. The overview shows all possible nodes and dependencies with waiting, running, completed, untaken, blocked, failed, and cancelled states. Select a node or use the Step picker. **Inspect request** opens the existing Flow/Questions/Context/Transport/Raw details for that Jev call; only the selected detail is mounted. Opening Flows pins the displayed run. Camera and run/node selections survive incoming updates and closing/reopening the drawer. Switching to another run starts its own view. Pan/zoom and Fit use the existing diagram camera.
 
 Run `npm run dev` and choose the Flow samples: Approve, Manual review, Other, Parallel checks + join, Failed review, and Slow call (then press Cancel). These are fixed samples and never use live inference.
 
