@@ -18,7 +18,7 @@ export function flowAnswer(answer?: AnswerView) {
     return Object.entries(answer.probabilities ?? {}).map(
       ([label, probability]) => ({
         label,
-        detail: `${Math.round(probability * 100)}% probability`,
+        detail: `${Number((probability * 100).toPrecision(6))}% probability`,
         active: label === answer.choice,
         eyebrow: label === answer.choice ? "RETURNED CHOICE" : "ALTERNATIVE",
       }),

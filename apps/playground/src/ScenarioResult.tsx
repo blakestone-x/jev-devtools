@@ -307,7 +307,19 @@ export function ScenarioResult({ run }: { run: RunState }) {
               result.
             </div>
           )}
-          {run.scenario === "image" ? (
+          {run.scenario === "stress" ? (
+            <div>
+              <h3>Sandbox response captured</h3>
+              <p>
+                {
+                  Object.keys(run.result!.answers.category?.probabilities ?? {})
+                    .length
+                }{" "}
+                probabilities returned. Open Jev DevTools → Flow → All
+                probabilities to inspect every value.
+              </p>
+            </div>
+          ) : run.scenario === "image" ? (
             <ImageResult key={run.id} run={run} />
           ) : (
             <TicketResult key={run.id} run={run} />

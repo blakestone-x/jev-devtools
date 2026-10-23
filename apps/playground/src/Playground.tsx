@@ -15,6 +15,8 @@ import "./controls.css";
 import "jev-devtools/styles.css";
 import "./style.css";
 
+import { defaultStress, type StressOptions } from "./stress-options";
+const sandbox = new URLSearchParams(location.search).has("sandbox");
 const savedSession = sessionStorage.getItem("jev-inspector-session");
 const session = savedSession || crypto.randomUUID();
 sessionStorage.setItem("jev-inspector-session", session);
@@ -39,6 +41,7 @@ async function post(path: string, body: unknown = {}) {
   return data;
 }
 function App() {
+  const [stress, setStress] = useState<StressOptions>(defaultStress);
   const [profile, setProfile] = useState<SampleProfile>("billing");
   const [outcome, setOutcome] = useState<RunState>({
     id: "initial",
@@ -51,7 +54,7 @@ function App() {
     setOutcome({ id: "idle", status: "idle", scenario, mode, message });
     setFeedback("Ready to capture a request.");
   };
-  const [scenario, setScenario] = useState("triage"),
+  const [scenario, setScenario] = useState(sandbox ? "stress" : "triage"),
     [mode, setMode] = useState("sample"),
     [live, setLive] = useState(false);
   const [message, setMessage] = useState(
@@ -79,6 +82,7 @@ function App() {
         mode,
         message,
         profile,
+        stress,
       });
       setOutcome({
         ...captured,
@@ -115,10 +119,13 @@ function App() {
                 onChange={(e) => {
                   setScenario(e.target.value);
                   resetOutcome();
-                  if (["retry", "error"].includes(e.target.value))
+                  if (["retry", "error", "stress"].includes(e.target.value))
                     setMode("sample");
                 }}
               >
+                <NativeSelectOption value="stress">
+                  Edge-case sandbox · Choice
+                </NativeSelectOption>
                 <NativeSelectOption value="triage">
                   Support triage · Choice, Score, Noul
                 </NativeSelectOption>
@@ -148,36 +155,122 @@ function App() {
                 <NativeSelectOption value="sample">Sample</NativeSelectOption>
                 <NativeSelectOption
                   value="live"
-                  disabled={!live || ["retry", "error"].includes(scenario)}
+                  disabled={
+                    !live || ["retry", "error", "stress"].includes(scenario)
+                  }
                 >
                   Live{!live ? " · no server key" : ""}
                 </NativeSelectOption>
               </NativeSelect>
             </div>
-            {mode === "sample" && scenario !== "image" && (
-              <div className="form-field">
-                <Label htmlFor="sample-outcome">Sample outcome</Label>
-                <NativeSelect
-                  id="sample-outcome"
-                  className="w-full"
-                  value={profile}
-                  disabled={!!runId}
-                  onChange={(e) => {
-                    const key = e.target.value as SampleProfile;
-                    setProfile(key);
-                    setMessage(sampleProfiles[key].message);
-                    resetOutcome();
-                  }}
-                >
-                  {Object.entries(sampleProfiles).map(([key, fixture]) => (
-                    <NativeSelectOption key={key} value={key}>
-                      {fixture.label}
-                    </NativeSelectOption>
-                  ))}
-                </NativeSelect>
-              </div>
-            )}
+            {mode === "sample" &&
+              scenario !== "image" &&
+              scenario !== "stress" && (
+                <div className="form-field">
+                  <Label htmlFor="sample-outcome">Sample outcome</Label>
+                  <NativeSelect
+                    id="sample-outcome"
+                    className="w-full"
+                    value={profile}
+                    disabled={!!runId}
+                    onChange={(e) => {
+                      const key = e.target.value as SampleProfile;
+                      setProfile(key);
+                      setMessage(sampleProfiles[key].message);
+                      resetOutcome();
+                    }}
+                  >
+                    {Object.entries(sampleProfiles).map(([key, fixture]) => (
+                      <NativeSelectOption key={key} value={key}>
+                        {fixture.label}
+                      </NativeSelectOption>
+                    ))}
+                  </NativeSelect>
+                </div>
+              )}
           </div>
+          {scenario === "stress" && (
+            <fieldset className="stress-controls">
+              <legend>Choice sandbox · deterministic samples only</legend>
+              <div className="form-row">
+                <div className="form-field">
+                  <Label htmlFor="stress-count">Categories</Label>
+                  <NativeSelect
+                    id="stress-count"
+                    disabled={!!runId}
+                    value={stress.choices}
+                    onChange={(e) =>
+                      setStress({
+                        ...stress,
+                        choices: Number(
+                          e.target.value,
+                        ) as StressOptions["choices"],
+                      })
+                    }
+                  >
+                    {[3, 6, 7, 150].map((n) => (
+                      <NativeSelectOption key={n} value={n}>
+                        {n} choices
+                      </NativeSelectOption>
+                    ))}
+                  </NativeSelect>
+                </div>
+                <div className="form-field">
+                  <Label htmlFor="stress-distribution">Distribution</Label>
+                  <NativeSelect
+                    id="stress-distribution"
+                    disabled={!!runId}
+                    value={stress.distribution}
+                    onChange={(e) =>
+                      setStress({
+                        ...stress,
+                        distribution: e.target
+                          .value as StressOptions["distribution"],
+                      })
+                    }
+                  >
+                    <NativeSelectOption value="peaked">
+                      One clear winner
+                    </NativeSelectOption>
+                    <NativeSelectOption value="tied">
+                      All tied
+                    </NativeSelectOption>
+                    <NativeSelectOption value="zeros">
+                      Zero-probability alternatives
+                    </NativeSelectOption>
+                  </NativeSelect>
+                </div>
+              </div>
+              {(
+                [
+                  ["longLabels", "Long category labels"],
+                  ["largeContext", "Large context (~80 KB)"],
+                  [
+                    "returnedLast",
+                    "Return last category (synthetic edge case)",
+                  ],
+                ] as const
+              ).map(([key, label]) => (
+                <label className="stress-toggle" key={key}>
+                  <input
+                    type="checkbox"
+                    disabled={!!runId}
+                    checked={stress[key]}
+                    onChange={(e) =>
+                      setStress({ ...stress, [key]: e.target.checked })
+                    }
+                  />{" "}
+                  {label}
+                </label>
+              ))}
+              <p>
+                Run a sample, open Jev DevTools, and select the latest Sandbox
+                request. Compare the compact Flow overview with All
+                probabilities. The returned-choice toggle deliberately tests a
+                response that may differ from the highest probability.
+              </p>
+            </fieldset>
+          )}
           {scenario === "image" ? (
             <div className="image-input">
               <img

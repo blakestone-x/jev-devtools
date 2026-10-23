@@ -28,6 +28,15 @@ BENCH_OUTPUT=benchmarks/results/my-comparison \
 
 Replace `BASE_COMMIT` with the baseline's commit SHA. The command builds the archived baseline and current working tree, runs timing and profiling separately, and stops its own browsers and servers afterward. `BENCH_ROUNDS` controls timing rounds (default four); `BENCH_BASE_PORT` controls loopback ports (default 4211 onward). `BENCH_DRAWER_MODES=open,closed,unopened` includes hidden-drawer workloads. Use a unique ignored output directory for each experiment; repeated output paths can overwrite previous measurements.
 
+For Choice diagram comparisons (small control, 150 categories, and combined stress):
+
+```sh
+BENCH_SUITE=choices BENCH_OUTPUT=benchmarks/results/choice-comparison \
+  npm run bench:compare -- BASE_COMMIT
+```
+
+This measures warmed mounts and the same native pan/wheel/Fit sequence in each revision, with separate profiling runs. It records scene size and whether Fit contains it. The manual [playground sandbox](http://127.0.0.1:4182/?sandbox=1) is available with `npm run dev`; it is not a performance measurement environment.
+
 ## Report in the PR
 
 Include:

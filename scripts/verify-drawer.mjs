@@ -1,3 +1,4 @@
+import { checkChoice } from "./check-choice.mjs";
 import { checkQuestions } from "./check-questions.mjs";
 import assert from "node:assert/strict";
 import { spawn } from "node:child_process";
@@ -262,6 +263,7 @@ try {
     ),
     true,
   );
+  await checkChoice({ page, load });
   await page.screenshot({ path: "benchmarks/results/drawer-reopened.png" });
   assert.deepEqual(errors, [], "No browser errors");
   console.log(

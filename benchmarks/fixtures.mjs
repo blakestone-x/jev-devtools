@@ -4,6 +4,16 @@ import { setImmediate as tick } from "node:timers/promises";
 
 // Synthetic, deterministic local transport: no credentials, network inference, or customer data.
 export const scenarios = [
+  { id: "choice-seven", history: 1, choices: 7, questions: 2, stateChars: 120 },
+  {
+    id: "choice-edge",
+    history: 1,
+    choices: 150,
+    questions: 1,
+    stateChars: 120,
+    returnedLast: true,
+    tied: true,
+  },
   {
     id: "mixed-questions",
     history: 1,
@@ -66,7 +76,7 @@ export function fixture(spec) {
   const probabilities = Object.fromEntries(
     Object.keys(criteria).map((key, i) => [
       key,
-      i ? 0.2 / (spec.choices - 1) : 0.8,
+      spec.tied ? 1 / spec.choices : i ? 0.2 / (spec.choices - 1) : 0.8,
     ]),
   );
   const questions = Object.fromEntries(
@@ -80,7 +90,9 @@ export function fixture(spec) {
       key,
       {
         type: "choice",
-        choice: "category_0",
+        choice: spec.returnedLast
+          ? `category_${spec.choices - 1}`
+          : "category_0",
         probabilities: { ...probabilities },
         confidence: 0.9,
       },

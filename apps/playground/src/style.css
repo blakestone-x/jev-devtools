@@ -570,3 +570,19 @@ a {
     animation: none;
   }
 }
+
+.stress-controls {
+  border: 1px solid #493248;
+  padding: 20px;
+  border-radius: 12px;
+}
+.stress-controls legend {
+  padding: 0 8px;
+  font-size: 13px;
+  color: #e551ba;
+}
+.stress-toggle {
+  display: block;
+  margin-top: 14px;
+  font-size: 13px;
+}
