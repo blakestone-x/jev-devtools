@@ -30,7 +30,7 @@ Public component props and server setup APIs are unchanged. These optimizations 
 - Add repeatable server and isolated-browser benchmarks for large histories, large inputs, diagram rendering, and streaming updates, with before/after reports for subsequent optimizations. ([#13](https://github.com/diegoag64/jev-devtools/pull/13), [#14](https://github.com/diegoag64/jev-devtools/pull/14), [#15](https://github.com/diegoag64/jev-devtools/pull/15), [#16](https://github.com/diegoag64/jev-devtools/pull/16))
 - Add browser correctness checks for closing/reopening, preserved controls, clear, and eviction on React 18 and 19. ([#16](https://github.com/diegoag64/jev-devtools/pull/16))
 - Refocus the README introduction on visualizing Jev flows. ([#12](https://github.com/diegoag64/jev-devtools/pull/12))
-- Make the changelog discoverable from both READMEs and the agent documentation index; add a release overview and a contribution policy for keeping it current.
+- Make the changelog discoverable from both READMEs and the agent documentation index; add a release overview and a contribution policy for keeping it current. ([#18](https://github.com/diegoag64/jev-devtools/pull/18))
 
 ## 0.1.3 — October 23, 2026 (experimental)
 
