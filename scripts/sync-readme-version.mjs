@@ -37,8 +37,10 @@ for (const path of ["README.md", "packages/jev-devtools/README.md"]) {
     stale = true;
   } else {
     await writeFile(url, synced);
-    console.log(`Updated ${path} to ${version}`);
+    console.error(`Updated ${path} to ${version}`);
   }
 }
 if (stale) process.exitCode = 1;
-else if (check) console.log(`README versions match jev-devtools@${version}`);
+// prepack may forward lifecycle stdout into `npm pack --json` on newer npm.
+// Keep progress messages on stderr so the archive manifest remains valid JSON.
+else if (check) console.error(`README versions match jev-devtools@${version}`);
