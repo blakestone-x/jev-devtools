@@ -1,8 +1,66 @@
+<div align="center">
+
 # Jev DevTools
 
-A drop-in React drawer for inspecting TypeSafe Jev requests. See context, questions, Choice probabilities, Score values, Noul probabilities, Box regions, and transport attempts through animated diagrams.
+**Your Jev requests, made visual.**
 
-Extracted from [Diagram Motion Lab](https://github.com/diegoag64/diagram-motion-lab). Uses a custom Jev drawer; TanStack DevTools inspired the workflow but is not a dependency.
+A drop-in React inspector for TypeSafe Jev.<br />
+Follow the context, explore each question, and see the answers come together.
+
+[![CI](https://github.com/diegoag64/jev-devtools/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/diegoag64/jev-devtools/actions/workflows/ci.yml)
+[![React 18 / 19](https://img.shields.io/badge/React-18%20%2F%2019-61DAFB?logo=react&logoColor=61DAFB&labelColor=0D0A0F)](#install-in-another-react-app)
+[![Next.js App Router](https://img.shields.io/badge/Next.js-App%20Router-white?logo=nextdotjs&labelColor=0D0A0F)](docs/nextjs.md)
+[![MIT license](https://img.shields.io/badge/License-MIT-E551BA?labelColor=0D0A0F)](LICENSE)
+[![Status: prototype](https://img.shields.io/badge/Status-prototype-E551BA?labelColor=0D0A0F)](#install-in-another-react-app)
+
+[Demo](#see-it-in-motion) · [Quick start](#run-the-playground) · [Install](#install-in-another-react-app) · [Next.js](docs/nextjs.md) · [Contributing](CONTRIBUTING.md)
+
+</div>
+
+## See it in motion
+
+[![Animated preview of Jev DevTools showing the request drawer, inspection tabs, and a connected Choice probability diagram. Watch the full demo.](docs/assets/jev-devtools-preview.gif)](docs/assets/jev-devtools-demo.mp4)
+
+<p align="center">
+  <a href="docs/assets/jev-devtools-demo.mp4"><strong>▶ Watch the full 28-second demo</strong></a><br />
+  <sub>Recorded in the sample playground. The preview loops; the full video preserves the original resolution.</sub>
+</p>
+
+## Why Jev DevTools?
+
+I got tired of drawing a new diagram for every Jev idea. This turns the requests your app already makes into something you can explore: one root component, a server adapter, and a drawer that follows along as you build.
+
+Inspired by the TanStack Query DevTools workflow, built with a custom Jev drawer and the visual language of [Diagram Motion Lab](https://github.com/diegoag64/diagram-motion-lab). **TanStack is not a dependency.**
+
+### A little less JSON archaeology
+
+| | What you can inspect |
+| --- | --- |
+| **✦ Connected flows** | Animated connections between shared context, questions, and returned values. |
+| **◈ Every Jev primitive** | Choice probability bars, Score values, Noul probabilities, and Box regions. |
+| **⌕ Request history** | Search and filter calls, then open Flow, Questions, Context, Transport, or Raw. |
+| **↻ Transport details** | Attempts, retries, errors, and cancellation alongside the logical request. |
+| **⚛ React + Node** | One root component, scoped styles, and a server adapter. React 18/19 and Next.js App Router examples included. |
+
+The diagrams visualize captured inputs and responses. They don't expose hidden model reasoning or infer your application's routing policies.
+
+## How it fits together
+
+```text
+Your server calls Jev through the instrumented SDK client
+                         │
+                         ▼
+              Bounded in-memory recorder
+                         │
+                  same-origin SSE
+                         │
+                         ▼
+              <JevDevtools /> in React
+             flows · questions · context
+                  transport · raw
+```
+
+Only calls made through the instrumented client are recorded. Your API key stays on the server; capture and display are opt-in.
 
 ## Run the playground
 
@@ -102,4 +160,15 @@ After `npm run pack:devtools`, you can also run `npm install && npm run dev` ins
 
 Changes use feature branches and PRs by default. See [CONTRIBUTING.md](CONTRIBUTING.md), [architecture](docs/architecture.md), and [release instructions](docs/releases.md). No workflow publishes packages or deploys the playground.
 
+## Credits & license
+
+Built from [Diagram Motion Lab](https://github.com/diegoag64/diagram-motion-lab), with diagram styling rooted in [Cathryn Lavery's diagram-design](https://github.com/cathrynlavery/diagram-design). TypeSafe branding belongs to its respective owner.
+
 MIT for project code; see [LICENSE](LICENSE) and [third-party notices](THIRD_PARTY_NOTICES.txt) for design provenance and branding.
+
+<div align="center">
+
+**Have a Jev flow you'd love to inspect?**<br />
+[Open an issue](https://github.com/diegoag64/jev-devtools/issues) · [Contribute a PR](CONTRIBUTING.md)
+
+</div>
