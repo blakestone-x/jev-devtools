@@ -37,10 +37,11 @@ const refundFlow = defineJevFlow<Ticket>("refund-review", (flow) => {
     else: (branch) => branch.output("other"),
   });
 });
+const abortController = new AbortController();
 const result = await refundFlow.run({ message: "Please refund my duplicate charge." }, {
   client,
   devtools: inspector,
-  signal: abortController.signal, // optional; create an AbortController in your handler
+  signal: abortController.signal, // optional
 });
 // { runId, outcome: "approve", value: { eligibility: 0.94 } }
 // Your application decides what to do with the outcome. No refund is executed.
@@ -115,6 +116,6 @@ node scripts/verify-flows.mjs
 node benchmarks/flows-isolated.mjs
 ```
 
-The new-flow scaling suite measures 11/51/151-node linear graphs, opening and keyboard pan CPU in isolated Chromium. It is not a before/after optimization claim. For existing request regressions, use `BENCH_SUITE=rerenders npm run bench:compare -- main` and keep those findings separate. Generated data and screenshots stay in ignored `benchmarks/results/`; report comparisons and limitations in the PR.
+The new-flow scaling suite measures 11/51/151-node linear graphs and 200 retained 11-node runs, opening and keyboard pan CPU in isolated Chromium. It is not a before/after optimization claim. For existing request regressions, use `BENCH_SUITE=rerenders npm run bench:compare -- main` and keep those findings separate. Generated data and screenshots stay in ignored `benchmarks/results/`; report comparisons and limitations in the PR.
 
 V1 has no standalone viewer, generic tasks, arbitrary callbacks at execution time, loops, automatic business actions, durable execution, cross-process coordination, or distributed persistence. A run belongs to one process and its supplied SDK client. Large overviews are bounded, not virtualized; every node remains selectable without mounting its full request diagram.

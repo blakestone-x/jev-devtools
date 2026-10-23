@@ -217,6 +217,7 @@ function evaluate(
       a === undefined ||
       b === undefined ||
       (a !== null && !["string", "number", "boolean"].includes(typeof a)) ||
+      (b !== null && !["string", "number", "boolean"].includes(typeof b)) ||
       typeof a !== typeof b ||
       (typeof a === "number" && (!Number.isFinite(a) || !Number.isFinite(b)))
     )
@@ -580,18 +581,22 @@ export function defineJevFlow<T>(
             } else if (step.kind === "parallel") {
               const entries = Object.entries(step.lanes!);
               let firstError: unknown;
+              let failed = false;
               const results = await Promise.allSettled(
                 entries.map(async ([, lane]) => {
                   try {
                     return await execute(lane);
                   } catch (e) {
-                    if (firstError === undefined) firstError = e;
+                    if (!failed) {
+                      firstError = e;
+                      failed = true;
+                    }
                     controller.abort(e);
                     throw e;
                   }
                 }),
               );
-              if (firstError !== undefined) throw firstError;
+              if (failed) throw firstError;
               value = Object.fromEntries(
                 results.map((r, i) => [
                   entries[i][0],

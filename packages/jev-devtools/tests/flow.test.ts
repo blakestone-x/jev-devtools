@@ -558,3 +558,50 @@ test("flow retention is bounded, definitions follow retained runs, and clear pre
     inspector.dispose();
   }
 });
+test("invalid null/object equality cannot silently choose an outcome", async () => {
+  const flow = defineJevFlow<{ value: null }>("invalid-equality", (f) =>
+    f.branch("compare", {
+      when: f.input.get("value").eq({} as never),
+      then: (p) => p.output("yes"),
+      else: (p) => p.output("no"),
+    }),
+  );
+  await assert.rejects(
+    flow.run(
+      { value: null },
+      { client: new TypeSafeClient(options(transport)) },
+    ),
+    /matching scalar/,
+  );
+});
+test("parallel rejection with an undefined reason is recorded as failure, not cancellation", async () => {
+  const flow = defineJevFlow("undefined-rejection", (f) => {
+    f.parallel("join", {
+      a: (p) =>
+        p.jev("call", { state: "x", questions }).answer("category").choice,
+    });
+    return f.output("must-not-complete");
+  });
+  const inspector = createJevDevtools({ origin, enabled: true });
+  try {
+    await assert.rejects(
+      flow.run(
+        {},
+        {
+          client: {
+            systemOne() {
+              throw undefined;
+            },
+          },
+          devtools: inspector,
+        },
+      ),
+    );
+    const run = (await history(inspector)).upserts[0];
+    assert.equal(run.status, "error");
+    assert.equal(run.steps.join.status, "error");
+    assert.equal(run.steps["must-not-complete"].status, "blocked");
+  } finally {
+    inspector.dispose();
+  }
+});

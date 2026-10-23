@@ -55,6 +55,7 @@ function App() {
     message: "",
   });
   const resetOutcome = () => {
+    setFlowResult(null);
     setOutcome({ id: "idle", status: "idle", scenario, mode, message });
     setFeedback("Ready to capture a request.");
   };
@@ -96,7 +97,11 @@ function App() {
         result: data.result,
         elapsedMs: Math.round(performance.now() - started),
       });
-      setFeedback("Response ready. Explore the result below.");
+      setFeedback(
+        data.flow
+          ? "Flow complete. Explore Flows in Jev DevTools."
+          : "Response ready. Explore the result below.",
+      );
     } catch (e) {
       setOutcome({
         ...captured,
