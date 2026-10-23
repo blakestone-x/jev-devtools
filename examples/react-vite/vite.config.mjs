@@ -1,5 +1,5 @@
 import { defineConfig } from "vite";
-import { createJevDevtools } from "@diagram-motion-lab/jev-devtools/server";
+import { createJevDevtools } from "jev-devtools/server";
 export default defineConfig({
   server: { host: "127.0.0.1", port: 4183, strictPort: true },
   plugins: [

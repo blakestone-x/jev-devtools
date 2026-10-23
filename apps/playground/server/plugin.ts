@@ -1,7 +1,7 @@
 import type { IncomingMessage, ServerResponse } from "node:http";
 import type { Plugin } from "vite";
 
-import { createJevDevtools } from "@diagram-motion-lab/jev-devtools/server";
+import { createJevDevtools } from "jev-devtools/server";
 import { makeRequest, sampleTransport } from "./scenarios.ts";
 import { sampleProfiles, type SampleProfile } from "../src/sample-profiles.js";
 import type { Scenario } from "./scenarios.ts";

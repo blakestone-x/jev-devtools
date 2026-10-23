@@ -6,10 +6,16 @@ The package has no Next.js dependency. `handle(request)` also works with other N
 
 ## Install
 
-The package is not published to npm yet. From this repository, run `npm ci && npm run pack:devtools`, then in your Next.js app:
+The first release is experimental and publication is pending. Once published, install in your Next.js app:
 
 ```sh
-npm install /absolute/path/to/diagram-motion-lab-jev-devtools-0.1.0.tgz server-only
+npm install jev-devtools server-only
+```
+
+Before publication, run `npm ci && npm run pack:devtools` from this repository, then in your Next.js app:
+
+```sh
+npm install /absolute/path/to/jev-devtools-0.1.0.tgz server-only
 ```
 
 Use Node 22.12+ and React 18/19. The App Router example pins Next.js 16.4.2 and React 19.3.1. The broader package's React 18 checks use the Vite consumer; they are not a claim that every Next.js version supports that combination.
@@ -33,7 +39,7 @@ Next.js bundles server dependencies by default. [serverExternalPackages](https:/
 ```ts
 // server/jev.ts (use src/server/jev.ts if your app lives in src/)
 import 'server-only';
-import { getJevDevtools } from '@diagram-motion-lab/jev-devtools/server';
+import { getJevDevtools } from 'jev-devtools/server';
 
 export const inspector = getJevDevtools('my-next-app', () => ({
   enabled: process.env.NODE_ENV === 'development',
@@ -73,7 +79,7 @@ For custom `getSession(request)` scopes, wrap inference Route Handlers in `inspe
 ```tsx
 // app/devtools.tsx
 'use client';
-import { JevDevtools } from '@diagram-motion-lab/jev-devtools';
+import { JevDevtools } from 'jev-devtools';
 
 export function Devtools() {
   return <JevDevtools
@@ -86,7 +92,7 @@ export function Devtools() {
 ```tsx
 // app/layout.tsx
 import type { ReactNode } from 'react';
-import '@diagram-motion-lab/jev-devtools/styles.css';
+import 'jev-devtools/styles.css';
 import { Devtools } from './devtools';
 
 export const runtime = 'nodejs';

@@ -1,5 +1,5 @@
 import "server-only";
-import { getJevDevtools } from "@diagram-motion-lab/jev-devtools/server";
+import { getJevDevtools } from "jev-devtools/server";
 
 export const origin =
   process.env.JEV_DEVTOOLS_ORIGIN || "http://127.0.0.1:4184";

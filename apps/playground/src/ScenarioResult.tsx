@@ -1,5 +1,5 @@
 import { useState } from "react";
-import type { AnswerView } from "@diagram-motion-lab/jev-devtools";
+import type { AnswerView } from "jev-devtools";
 
 export type RunState = {
   id: string;

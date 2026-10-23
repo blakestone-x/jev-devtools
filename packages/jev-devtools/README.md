@@ -2,21 +2,31 @@
 
 A React drawer and Node adapter for inspecting TypeSafe Jev requests with animated diagrams. Includes request history, context, questions, typed answers, transport attempts, and raw snapshots.
 
-This is an installable prototype, not a published npm release. React 18/19 and Node 22.12+ are supported. The package name is retained from Diagram Motion Lab pending a publishing decision.
+**Experimental 0.1.0.** React 18/19 and Node 22.12+ are supported. APIs may change before 1.0. Verification uses sample responses through the real TypeSafe SDK, not live inference.
+
+Registry installation (once the pending first release is published):
+
+```sh
+npm install jev-devtools
+```
+
+To try the release candidate before publication:
 
 ```sh
 # From the jev-devtools repository root:
 npm ci
 npm run pack:devtools
 # From the consuming app:
-npm install /absolute/path/to/diagram-motion-lab-jev-devtools-0.1.0.tgz
+npm install /absolute/path/to/jev-devtools-0.1.0.tgz
 ```
+
+If migrating from the extracted prototype, replace `@diagram-motion-lab/jev-devtools` with `jev-devtools` in dependencies and imports, including `/server` and `/styles.css`. Component props and server APIs are unchanged; restart the dev server after upgrading.
 
 Mount once:
 
 ```tsx
-import { JevDevtools } from '@diagram-motion-lab/jev-devtools';
-import '@diagram-motion-lab/jev-devtools/styles.css';
+import { JevDevtools } from 'jev-devtools';
+import 'jev-devtools/styles.css';
 
 <JevDevtools enabled={import.meta.env.DEV} defaultOpen={false} />
 ```
@@ -24,7 +34,7 @@ import '@diagram-motion-lab/jev-devtools/styles.css';
 Create one shared Node adapter and instrumented client:
 
 ```ts
-import { createJevDevtools } from '@diagram-motion-lab/jev-devtools/server';
+import { createJevDevtools } from 'jev-devtools/server';
 
 const inspector = createJevDevtools({
   enabled: process.env.NODE_ENV === 'development',

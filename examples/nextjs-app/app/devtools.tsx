@@ -1,5 +1,5 @@
 "use client";
-import { JevDevtools } from "@diagram-motion-lab/jev-devtools";
+import { JevDevtools } from "jev-devtools";
 
 export function Devtools() {
   return (

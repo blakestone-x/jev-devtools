@@ -1,7 +1,6 @@
 {
-  "name": "@diagram-motion-lab/jev-devtools",
+  "name": "jev-devtools",
   "version": "0.1.0",
-  "private": true,
   "type": "module",
   "engines": {
     "node": ">=22.12"
@@ -47,5 +46,19 @@
     "test": "node --import tsx --test tests/*.test.ts",
     "build": "tsc -p tsconfig.lib.json && node scripts/copy-styles.mjs",
     "prepack": "npm run build"
-  }
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "keywords": [
+    "jev",
+    "typesafe",
+    "devtools",
+    "react",
+    "nextjs",
+    "inspector",
+    "ai",
+    "debugging"
+  ]
 }

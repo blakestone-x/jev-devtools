@@ -1,3 +1,4 @@
+import assert from "node:assert/strict";
 import { mkdtemp, cp, readFile, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, dirname } from "node:path";
@@ -13,6 +14,34 @@ const packed = JSON.parse(
   }),
 );
 const tarball = join(temp, packed[0].filename);
+// Guard the shipped archive, not just the source manifest's intended allowlist.
+// A widened files list or stale build output must not ship fixtures or secrets.
+const shipped = new Set(packed[0].files.map(({ path }) => path));
+for (const path of shipped) {
+  assert.ok(
+    /^(?:package\.json|README\.md|LICENSE|THIRD_PARTY_NOTICES\.txt|lib\/(?:src|server)\/[\w-]+\.(?:js|d\.ts|css))$/.test(
+      path,
+    ),
+    `Unexpected file in npm archive: ${path}`,
+  );
+}
+for (const path of [
+  "package.json",
+  "README.md",
+  "LICENSE",
+  "THIRD_PARTY_NOTICES.txt",
+]) {
+  assert.ok(shipped.has(path), `Missing package documentation: ${path}`);
+}
+for (const extension of [".js", ".d.ts", ".css"]) {
+  assert.ok(
+    [...shipped].some((path) => path.endsWith(extension)),
+    `Missing compiled ${extension} files`,
+  );
+}
+console.log(
+  `Archive contents: ${shipped.size} allowed library files; no app, tests, media, or env files`,
+);
 const consumer = join(temp, "react-app");
 await cp(join(root, "examples/react-vite"), consumer, {
   recursive: true,
@@ -23,7 +52,7 @@ if (process.env.JEV_VERIFY_REACT) {
   pkg.dependencies.react = process.env.JEV_VERIFY_REACT;
   pkg.dependencies["react-dom"] = process.env.JEV_VERIFY_REACT;
 }
-pkg.dependencies["@diagram-motion-lab/jev-devtools"] = `file:${tarball}`;
+pkg.dependencies["jev-devtools"] = `file:${tarball}`;
 await writeFile(join(consumer, "package.json"), JSON.stringify(pkg, null, 2));
 execFileSync(
   npm,
@@ -41,7 +70,7 @@ execFileSync(
   [
     "--input-type=module",
     "-e",
-    `import assert from 'node:assert/strict';import React from 'react';import {renderToString} from 'react-dom/server';import {JevDevtools} from '@diagram-motion-lab/jev-devtools';import {createJevDevtools} from '@diagram-motion-lab/jev-devtools/server';assert.equal(renderToString(React.createElement(JevDevtools,{enabled:true})), '');assert.equal(renderToString(React.createElement(JevDevtools)), '');const tools=createJevDevtools({origin:'http://localhost:3000'});assert.equal((await tools.handle(new Request('http://localhost:3000/api/jev-devtools'))).status,404);tools.dispose();console.log('Packed exports, SSR, and disabled endpoint: passed');`,
+    `import assert from 'node:assert/strict';import React from 'react';import {renderToString} from 'react-dom/server';import {JevDevtools} from 'jev-devtools';import {createJevDevtools} from 'jev-devtools/server';assert.equal(renderToString(React.createElement(JevDevtools,{enabled:true})), '');assert.equal(renderToString(React.createElement(JevDevtools)), '');const tools=createJevDevtools({origin:'http://localhost:3000'});assert.equal((await tools.handle(new Request('http://localhost:3000/api/jev-devtools'))).status,404);tools.dispose();console.log('Packed exports, SSR, and disabled endpoint: passed');`,
   ],
   { cwd: consumer, stdio: "inherit" },
 );
