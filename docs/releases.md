@@ -1,10 +1,17 @@
 # Packaging and releases
 
-## Release 0.2.0 — pending publication
+## Release 0.2.0 — published October 23, 2026
 
-This minor release adds compact Choice diagrams with progressive branch reveal and a complete probability table, virtualizes Questions, and reduces repeated work in transport and rendering. It includes batching, changed-trace streaming, frame-coalesced browser updates, suspended rendering while closed, and memoized unchanged views. Public component props and server setup APIs are unchanged; no integration migration is required. See the [0.2.0 changelog](../CHANGELOG.md#020--pending-publication) for behavior and tradeoffs.
+This minor release adds compact Choice diagrams with progressive branch reveal and a complete probability table, virtualizes Questions, and reduces repeated work in transport and rendering. It includes batching, changed-trace streaming, frame-coalesced browser updates, suspended rendering while closed, and memoized unchanged views. Public component props and server setup APIs are unchanged; no integration migration is required. See the [0.2.0 changelog](../CHANGELOG.md#020--october-23-2026-experimental) for behavior and tradeoffs.
 
-Version 0.2.0 is prepared but **not published**. Use `jev-devtools-0.2.0.tgz` for this release and follow the verification and explicit publishing approval process below. The first-publish commands are historical. After approval, publish the inspected 0.2.0 archive with the `latest` tag, verify the registry version and timestamp, then record the publication date in the changelog.
+**[jev-devtools@0.2.0](https://www.npmjs.com/package/jev-devtools/v/0.2.0) was published on October 23, 2026 at 22:15:46 UTC**, from commit `b3bcb1097246a5065b6608397ff535ad71bb7648` after [PR #21](https://github.com/diegoag64/jev-devtools/pull/21) and all eight post-merge checks passed. npm's `latest` tag was verified as `0.2.0`.
+
+The inspected and published archive was `jev-devtools-0.2.0.tgz`:
+
+- SHA-256: `d64f0d8234b52108fa3079cbd61786054843d9396a0284f8ca02ac6519a3a8f0`
+- Registry integrity: `sha512-U63uyugokRyL0Yth+8yaWFOqwnQV3XpPcgVJ+3eyXpnK7eYR4StEo7LzAEYyFn57Wb2m+xjO5+xkOWbrDVujQg==`
+
+Do not republish 0.2.0. Archive commands below document its verification; use a new version and explicit approval for the next release. The first-publish commands remain historical.
 
 ## First published release
 
