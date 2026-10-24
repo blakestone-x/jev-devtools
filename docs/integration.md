@@ -11,7 +11,7 @@ Requires React 18 or 19. Use Node 22.12+ for the repository tooling (verified on
 Install from npm:
 
 ```sh
-npm install jev-devtools
+npm install jev-devtools @typesafe-ai/sdk
 ```
 
 To try unpublished local changes instead, build an archive from this repository:

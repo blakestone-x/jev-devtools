@@ -34,7 +34,7 @@ The [setup skill](https://github.com/diegoag64/jev-devtools/blob/main/packages/j
 Install from npm:
 
 ```sh
-npm install jev-devtools
+npm install jev-devtools @typesafe-ai/sdk
 ```
 
 To try unpublished local changes instead:

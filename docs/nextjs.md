@@ -9,7 +9,7 @@ The package has no Next.js dependency. `handle(request)` also works with other N
 The first release is experimental and [available on npm](https://www.npmjs.com/package/jev-devtools). Install in your Next.js app:
 
 ```sh
-npm install jev-devtools server-only
+npm install jev-devtools @typesafe-ai/sdk server-only
 ```
 
 To try unpublished local changes instead, run `npm ci && npm run pack:devtools` from this repository, then in your Next.js app:

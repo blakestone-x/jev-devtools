@@ -105,7 +105,7 @@ A Node backend is required for live Jev calls. The guide includes a local Vite s
 **[Jev DevTools is available on npm](https://www.npmjs.com/package/jev-devtools/v/0.3.0).** This is an experimental release; APIs may change before 1.0.
 
 ```sh
-npm install jev-devtools
+npm install jev-devtools @typesafe-ai/sdk
 ```
 
 <details>
