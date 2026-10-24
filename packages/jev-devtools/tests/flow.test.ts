@@ -18,6 +18,7 @@ import {
   not,
   type FlowExpression,
   type FlowOutcome,
+  type FlowObserver,
 } from "../flow/index.js";
 import { createJevDevtools } from "../server/index.js";
 import {
@@ -1158,4 +1159,208 @@ test("failed task capture cannot leak its data or change execution", async () =>
   } finally {
     inspector.dispose();
   }
+});
+
+test("mutating task redaction changes only the capture, not the task input or result", async () => {
+  for (const record of [false, true]) {
+    const inspector = createJevDevtools({
+      origin,
+      enabled: true,
+      redact: (path, value) => {
+        if (path.join(".") === "steps.work.data.input")
+          (value as { count: number }).count = 77;
+        return value;
+      },
+    });
+    try {
+      const inputs: number[] = [];
+      const flow = defineJevFlow("task-isolation", (f) => {
+        const result = f.task("work", {
+          input: { count: 1 },
+          run: ({ count }) => {
+            inputs.push(count);
+            return count;
+          },
+        });
+        return f.output("done", result);
+      });
+      const result = await flow.run(
+        {},
+        {
+          client: inspector.createClient(options(transport)),
+          devtools: record ? inspector : undefined,
+        },
+      );
+      assert.deepEqual(inputs, [1]);
+      assert.equal(result.value, 1);
+      if (record) {
+        const captured = (await history(inspector)).upserts[0];
+        assert.equal(captured.status, "success");
+        assert.deepEqual(captured.steps.work.data, {
+          input: { count: 77 },
+          output: 1,
+        });
+      }
+    } finally {
+      inspector.dispose();
+    }
+  }
+});
+
+test("mutating loop redaction cannot change iteration inputs, decisions, or final output", async () => {
+  for (const record of [false, true]) {
+    const inspector = createJevDevtools({
+      origin,
+      enabled: true,
+      redact: (path, value) => {
+        if (path.join(".") === "steps.iterate.data.output")
+          (value as { count: number }).count = 88;
+        if (
+          path.length === 0 &&
+          value &&
+          typeof value === "object" &&
+          "count" in value
+        )
+          (value as { count: number }).count = 99;
+        return value;
+      },
+    });
+    try {
+      const inputs: number[] = [];
+      const flow = defineJevFlow("loop-isolation", (f) => {
+        const result = f.loop(
+          "iterate",
+          {
+            initial: { count: 0 },
+            input: null,
+            while: (s) => s.get("count").lt(2),
+            maxIterations: 2,
+          },
+          (round) =>
+            round.task("advance", {
+              input: round.input.get("state"),
+              run: ({ count }) => {
+                inputs.push(count);
+                return { count: count + 1 };
+              },
+            }),
+        );
+        return f.output("done", result);
+      });
+      const result = await flow.run(
+        {},
+        {
+          client: inspector.createClient(options(transport)),
+          devtools: record ? inspector : undefined,
+        },
+      );
+      assert.deepEqual(inputs, [0, 1]);
+      assert.deepEqual(result.value, { count: 2 });
+      if (record) {
+        const captured = (await history(inspector)).upserts[0];
+        assert.equal(captured.status, "success");
+        assert.equal(captured.steps.iterate.decision, false);
+        assert.equal(captured.steps.iterate.collection?.total, 2);
+        assert.deepEqual(captured.steps.iterate.data, {
+          input: { count: 0 },
+          output: { count: 88 },
+        });
+        assert.deepEqual(captured.value, { count: 99 });
+      }
+    } finally {
+      inspector.dispose();
+    }
+  }
+});
+
+test("custom observers cannot mutate nested map results or returned application objects", async () => {
+  let mutations = 0;
+  const inputs: number[] = [];
+  const devtools: FlowObserver = {
+    startFlow: () => ({
+      update(run) {
+        for (const item of run.steps.items?.collection?.items ?? []) {
+          const data = item.run?.steps.work?.data as
+            { input?: { count: number } } | undefined;
+          if (data?.input) {
+            data.input.count = 66;
+            mutations++;
+          }
+          if (item.run?.value && typeof item.run.value === "object") {
+            (item.run.value as { count: number }).count = 77;
+            mutations++;
+          }
+        }
+        if (Array.isArray(run.value)) {
+          (run.value[0] as { count: number }).count = 88;
+          mutations++;
+        }
+      },
+      request: (_link, _trace, callback) => callback(),
+    }),
+  };
+  const flow = defineJevFlow<{ count: number }[]>("map-isolation", (f) => {
+    const items = f.map(
+      "items",
+      {
+        items: f.input,
+        input: null,
+        maxItems: 2,
+        concurrency: 1,
+      },
+      (item) =>
+        item.task("work", {
+          input: item.input.get("item"),
+          run: (value) => {
+            inputs.push(value.count);
+            return value;
+          },
+        }),
+    );
+    return f.output("done", items);
+  });
+  const input = [{ count: 1 }, { count: 2 }];
+  const result = await flow.run(input, {
+    client: new TypeSafeClient(options(transport)),
+    devtools,
+  });
+  assert.ok(mutations > 0);
+  assert.deepEqual(inputs, [1, 2]);
+  assert.deepEqual(result.value, [{ count: 1 }, { count: 2 }]);
+  assert.deepEqual(input, [{ count: 1 }, { count: 2 }]);
+});
+
+test("observer output copies preserve shared references without sharing application objects", async () => {
+  type Shared = { left?: Shared; right?: Shared; value?: number };
+  const leaf: Shared = { value: 1 };
+  let input = leaf;
+  for (let i = 0; i < 12; i++) input = { left: input, right: input };
+  let snapshot: Shared | undefined;
+  const flow = defineJevFlow<Shared>("shared-output", (f) =>
+    f.output("done", f.input),
+  );
+  const result = await flow.run(input, {
+    client: new TypeSafeClient(options(transport)),
+    devtools: {
+      startFlow: () => ({
+        update(run) {
+          if (run.status === "success") snapshot = run.value as Shared;
+        },
+        request: (_link, _trace, callback) => callback(),
+      }),
+    },
+  });
+  assert.equal(result.value, input);
+  assert.ok(snapshot);
+  let original = input;
+  for (let i = 0; i < 12; i++) {
+    assert.notEqual(snapshot, original);
+    assert.equal(snapshot.left, snapshot.right);
+    assert.ok(snapshot.left);
+    snapshot = snapshot.left;
+    original = original.left!;
+  }
+  assert.notEqual(snapshot, leaf);
+  snapshot.value = 77;
+  assert.equal(leaf.value, 1);
 });

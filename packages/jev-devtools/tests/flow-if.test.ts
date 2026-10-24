@@ -256,8 +256,8 @@ test("merge captures honor recorder redaction without changing downstream values
   );
 });
 
-test("non-JSON direct-return values are preserved even when a merge snapshot is unavailable", async () => {
-  const flow = defineJevFlow<{ choose: boolean; value: Date }>(
+test("direct-return values are preserved when their observer snapshots are unavailable", async () => {
+  const flow = defineJevFlow<{ choose: boolean; value: unknown }>(
     "optional",
     (f) => {
       const result = f.if("gate", {
@@ -268,18 +268,32 @@ test("non-JSON direct-return values are preserved even when a merge snapshot is 
       return f.output("done", result);
     },
   );
-  const observer = observe();
-  const value = new Date("2026-10-24T00:00:00Z");
-  const result = await flow.run(
-    { choose: true, value },
-    { client, devtools: observer.devtools },
-  );
-  assert.equal(result.value, value);
-  assert.equal(observer.run.status, "success");
-  assert.equal(
-    typeof observer.run.steps[
-      flow.definition.nodes.find((n) => n.kind === "merge")!.id
-    ].data,
-    "string",
-  );
+  const cycle: { self?: unknown } = {};
+  cycle.self = cycle;
+  const shared = { nested: { count: 1 } };
+  let deep: unknown = shared;
+  for (let i = 0; i < 39; i++) deep = { child: deep };
+  // Visit shared first, then reach the cached subtree beyond the depth limit.
+  const sharedTooDeep = { shared, deep };
+  for (const value of [
+    new Date("2026-10-24T00:00:00Z"),
+    () => 42,
+    cycle,
+    sharedTooDeep,
+  ]) {
+    const observer = observe();
+    const result = await flow.run(
+      { choose: true, value },
+      { client, devtools: observer.devtools },
+    );
+    assert.equal(result.value, value);
+    assert.equal(observer.run.status, "success");
+    assert.equal(observer.run.value, "[capture unavailable]");
+    assert.equal(
+      typeof observer.run.steps[
+        flow.definition.nodes.find((n) => n.kind === "merge")!.id
+      ].data,
+      "string",
+    );
+  }
 });
