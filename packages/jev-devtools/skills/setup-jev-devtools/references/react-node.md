@@ -41,7 +41,7 @@ app.use(inspector.middleware);
 // Existing inference handlers import jev from './jev' and call systemOne as before.
 ```
 
-Mount at the application root, before fallback routes. Do not mount with `app.use('/api/jev-devtools', ...)`: Express strips the prefix the adapter needs. Dispose the adapter during server shutdown, not after each request. If the framework reloads server modules, use `getJevDevtools('your-app', () => options)` instead and restart after options change.
+Mount at the application root, before fallback routes. Do not mount with `app.use('/api/jev-devtools', ...)`: Express strips the prefix the adapter needs. Dispose the adapter during server shutdown, not after each request. If the framework reloads server modules, use `getJevDevtools('your-app', () => options)` instead and restart after options change. Without `authorize`, the middleware returns 403 to non-loopback connections, including a host browser reaching a container through a published port; those setups need a real `authorize` check. So does a proxy or tunnel reachable from the network, because it connects to the backend over loopback.
 
 ### Separate Vite frontend and backend ports
 
@@ -61,7 +61,7 @@ server: {
 }
 ```
 
-Set the adapter origin to the **frontend** origin. Preserve Host and the complete path; no prefix rewrite. Do not buffer or cache `/events`. A broader existing `/api` proxy may suffice if it obeys these rules. The React component must still use the relative same-origin endpoint. See [Vite proxy options](https://vite.dev/config/server-options.html#server-proxy).
+Set the adapter origin to the **frontend** origin. Preserve Host and the complete path; no prefix rewrite. The backend sees the proxy's loopback connection, so keep Vite on its default `localhost` host or set `authorize`. Do not buffer or cache `/events`. A broader existing `/api` proxy may suffice if it obeys these rules. The React component must still use the relative same-origin endpoint. See [Vite proxy options](https://vite.dev/config/server-options.html#server-proxy).
 
 ## Vite app without a backend: local sample setup
 

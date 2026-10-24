@@ -34,6 +34,8 @@ Use one stable, app-specific key. The first options factory wins; restart after 
 
 Set the exact browser origin and API key in the existing server environment (normally an ignored `.env.local`). Never use `NEXT_PUBLIC_` for credentials. SDK client construction requires a key even when capture is disabled. When no key is available, use the sample client in [verify.md](verify.md) for verification instead of constructing a live client with an undefined key.
 
+`next dev` listens on `0.0.0.0` by default, and Route Handlers can't see the connection's address. Recommend `--hostname 127.0.0.1` in the dev script, or a real `authorize` check, and report which one the app uses.
+
 Import this `jev` in existing Route Handlers, Server Actions, and Server Components that call `systemOne(...)`. Keep their inputs and behavior; calls using other clients are not captured.
 
 ## Inspector route

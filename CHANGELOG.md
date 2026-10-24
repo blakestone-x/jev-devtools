@@ -8,7 +8,7 @@ Dates below use UTC and were checked against npm's publication history. The hist
 
 | Version | Published (UTC) | Highlights |
 | --- | --- | --- |
-| [Unreleased](#unreleased) | Not published | Local experiment: function steps, runtime requests, bounded collections, returning conditionals, bounded loops, and six cookbooks. |
+| [Unreleased](#unreleased) | Not published | Local experiment: function steps, runtime requests, bounded collections, returning conditionals, bounded loops, and six cookbooks. Loopback-only inspector middleware unless `authorize` is set. |
 | [0.3.0](#030--october-24-2026-experimental) | 2026-10-24 | Connected flow API, complete request diagrams, readable branch requirements, structured content, and bundled AI flow guidance. |
 | [0.2.0](#020--october-23-2026-experimental) | 2026-10-23 | Batched updates, changed-trace streaming, frame-coalesced rendering, less work while the drawer is closed, virtualized Questions, compact Choice diagrams, and reuse of unchanged inspector views. |
 | [0.1.3](#013--october-23-2026-experimental) | 2026-10-23 | Isolated drawer styles, diagram pan/zoom, and version-specific npm links. |
@@ -17,6 +17,8 @@ Dates below use UTC and were checked against npm's publication history. The hist
 | [0.1.0](#010--october-23-2026-experimental) | 2026-10-23 | First public package: React inspector, Jev diagrams, Node adapter, and Next.js integration. |
 
 ## Unreleased
+
+- Refuse non-loopback connections in `middleware` when `authorize` is unset. `Host` and `Origin` are client-controlled, so a network client could read captures and clear history on servers listening on all interfaces, such as Express `listen(port)` and `next dev`. Web Request handlers can't see the connection's address; run those servers on `127.0.0.1` or set `authorize`. Setups where the browser reaches the dev server through Docker port publishing, a VM, or a network-reachable proxy now need `authorize`. ([#27](https://github.com/diegoag64/jev-devtools/pull/27))
 
 Flow API extensions and cookbook demos proposed in [#30](https://github.com/diegoag64/jev-devtools/pull/30); not published to npm.
 
