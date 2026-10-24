@@ -4,6 +4,7 @@ import type { Trace } from "./protocol.js";
 import { useDiagramViewport } from "./useDiagramViewport.js";
 import { RequestDetail } from "./JevDevtools.js";
 import { JsonBlock } from "./TraceContent.js";
+import { formatFlowCondition } from "./flow-condition.js";
 import { TraceDiagram } from "./TraceDiagram.js";
 type Lane = { name: string; status: string };
 type Bounds = { x: number; y: number; width: number; height: number };
@@ -146,6 +147,17 @@ const Card = memo(function Card({
       {node.description && (
         <span className="flow-step-description">{node.description}</span>
       )}
+      {node.kind === "branch" &&
+        (node.conditionRule !== undefined || node.condition) && (
+          <span className="flow-condition-rule">
+            <span className="flow-condition-label">Branch rule</span>
+            <code>
+              {node.conditionRule !== undefined
+                ? formatFlowCondition(node.conditionRule)
+                : node.condition}
+            </code>
+          </span>
+        )}
       {join && (
         <>
           <span className="flow-join-summary">
@@ -339,9 +351,8 @@ export const FlowOverview = memo(function FlowOverview({
               ? 190 +
                 (node.description ? 64 : 0) +
                 Math.min(4, (node.lanes ?? node.dependencies).length) * 32
-              : node.description
-                ? 244
-                : 172;
+              : (node.description ? 244 : 172) +
+                (node.kind === "branch" ? 80 : 0);
         const parents = (links.get(node.id) ?? [])
           .map((id) => points.get(id)!)
           .filter(Boolean);
@@ -559,12 +570,19 @@ export const FlowOverview = memo(function FlowOverview({
                 ))}
               </ul>
             )}
-            {node.condition && (
+            {(node.conditionRule !== undefined || node.condition) && (
               <p>
-                <code>{node.condition}</code> ·{" "}
+                <code>
+                  {node.conditionRule !== undefined
+                    ? formatFlowCondition(node.conditionRule)
+                    : node.condition}
+                </code>{" "}
+                ·{" "}
                 {step.decision === undefined
-                  ? "not evaluated"
-                  : String(step.decision)}
+                  ? "Not evaluated"
+                  : step.decision
+                    ? "Passed · then route"
+                    : "Not met · else route"}
               </p>
             )}
             <p className="muted">

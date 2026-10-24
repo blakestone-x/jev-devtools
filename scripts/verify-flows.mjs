@@ -199,6 +199,10 @@ try {
     name: "Step review-output, output, untaken",
     exact: true,
   });
+  await page
+    .getByRole("button", { name: "Step ready, branch, completed", exact: true })
+    .getByText("combined.ready ≥ 90%", { exact: true })
+    .waitFor();
   await returned.getByText("Ready for approval", { exact: true }).waitFor();
   await returned.getByText("Returned outcome", { exact: true }).waitFor();
   await untaken.getByText("Needs a closer look", { exact: true }).waitFor();
@@ -320,6 +324,8 @@ try {
   await state.getByText("0.94", { exact: true }).waitFor();
   await state.getByText("false", { exact: true }).waitFor();
   await state.getByText("null", { exact: true }).waitFor();
+  // Let initial focus/ResizeObserver frames finish before comparing interactions.
+  await page.waitForTimeout(150);
   const contentCamera = await page
     .locator(".flow-overview-canvas")
     .getAttribute("style");

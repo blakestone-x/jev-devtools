@@ -7,6 +7,7 @@ import type {
 } from "@typesafe-ai/sdk";
 import type {
   FlowDefinition,
+  FlowCondition,
   FlowDisplay,
   FlowNode,
   FlowRun,
@@ -179,6 +180,62 @@ function describe(ast: Ast): string {
   if (ast.op === "get") return `${describe(ast.from)}.${ast.key}`;
   if (ast.op === "literal") return "[literal]";
   return `${ast.op}(${ast.args.map(describe).join(", ")})`;
+}
+function conditionRule(ast: Ast, requests: Set<string>): FlowCondition {
+  let remaining = 128;
+  const visit = (node: Ast): FlowCondition => {
+    if (--remaining < 0) return { op: "literal", value: "[rule truncated]" };
+    if (node.op === "input" || node.op === "ref" || node.op === "get") {
+      const path: string[] = [];
+      let base: Ast = node;
+      while (base.op === "get") {
+        path.unshift(base.key);
+        base = base.from;
+      }
+      const answer =
+        base.op === "ref" && requests.has(base.id) && path[0] === "answers";
+      const probability = answer && path.length === 3 && path[2] === "noul";
+      const root =
+        base.op === "input"
+          ? "input"
+          : base.op === "ref"
+            ? base.id
+            : describe(base);
+      const fields = probability
+        ? path.slice(1, -1)
+        : answer
+          ? path.slice(1)
+          : path;
+      const label =
+        root +
+        fields
+          .map((key) =>
+            /^[a-zA-Z_$][\w$]*$/.test(key)
+              ? `.${key}`
+              : `[${JSON.stringify(key)}]`,
+          )
+          .join("");
+      return { op: "reference", label, probability };
+    }
+    if (node.op === "literal")
+      return {
+        op: "literal",
+        value:
+          node.value === null ||
+          typeof node.value === "string" ||
+          typeof node.value === "boolean" ||
+          (typeof node.value === "number" && Number.isFinite(node.value))
+            ? (node.value as string | number | boolean | null)
+            : "[value unavailable]",
+      };
+    const args: FlowCondition[] = [];
+    for (const arg of node.args) {
+      args.push(visit(arg));
+      if (remaining < 0) break;
+    }
+    return { op: node.op, args };
+  };
+  return visit(ast);
 }
 function evaluate(
   ast: Ast,
@@ -400,7 +457,12 @@ export function defineJevFlow<T>(
         step.when = paths.when;
         if (!(paths.when instanceof FlowExpression))
           throw new Error("branch requires a condition expression");
-        nodes.find((n) => n.id === id)!.condition = describe(paths.when.ast);
+        const node = nodes.find((n) => n.id === id)!;
+        node.condition = describe(paths.when.ast);
+        node.conditionRule = conditionRule(
+          paths.when.ast,
+          new Set(nodes.filter((n) => n.kind === "jev").map((n) => n.id)),
+        );
         step.then = block(
           paths.then,
           new Set(available),
@@ -500,10 +562,16 @@ export function defineJevFlow<T>(
     nodes,
   };
   const definitionView = structuredClone(definition);
+  const freezeRule = (rule: unknown): void => {
+    if (!rule || typeof rule !== "object") return;
+    for (const value of Object.values(rule)) freezeRule(value);
+    Object.freeze(rule);
+  };
   for (const node of definitionView.nodes) {
     Object.freeze(node.dependencies);
     Object.freeze(node.path);
     if (node.lanes) Object.freeze(node.lanes);
+    freezeRule(node.conditionRule);
     Object.freeze(node);
   }
   Object.freeze(definitionView.nodes);

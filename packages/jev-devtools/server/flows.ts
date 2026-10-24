@@ -29,7 +29,23 @@ export class FlowRecorder {
   }
   start(definition: FlowDefinition, run: FlowRun, session: string) {
     if (!this.definitions.has(definition.id)) {
-      this.definitions.set(definition.id, structuredClone(definition));
+      const stored = structuredClone(definition);
+      for (const node of stored.nodes) {
+        if (node.conditionRule === undefined) continue;
+        try {
+          node.conditionRule = capture(
+            node.conditionRule,
+            new Set(),
+            this.options.redact
+              ? (path, value) =>
+                  this.options.redact!(["conditions", node.id, ...path], value)
+              : undefined,
+          );
+        } catch {
+          node.conditionRule = "[rule capture unavailable]";
+        }
+      }
+      this.definitions.set(definition.id, stored);
       this.definitionRevisions.set(definition.id, ++this.revision);
     }
     this.runs.set(run.id, run);

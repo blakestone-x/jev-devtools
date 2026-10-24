@@ -118,7 +118,7 @@ Definitions and runs are separate schema-version-1 records. Each definition inst
 
 The existing `limit` bounds flow-run history independently from request history (default 50, maximum 200). Definitions are pruned when no retained run references them. Clear affects both histories and cannot resurrect an in-flight cleared run. Requests can be evicted before their flow; the overview then explains that details are unavailable. Capture, transport and parsing continue while the drawer is closed; its React work remains suspended.
 
-Definition captures contain structural IDs/dependencies and parallel lane names and condition expressions with literal values hidden. State, questions, probabilities, and images stay in the ordinary bounded/redacted request captures. Outcome values use the existing redaction/size limits. Decision results are actual execution facts; they are not recalculated from snapshots. Step IDs, flow names, output names, and branch decisions are structural metadata: do not put secrets in their names. Errors show error classes rather than possibly sensitive application messages.
+Definition captures contain structural IDs/dependencies and parallel lane names and condition expressions. New captures include bounded rule literals, processed by the configured redaction callback under `conditions.<step-id>…`; older captures keep literals hidden. State, questions, probabilities, and images stay in the ordinary bounded/redacted request captures. Outcome values use the existing redaction/size limits. Decision results are actual execution facts; they are not recalculated from snapshots. Step IDs, flow names, output names, and branch decisions are structural metadata: do not put secrets in their names. Errors show error classes rather than possibly sensitive application messages.
 
 ## Drawer and samples
 
@@ -147,3 +147,9 @@ V1 has no standalone viewer, generic tasks, arbitrary callbacks at execution tim
 ### Structured content in request cards
 
 State and instruction objects show their top-level properties, with nested objects and arrays collapsed by default. Numbers, booleans, nulls, and text have distinct styling. Expand a property to inspect its children; collections initially render 12 entries and offer more in batches. Long strings offer **Full text** / **Less text**. Content scrolls inside the card without zooming or moving the diagram, and expansion survives closing/reopening the drawer. Displayed values come from the captured snapshot; existing redaction and capture limits still apply. JSON stored as a string remains text, without coercing its type.
+
+### Branch rules
+
+Condition cards show a rule derived from the executable expression, alongside your authored description. For example, `decision.answer("ready").noul.gte(0.9)` displays `combined.ready ≥ 90%` when the request step ID is `combined`. Comparisons preserve their operators and AND/OR/NOT grouping. The condition's recorded decision shows **then** or **else**; the viewer never re-evaluates a rule against potentially redacted snapshots. Selecting the card reveals its full captured rule; the card itself previews three lines.
+
+Rule literals now appear in captures, including numeric thresholds and string comparison labels. They use the existing capture limits and `redact` callback, with paths prefixed by `["conditions", stepId]`; a literal's final path segment is `value`. For example, return `"[redacted]"` whenever `path[0] === "conditions" && path.at(-1) === "value"` to hide all rule literals. Redaction/truncation is displayed explicitly and never changes execution. Rules are bounded to 128 expression nodes before capture. Existing integrations and older captures remain supported; old captures show their original rule with hidden literals.

@@ -18,6 +18,7 @@ import {
   type FlowOutcome,
 } from "../flow/index.js";
 import { createJevDevtools } from "../server/index.js";
+import { formatFlowCondition } from "../src/flow-condition.js";
 import type { FlowUpdate } from "../src/flow-protocol.js";
 const questions = {
   category: choice("Category?", { refund: null, other: null }),
@@ -717,5 +718,90 @@ test("invalid display text is rejected when defining a flow", () => {
         ),
       /must be a non-empty string/,
     );
+  }
+});
+
+test("captured branch rules preserve thresholds and Boolean grouping without changing recorded decisions", async () => {
+  const inputRule = defineJevFlow<{ answers: { ready: boolean } }>(
+    "input-rule",
+    (f) =>
+      f.branch("route", {
+        when: f.input.get("answers").get("ready").eq(true),
+        then: (p) => p.output("yes"),
+        else: (p) => p.output("no"),
+      }),
+  );
+  assert.equal(
+    formatFlowCondition(inputRule.definition.nodes[0].conditionRule!),
+    "input.answers.ready = true",
+  );
+  const inspector = createJevDevtools({ origin, enabled: true });
+  try {
+    const flow = refund();
+    const client = inspector.createClient(options(transport), {
+      source: "sample",
+    });
+    await flow.run(
+      { category: "refund", eligible: 0.94, risky: 0.1 },
+      { client, devtools: inspector },
+    );
+    const captured = (await history(inspector)) as FlowUpdate;
+    const rules = captured.definitions[0].nodes;
+    assert.equal(
+      formatFlowCondition(
+        rules.find((n) => n.id === "refund-request")!.conditionRule!,
+      ),
+      'triage.category.choice = "refund"',
+    );
+    assert.equal(
+      formatFlowCondition(
+        rules.find((n) => n.id === "approval")!.conditionRule!,
+      ),
+      "(review.eligible ≥ 90% AND NOT ((review.risky ≥ 20% OR review.eligible < 0%)))",
+    );
+    assert.equal(captured.upserts[0].steps.approval.decision, true);
+  } finally {
+    inspector.dispose();
+  }
+});
+test("rule literals follow condition redaction and capture failures never expose them or alter execution", async () => {
+  const flow = defineJevFlow<string>("private-rule", (f) =>
+    f.branch("match", {
+      when: f.input.eq("private-code"),
+      then: (p) => p.output("matched"),
+      else: (p) => p.output("other"),
+    }),
+  );
+  for (const throws of [false, true]) {
+    const inspector = createJevDevtools({
+      origin,
+      enabled: true,
+      redact: (path, value) => {
+        if (path[0] === "conditions" && path.at(-1) === "value") {
+          if (throws) throw new Error("no capture");
+          return "[redacted]";
+        }
+        return value;
+      },
+    });
+    try {
+      const result = await flow.run("private-code", {
+        client: new TypeSafeClient(options(transport)),
+        devtools: inspector,
+      });
+      assert.equal(result.outcome, "matched");
+      const captured = (await history(inspector)) as FlowUpdate;
+      assert.equal(JSON.stringify(captured).includes("private-code"), false);
+      assert.equal(
+        formatFlowCondition(
+          captured.definitions[0].nodes.find((n) => n.id === "match")!
+            .conditionRule!,
+        ),
+        throws ? "[rule capture unavailable]" : 'input = "[redacted]"',
+      );
+      assert.equal(captured.upserts[0].steps.match.decision, true);
+    } finally {
+      inspector.dispose();
+    }
   }
 });

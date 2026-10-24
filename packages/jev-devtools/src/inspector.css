@@ -1686,3 +1686,29 @@
 .jev-devtools .lab-noul-output > p {
   opacity: calc(0.65 + 0.35 * var(--lab-noul-probability, 1));
 }
+
+.flow-condition-rule {
+  display: block;
+  padding: 10px 12px;
+  border: 1px solid #49324b;
+  border-radius: 6px;
+  background: #211723;
+  width: 100%;
+}
+.flow-condition-label {
+  display: block;
+  font-size: 10px;
+  color: #ba9dbe;
+  margin-bottom: 5px;
+}
+.flow-condition-rule code {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+  font:
+    12px/1.6 ui-monospace,
+    monospace;
+  color: #f2d7eb;
+}
