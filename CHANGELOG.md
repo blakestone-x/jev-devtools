@@ -8,7 +8,7 @@ Dates below use UTC and were checked against npm's publication history. The hist
 
 | Version | Published (UTC) | Highlights |
 | --- | --- | --- |
-| [Unreleased](#unreleased) | Not published | `@typesafe-ai/sdk` becomes a peer dependency. |
+| [Unreleased](#unreleased) | Not published | Flow API extensions, six cookbooks, and `@typesafe-ai/sdk` as a peer dependency. |
 | [0.3.0](#030--october-24-2026-experimental) | 2026-10-24 | Connected flow API, complete request diagrams, readable branch requirements, structured content, and bundled AI flow guidance. |
 | [0.2.0](#020--october-23-2026-experimental) | 2026-10-23 | Batched updates, changed-trace streaming, frame-coalesced rendering, less work while the drawer is closed, virtualized Questions, compact Choice diagrams, and reuse of unchanged inspector views. |
 | [0.1.3](#013--october-23-2026-experimental) | 2026-10-23 | Isolated drawer styles, diagram pan/zoom, and version-specific npm links. |
@@ -18,9 +18,54 @@ Dates below use UTC and were checked against npm's publication history. The hist
 
 ## Unreleased
 
-### Changed
-
 - Make `@typesafe-ai/sdk` a peer dependency (`>=0.7.0 <0.8.0`, tested with 0.7.0) instead of a pinned dependency, so `createClient` uses the application's SDK copy. Install it with the package: `npm install jev-devtools @typesafe-ai/sdk`. Applications on another SDK version must move to 0.7.x. ([#28](https://github.com/diegoag64/jev-devtools/pull/28))
+
+Flow API extensions and cookbook demos merged in [#30](https://github.com/diegoag64/jev-devtools/pull/30); not published to npm.
+
+- Preserve the original failure when a map fails inside parallel work; cancelling sibling lanes no longer misreports the run as cancelled.
+
+- Keep all six cookbook sample transports compatible with Node 22.12, including the SDK’s uncompressed request fallback when Zstandard is unavailable.
+
+- Require conventional PR titles (`feat: …`, `fix: …`, etc.), with contributor/agent instructions and a lightweight metadata check that reruns on title edits.
+
+- Format function and merge-card outputs as typed, collapsible properties instead of cut-off JSON strings. Nested objects and arrays expand on demand; long values and additional properties remain accessible without growing the canvas indefinitely.
+
+- Add the Simple Memory cookbook using existing flow APIs: sequential customer ticket replay, explicit per-customer memory, original-ticket/readable-answer capture and the inclusive 50% save gate. Four no-key samples show before/after routing, all team probabilities, transient-only tickets and threshold boundaries. Responses are synthetic; each run starts empty and no persistence API is added.
+
+- Bound playground request waits (30 seconds for samples, five minutes for live flows), including stalled response bodies. Timeouts restore the controls and explain recovery; Cancel now aborts the browser wait immediately and requests server cancellation in the background.
+
+- Add the sample-only Structure Recovery cookbook using existing flow APIs: two sequential batched requests, visible line-merge and Markdown-render tasks, a safe original/preview comparison, every join/type probability, and cases for threshold boundaries, separated text and empty input. Prompts and rendering rules follow the official executable recipe; documents and answers are synthetic. No new flow primitive or live provider is introduced.
+
+- Add typed, pre-test `flow.loop()` with state carried between iterations, explicit `FlowLoopLimitError` on unfinished iteration-limit exhaustion, zero-iteration support and cancellation. Loops may contain maps; all expanded work shares one run-wide step budget. Loop templates and nested item templates count toward the definition limit. Nested loops and loops inside maps remain unsupported.
+- Inspect loop iterations inline with selectors and navigation arrows, preserving the parent graph and camera. Initial/latest state, continuation decisions and nested request captures use the existing redaction limits. New loop records require a matching server/drawer build.
+- Add a sample-only hierarchical classification cookbook comparing beam and greedy traversal, including retained/pruned paths, every child probability, deterministic single-child bypass, an initial leaf, and intentional limit exhaustion. The taxonomy and scores are authored fixtures; scoring and separate concurrent frontier requests follow the official executable recipe.
+
+- Add `flow.if()` for typed value-returning paths that rejoin shared work, strict numeric `.gt()`, and a visible Selected result merge with captured values and only the chosen incoming edge highlighted. Branch-local references remain scoped; failures/cancellation prevent continuation. New `if`/`merge` records require the matching updated server and drawer; published `flow.branch()` semantics are unchanged.
+- Add a sample-only SDE cascade cookbook with dynamic per-field verification, conditional stronger extraction, before/after records, every flag accessible, and four no-key cases covering both routes and the strict 70% boundary. The overall judge is excluded from escalation; extraction and probabilities are labeled synthetic fixtures.
+
+- Animate collection item changes with a short directional fade/slide, respecting reduced motion. Center previews beneath their collection, move navigation arrows outside the frame with subtle corner rounding, and include their bounds when fitting the canvas. The camera and original nodes stay fixed during navigation.
+
+- Add previous/next arrows beside expanded collection flows. Navigation wraps between the first and last items, stays synchronized with the selector, and preserves the original graph and camera.
+
+- Keep original flow nodes and the camera fixed when opening or switching collection previews. Place previews below the graph with connectors anchored to the center of each wrapper’s top edge.
+
+- Inspect collection items inline: choose an item and View Flow inside the collection card to expand its connected diagram underneath. Cycle items without leaving the parent canvas, with shared pan/zoom, collapsible item flows, and explicit queued/empty states.
+
+- Size flow cards and request headings to their text instead of clipping titles and descriptions. Recalculate spacing and connectors when content grows or shrinks, while preserving the camera.
+
+- Add typed `flow.map()` with bounded concurrency, stable input-order results, isolated item programs, fail-fast cancellation, empty-list support and explicit item/execution limits. Collection cards show progress and let users inspect every started item’s full request/function diagram.
+- Add the RAG passage-classification cookbook with twelve candidates, official question/policy semantics, separate evidence/conflict blocks, and three sample cases. Retrieval and generation are explicitly labeled stand-ins; no live providers are called.
+
+- Collapse flow metadata behind a Show details bar by default. The expanded panel scrolls independently and supports vertical pointer/keyboard resizing; selecting another step keeps the chosen panel height and does not open it automatically.
+
+- Add the full skill-suggestion selection flow using the official 182-skill roster, exact request/fit gates, dynamic shortlist questions, and agent-hint formatting. Provide three labeled synthetic cases, an adaptive result UI, and optional explicit live mode; the external-agent benchmark is not run.
+- Expose `.answers` references on Jev steps so functions can consume answers with runtime-generated names.
+- Preserve up to 256 criteria/probability map entries in captures, allowing all 182 skills to remain inspectable. General collection, byte, and depth bounds still apply.
+
+- Add server-side `flow.task()` with typed resolved inputs/results, asynchronous callbacks, cooperative cancellation and optional timeouts. Late results cannot advance failed/cancelled flows; tasks do not retry automatically.
+- Add a synchronous request-factory overload to `flow.jev()` for questions/criteria built from preceding results while retaining SDK request capture and linkage. Existing static requests remain supported.
+- Display function cards, captured input/output property views, duration/status, capture warnings, and task-derived condition values. Task data is bounded/redacted independently of runtime values; exception messages and callback code are not sent to the browser.
+- Add a clearly labeled synthetic shortlist playground flow and human/AI API guidance. The map and loop additions are described above; distributed execution is not included.
 
 ## 0.3.0 — October 24, 2026 (experimental)
 
