@@ -831,7 +831,11 @@
   min-height: 100px;
   overflow: hidden;
   background-color: #0d0a0f;
-  background-image: radial-gradient(#463449 0.8px, transparent 0.8px);
+  background-image: radial-gradient(
+    rgb(70 52 73 / var(--diagram-grid-opacity, 1))
+      calc(0.8px * var(--diagram-grid-weight, 1)),
+    transparent calc(0.8px * var(--diagram-grid-weight, 1))
+  );
   background-size: 20px 20px;
   border-block: 1px solid #302634;
   cursor: grab;
@@ -1278,7 +1282,11 @@
   overflow: hidden;
   touch-action: none;
   cursor: grab;
-  background-image: radial-gradient(#534357 1px, transparent 1px);
+  background-image: radial-gradient(
+    rgb(83 67 87 / var(--diagram-grid-opacity, 1))
+      calc(1px * var(--diagram-grid-weight, 1)),
+    transparent calc(1px * var(--diagram-grid-weight, 1))
+  );
   background-size: 20px 20px;
 }
 .flow-overview-viewport[data-panning] {

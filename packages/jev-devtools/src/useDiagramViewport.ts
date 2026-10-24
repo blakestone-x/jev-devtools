@@ -38,8 +38,18 @@ export function useDiagramViewport(
         canvas.current.style.transform = `translate(${x}px, ${y}px) scale(${scale})`;
       if (viewport.current) {
         viewport.current.style.backgroundPosition = `${x}px ${y}px`;
-        const grid = Math.max(12, 20 * scale);
+        // Thin out the decorative grid at overview zooms instead of packing
+        // more dots behind an increasingly small diagram.
+        const grid = 20 * Math.max(scale, 1 / Math.sqrt(scale));
         viewport.current.style.backgroundSize = `${grid}px ${grid}px`;
+        viewport.current.style.setProperty(
+          "--diagram-grid-opacity",
+          String(Math.min(1, Math.sqrt(scale))),
+        );
+        viewport.current.style.setProperty(
+          "--diagram-grid-weight",
+          String(Math.max(0.6, Math.min(1, Math.sqrt(scale)))),
+        );
       }
       setZoom(Math.round(scale * 100));
     });
