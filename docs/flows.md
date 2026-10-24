@@ -347,6 +347,8 @@ A fixture saves the responses of completed Jev requests, not every diagram node.
 
 Warnings about failed/cancelled runs, missing responses and capture issues remain visible so you know when an export is partial. Only successful captured responses are included; see the limitations below before relying on a fixture as a complete reproduction.
 
+Changing the displayed capture data or masking settings clears previous copy feedback and fallback JSON. Click **Copy fixture** again to export the current view. A clipboard operation already in progress cannot restore the old fallback or replace a newer copy result; data already sent to the system clipboard is not retracted.
+
 ### One-command playground replay
 
 After clicking **Copy fixture**, run this from the repository root on macOS:

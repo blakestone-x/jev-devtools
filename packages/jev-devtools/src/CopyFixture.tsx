@@ -34,17 +34,26 @@ export function useFixtureCopy(
   run: FlowRun,
   traces: ReadonlyMap<string, Trace>,
 ): FixtureCopy {
-  const [result, setResult] = useState<CopyResult>();
-  const [busy, setBusy] = useState(false);
-  const pending = useRef(false);
+  const source = useMemo(
+    () => ({ definition, run, traces }),
+    [definition, run, traces],
+  );
+  const [attempt, setAttempt] = useState<{
+    source: typeof source;
+    result?: CopyResult;
+  }>();
+  const pending = useRef<typeof source | undefined>(undefined);
+  // Masking replaces the display projection. Hide its old JSON during render,
+  // including results from clipboard promises that settle after that change.
+  const current = attempt?.source === source ? attempt : undefined;
   const completed = useMemo(
     () => hasCompletedJev(definition, run),
     [definition, run],
   );
   const copy = async () => {
-    if (pending.current) return;
-    pending.current = true;
-    setBusy(true);
+    if (pending.current === source) return;
+    pending.current = source;
+    setAttempt({ source });
     const built = flowFixture(definition, run, traces);
     const json = JSON.stringify(built.fixture, null, 2);
     let copied = false;
@@ -54,14 +63,17 @@ export function useFixtureCopy(
     } catch {
       // Clipboard access can be refused; show the JSON for manual copying instead.
     }
-    setResult({ built, json, copied, status: run.status });
-    pending.current = false;
-    setBusy(false);
+    setAttempt((latest) =>
+      latest?.source === source
+        ? { source, result: { built, json, copied, status: run.status } }
+        : latest,
+    );
+    if (pending.current === source) pending.current = undefined;
   };
   return {
     copy: () => void copy(),
-    disabled: busy || run.status === "pending" || !completed,
-    result,
+    disabled: (!!current && !current.result) || run.status === "pending" || !completed,
+    result: current?.result,
   };
 }
 export function CopyFixtureButton({ control }: { control: FixtureCopy }) {
