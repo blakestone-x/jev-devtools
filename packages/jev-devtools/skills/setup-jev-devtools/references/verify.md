@@ -78,6 +78,6 @@ Report HTTP/capture checks separately from visual browser checks, and sample ver
 | Server import/build errors | Keep `/server` outside client modules. In Next externalize the SDK only. Use a supported Node runtime. |
 | Production 404 | Expected when disabled; app inference remains independent. |
 
-Capture is bounded to 50 calls in memory by default. Built-in redaction has limits; arbitrary secrets in prose are not detected. Diagrams show captured inputs/outputs, not hidden model reasoning or application routing decisions.
+Capture is bounded to 50 calls in memory by default. Built-in redaction has limits; arbitrary secrets in prose are not detected. Diagrams show captured inputs/outputs, not hidden model reasoning. Routing decisions are recorded only for explicitly defined flows; see [flows.md](flows.md) for flow verification.
 
 The current browser requests `/events?protocol=2`: the first event is a full version 2 `snapshot`, followed by `delta` events containing changed traces and the retained ID order. The unqualified `/events` check above intentionally remains compatible with legacy clients. Reconnecting always supplies a fresh snapshot.

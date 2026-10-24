@@ -1,6 +1,6 @@
 # Jev DevTools
 
-> React request inspector for TypeSafe Jev, with a Node server adapter. Development-only opt-in; React 18/19, Node 22.12+. No TanStack dependency.
+> React request inspector for TypeSafe Jev, with a Node server adapter. Development-only opt-in; React 18/19, Node 22.12+. Custom drawer; TanStack Virtual is used internally for Questions.
 
 ## Set up in an existing app
 
@@ -10,6 +10,13 @@
 - [Verification and troubleshooting](https://raw.githubusercontent.com/diegoag64/jev-devtools/main/packages/jev-devtools/skills/setup-jev-devtools/references/verify.md): No-key sample, captured request, SSE, production behavior.
 
 The skill and references ship in npm at `node_modules/jev-devtools/skills/setup-jev-devtools/`. Prefer the installed version's guidance and declaration files when it differs from main. These are explicit entry points, not a promise of automatic discovery by every AI tool.
+
+## Build connected flows (0.3.0+)
+
+- [Bundled flow recipe](https://raw.githubusercontent.com/diegoag64/jev-devtools/main/packages/jev-devtools/skills/setup-jev-devtools/references/flows.md): Agent workflow, complete parallel/branch example, metadata, scope rules, sample checks and troubleshooting. Available offline beside the installed setup skill.
+- [Flow API guide](https://raw.githubusercontent.com/diegoag64/jev-devtools/main/docs/flows.md): Definition versus execution, typed references, conditions, joins, errors/cancellation, recording and viewer limits.
+
+Use the installed `lib/flow/index.d.ts` as the version-matched API contract. Define on Node; execute with the shared instrumented client and inspector. Existing request capture does not require adopting flows. Do not invent thresholds or business actions.
 
 ## Details and examples
 
@@ -23,5 +30,3 @@ The skill and references ship in npm at `node_modules/jev-devtools/skills/setup-
 
 - [Repository workflow](https://raw.githubusercontent.com/diegoag64/jev-devtools/main/AGENTS.md): For package contributors, not installation into a consumer app.
 - [Release process](https://raw.githubusercontent.com/diegoag64/jev-devtools/main/docs/releases.md)
-
-- [Connected flow API (unreleased)](docs/flows.md): Node definition/execution, references, branches, parallel joins, and whole-flow inspection.

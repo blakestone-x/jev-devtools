@@ -22,6 +22,7 @@ const setupDocs = new Set([
   "skills/setup-jev-devtools/references/react-node.md",
   "skills/setup-jev-devtools/references/nextjs.md",
   "skills/setup-jev-devtools/references/verify.md",
+  "skills/setup-jev-devtools/references/flows.md",
 ]);
 for (const path of shipped) {
   assert.ok(

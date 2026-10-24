@@ -15,7 +15,7 @@ npm install jev-devtools server-only
 To try unpublished local changes instead, run `npm ci && npm run pack:devtools` from this repository, then in your Next.js app:
 
 ```sh
-npm install /absolute/path/to/jev-devtools-0.2.0.tgz server-only
+npm install /absolute/path/to/jev-devtools-0.3.0.tgz server-only
 ```
 
 Use Node 22.12+ and React 18/19. The App Router example pins Next.js 16.4.2 and React 19.3.1. The broader package's React 18 checks use the Vite consumer; they are not a claim that every Next.js version supports that combination.

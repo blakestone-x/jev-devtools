@@ -1,6 +1,6 @@
 ---
 name: setup-jev-devtools
-description: Install and verify Jev DevTools in an existing React application with a Node backend or Next.js App Router. Use when asked to add the Jev request inspector, wire capture, or troubleshoot its setup.
+description: Install and verify Jev DevTools in an existing React application with a Node backend or Next.js App Router. Use when asked to add the Jev request inspector, wire capture, build connected Jev flows with branches and parallel checks, or troubleshoot its setup.
 ---
 
 # Set up Jev DevTools
@@ -17,9 +17,13 @@ Inspect the app's package manager/lockfile, React and Node versions, root compon
 
 Install `jev-devtools` using the app's existing package manager (npm: `npm install jev-devtools`; pnpm: `pnpm add jev-devtools`; Yarn: `yarn add jev-devtools`). Install in the workspace(s) that actually import it. It is a regular dependency when application modules import it, even though capture/display are development-only. React 18/19 and Node 22.12+ are required. Do not replace the app's framework or upgrade unrelated dependencies to force compatibility.
 
+## Optional connected flow API (0.3.0+)
+
+When asked to build or inspect connected calls, read [references/flows.md](references/flows.md) after the framework recipe. It includes an executable parallel-checks/branch example, step titles/descriptions, scope and execution rules, sample verification, and privacy limits. Preserve existing application policies; do not convert unrelated calls just to install the drawer. Flow execution is server-only and continues even with the inspector disabled.
+
 ## Integration invariants
 
-- Use only public imports: `jev-devtools`, `jev-devtools/styles.css`, and server-only `jev-devtools/server`. No provider, TanStack, Tailwind, or shadcn installation is needed.
+- Use only public imports: `jev-devtools`, `jev-devtools/styles.css`, and server-only `jev-devtools/server` and `jev-devtools/flow`. No provider, TanStack DevTools shell, Tailwind, or shadcn setup is needed; TanStack Virtual is an internal dependency.
 - Mount `<JevDevtools />` once with an explicit development flag and import the CSS. Server capture must also be explicitly enabled for development; both default to off.
 - Create a shared adapter; the inspector routes and application client must use it in the same Node realm/process. Replace existing `new TypeSafeClient(options)` construction with `inspector.createClient(options)` while preserving keys, transport options, retries, and call semantics. Keep existing `systemOne(...)` inputs and application behavior.
 - Browser and server `endpoint` paths must agree (default `/api/jev-devtools`). Route the base path and its subpaths. The server `origin` must exactly match the browser scheme, hostname, and port. A browser endpoint is a same-origin path, not an absolute backend URL.

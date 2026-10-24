@@ -1,6 +1,10 @@
 # Define and inspect connected Jev calls
 
-This API is unreleased; it is not included in npm 0.2.0. Use a locally packed build of this branch until a new version is published. Existing single-request integrations are unchanged.
+Introduced in **0.3.0**. Existing single-request integrations are unchanged; adopting flows is optional. For release availability, check the [changelog](../CHANGELOG.md).
+
+Start with the [integration guide](integration.md) or [Next.js setup](nextjs.md) to mount the drawer and expose the shared inspector. For coding agents, the [bundled flow recipe](../packages/jev-devtools/skills/setup-jev-devtools/references/flows.md) includes a complete parallel-checks → decision → branch example and no-key verification. It ships with npm for offline, version-matched use.
+
+The examples below import `@typesafe-ai/sdk` question helpers; declare it as a direct dependency in the server workspace (0.3.0 is verified with SDK 0.7.0). Keep API keys and both `/server` and `/flow` imports in Node code.
 
 `jev-devtools/flow` is a TypeScript/Node entry point. A definition builds an inspectable, bounded graph once; each `run()` executes an independent instance. This is an in-process helper for Jev calls, not a durable workflow engine or a business-action executor.
 
