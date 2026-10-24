@@ -18,6 +18,11 @@ import {
   type FlowOutcome,
 } from "../flow/index.js";
 import { createJevDevtools } from "../server/index.js";
+import {
+  conditionInputs,
+  conditionRequirement,
+} from "../src/condition-inputs.js";
+import type { Trace } from "../src/protocol.js";
 import { formatFlowCondition } from "../src/flow-condition.js";
 import type { FlowUpdate } from "../src/flow-protocol.js";
 const questions = {
@@ -322,6 +327,13 @@ test("concurrent scoped runs retain independent decisions, request links, redact
       const traces = (await history(inspector, session, "/events")).traces;
       assert.equal(traces.length, 2);
       assert.equal(traces[0].result.answers.eligible.noul, "[redacted]");
+      const inputs = conditionInputs(
+        captured.definitions[0].nodes.find((n) => n.id === "approval")!
+          .conditionRule!,
+        run,
+        new Map((traces as Trace[]).map((t) => [t.id, t])),
+      );
+      assert.ok(inputs.every((input) => input.value === "[redacted]"));
       for (const trace of traces) {
         assert.equal(trace.flow.runId, run.id);
         assert.equal(run.steps[trace.flow.stepId].traceId, trace.id);
@@ -758,6 +770,27 @@ test("captured branch rules preserve thresholds and Boolean grouping without cha
         rules.find((n) => n.id === "approval")!.conditionRule!,
       ),
       "(review.eligible ≥ 90% AND NOT ((review.risky ≥ 20% OR review.eligible < 0%)))",
+    );
+    const traces = (await history(inspector, "local", "/events"))
+      .traces as Trace[];
+    const rule = rules.find((n) => n.id === "approval")!.conditionRule!;
+    const inputs = conditionInputs(
+      rule,
+      captured.upserts[0],
+      new Map(traces.map((t) => [t.id, t])),
+    );
+    assert.deepEqual(inputs, [
+      { reference: "review.eligible", name: "Eligible", value: "94%" },
+      { reference: "review.risky", name: "Risky", value: "10%" },
+    ]);
+    assert.equal(
+      conditionRequirement(rule, inputs),
+      "(Eligible ≥ 90% AND NOT ((Risky ≥ 20% OR Eligible < 0%)))",
+    );
+    assert.ok(
+      conditionInputs(rule, captured.upserts[0], new Map()).every(
+        (input) => input.value === "Not captured",
+      ),
     );
     assert.equal(captured.upserts[0].steps.approval.decision, true);
   } finally {

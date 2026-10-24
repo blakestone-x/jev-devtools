@@ -3,7 +3,14 @@ import type { Json } from "./protocol.js";
 export type FlowDisplay = { title?: string; description?: string };
 /** Rule literals are captured/redacted by the recorder before browser delivery. */
 export type FlowCondition =
-  | { op: "reference"; label: string; probability: boolean }
+  | {
+      op: "reference";
+      label: string;
+      probability: boolean;
+      name?: string;
+      stepId?: string;
+      path?: string[];
+    }
   | { op: "literal"; value: string | number | boolean | null }
   | { op: "eq" | "lt" | "gte" | "all" | "any" | "not"; args: FlowCondition[] };
 /** Structural metadata and authored rules; runtime inputs/answers stay in request captures. */

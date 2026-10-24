@@ -215,7 +215,19 @@ function conditionRule(ast: Ast, requests: Set<string>): FlowCondition {
               : `[${JSON.stringify(key)}]`,
           )
           .join("");
-      return { op: "reference", label, probability };
+      return {
+        op: "reference",
+        label,
+        probability,
+        name: answer
+          ? path.length === 3 && ["noul", "choice", "score"].includes(path[2])
+            ? path[1]
+            : path.slice(1).join(" ")
+          : (path.at(-1) ?? "Input"),
+        ...(base.op === "ref" && requests.has(base.id)
+          ? { stepId: base.id, path }
+          : {}),
+      };
     }
     if (node.op === "literal")
       return {

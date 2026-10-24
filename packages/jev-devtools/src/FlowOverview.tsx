@@ -4,6 +4,11 @@ import type { Trace } from "./protocol.js";
 import { useDiagramViewport } from "./useDiagramViewport.js";
 import { RequestDetail } from "./JevDevtools.js";
 import { JsonBlock } from "./TraceContent.js";
+import {
+  conditionInputs,
+  conditionRequirement,
+  type ConditionInput,
+} from "./condition-inputs.js";
 import { formatFlowCondition } from "./flow-condition.js";
 import { TraceDiagram } from "./TraceDiagram.js";
 type Lane = { name: string; status: string };
@@ -75,6 +80,7 @@ const Card = memo(function Card({
   bounds,
   onSelect,
   lanes,
+  inputs,
 }: {
   node: FlowNode;
   status: string;
@@ -83,6 +89,7 @@ const Card = memo(function Card({
   bounds: Bounds;
   onSelect: (id: string) => void;
   lanes: Lane[];
+  inputs?: ConditionInput[];
 }) {
   const join = node.kind === "parallel";
   const finished = lanes.filter((lane) => lane.status === "completed").length;
@@ -150,10 +157,28 @@ const Card = memo(function Card({
       {node.kind === "branch" &&
         (node.conditionRule !== undefined || node.condition) && (
           <span className="flow-condition-rule">
-            <span className="flow-condition-label">Branch rule</span>
+            {inputs && inputs.length > 0 && (
+              <span className="flow-condition-incoming">
+                <span className="flow-condition-label">
+                  {inputs.length === 1 ? "Incoming value" : "Incoming values"}
+                </span>
+                {inputs.slice(0, 3).map((input) => (
+                  <span className="flow-condition-input" key={input.reference}>
+                    <span>{input.name}</span>
+                    <b>{input.value}</b>
+                  </span>
+                ))}
+                {inputs.length > 3 && (
+                  <small>
+                    {inputs.length - 3} more inputs · select to inspect
+                  </small>
+                )}
+              </span>
+            )}
+            <span className="flow-condition-label">Requirement</span>
             <code>
               {node.conditionRule !== undefined
-                ? formatFlowCondition(node.conditionRule)
+                ? conditionRequirement(node.conditionRule, inputs ?? [])
                 : node.condition}
             </code>
           </span>
@@ -239,6 +264,23 @@ export const FlowOverview = memo(function FlowOverview({
   const tracesById = useMemo(
     () => new Map(traces.map((trace) => [trace.id, trace])),
     [traces],
+  );
+  const inputsByStep = useMemo(
+    () =>
+      new Map(
+        definition.nodes
+          .filter((node) => node.conditionRule !== undefined)
+          .map((node) => [
+            node.id,
+            conditionInputs(
+              node.conditionRule!,
+              run,
+              tracesById,
+              new Map(definition.nodes.map((n) => [n.id, n.title ?? n.id])),
+            ),
+          ]),
+      ),
+    [definition, run, tracesById],
   );
   // Omit redundant transitive edges so a reference does not draw through an
   // intervening condition. Execution ordering still includes every dependency.
@@ -352,7 +394,10 @@ export const FlowOverview = memo(function FlowOverview({
                 (node.description ? 64 : 0) +
                 Math.min(4, (node.lanes ?? node.dependencies).length) * 32
               : (node.description ? 244 : 172) +
-                (node.kind === "branch" ? 80 : 0);
+                (node.kind === "branch"
+                  ? 110 +
+                    Math.min(3, inputsByStep.get(node.id)?.length ?? 0) * 24
+                  : 0);
         const parents = (links.get(node.id) ?? [])
           .map((id) => points.get(id)!)
           .filter(Boolean);
@@ -375,7 +420,7 @@ export const FlowOverview = memo(function FlowOverview({
         ...[...points.values()].map((p) => p.y + p.height + 40),
       ),
     };
-  }, [definition, run.steps, tracesById, heights, links]);
+  }, [definition, run.steps, tracesById, heights, links, inputsByStep]);
   const { viewport, canvas, zoom, zoomBy, fit, preserveCamera, focusArea } =
     useDiagramViewport(layout.width, layout.height, run.id);
   const onResize = useCallback(
@@ -535,6 +580,7 @@ export const FlowOverview = memo(function FlowOverview({
                 selected={selected === n.id}
                 bounds={p}
                 onSelect={setSelected}
+                inputs={inputsByStep.get(n.id)}
                 lanes={parallelLanes.get(n.id) ?? []}
               />
             );
@@ -569,6 +615,18 @@ export const FlowOverview = memo(function FlowOverview({
                   </li>
                 ))}
               </ul>
+            )}
+            {(inputsByStep.get(node.id)?.length ?? 0) > 0 && (
+              <dl className="flow-input-details">
+                {inputsByStep.get(node.id)?.map((input) => (
+                  <div key={input.reference}>
+                    <dt>
+                      {input.name} <code>{input.reference}</code>
+                    </dt>
+                    <dd>{input.value}</dd>
+                  </div>
+                ))}
+              </dl>
             )}
             {(node.conditionRule !== undefined || node.condition) && (
               <p>

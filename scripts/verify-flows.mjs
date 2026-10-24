@@ -201,8 +201,15 @@ try {
   });
   await page
     .getByRole("button", { name: "Step ready, branch, completed", exact: true })
-    .getByText("combined.ready ≥ 90%", { exact: true })
+    .getByText("At least 90%", { exact: true })
     .waitFor();
+  const readyCard = page.getByRole("button", {
+    name: "Step ready, branch, completed",
+    exact: true,
+  });
+  await readyCard.getByText("Ready", { exact: true }).waitFor();
+  await readyCard.getByText("94%", { exact: true }).waitFor();
+  assert.equal((await readyCard.innerText()).includes("combined.ready"), false);
   await returned.getByText("Ready for approval", { exact: true }).waitFor();
   await returned.getByText("Returned outcome", { exact: true }).waitFor();
   await untaken.getByText("Needs a closer look", { exact: true }).waitFor();

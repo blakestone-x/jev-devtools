@@ -21,6 +21,7 @@ Changes proposed in [#23](https://github.com/diegoag64/jev-devtools/pull/23); no
 
 ### Added
 
+- Separate condition cards into named incoming values and plain-language requirements (for example, Ready: 94% / At least 90%). Read values only from retained, redacted request captures; keep technical references in the selected-step details.
 - Show executable branching rules on condition cards, including exact thresholds, comparisons, and AND/OR/NOT grouping. Noul thresholds display as percentages; the recorded decision identifies the taken route. Rule literals use bounded capture and the configured redaction callback.
 - Weight Noul True/False output-card borders and text by their respective probabilities, with minimum visibility for near-zero values and opaque backgrounds. Equal probabilities receive equal emphasis.
 - Render diagram state and instructions as compact, scrollable property views, with lazy object/array expansion, typed values, paged properties, and expandable long text. Preserve sibling fields and camera position while browsing captured content.

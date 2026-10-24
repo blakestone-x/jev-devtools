@@ -1,5 +1,16 @@
 import type { Json } from "./protocol.js";
 
+export function formatConditionLiteral(
+  value: Json,
+  probability = false,
+): string {
+  if (probability && typeof value === "number" && value >= 0 && value <= 1) {
+    const [coefficient, exponent = "0"] = String(value).split("e");
+    return `${Number(`${coefficient}e${Number(exponent) + 2}`)}%`;
+  }
+  return JSON.stringify(value) ?? "[value unavailable]";
+}
+
 /** Format captured rules only; never evaluate or infer the branch result. */
 export function formatFlowCondition(value: Json, depth = 0): string {
   if (depth > 16) return "[rule truncated]";
@@ -9,8 +20,7 @@ export function formatFlowCondition(value: Json, depth = 0): string {
     return typeof value.label === "string"
       ? value.label
       : "[reference unavailable]";
-  if (value.op === "literal")
-    return JSON.stringify(value.value) ?? "[value unavailable]";
+  if (value.op === "literal") return formatConditionLiteral(value.value);
   if (!Array.isArray(value.args)) return "[rule unavailable]";
   const args = value.args;
   const format = (v: Json) => formatFlowCondition(v, depth + 1);
@@ -32,22 +42,12 @@ export function formatFlowCondition(value: Json, depth = 0): string {
       arg.op === "reference" &&
       arg.probability === true,
   );
-  const operand = (arg: Json) => {
-    if (
-      probability &&
-      arg &&
-      typeof arg === "object" &&
-      !Array.isArray(arg) &&
-      arg.op === "literal" &&
-      typeof arg.value === "number" &&
-      arg.value >= 0 &&
-      arg.value <= 1
-    ) {
-      // Decimal scaling avoids binary floating-point artifacts without rounding thresholds.
-      const [coefficient, exponent = "0"] = String(arg.value).split("e");
-      return `${Number(`${coefficient}e${Number(exponent) + 2}`)}%`;
-    }
-    return format(arg);
-  };
+  const operand = (arg: Json) =>
+    arg &&
+    typeof arg === "object" &&
+    !Array.isArray(arg) &&
+    arg.op === "literal"
+      ? formatConditionLiteral(arg.value, probability)
+      : format(arg);
   return `${operand(args[0])} ${value.op === "eq" ? "=" : value.op === "lt" ? "<" : "≥"} ${operand(args[1])}`;
 }

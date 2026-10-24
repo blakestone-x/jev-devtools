@@ -1712,3 +1712,48 @@
     monospace;
   color: #f2d7eb;
 }
+
+.flow-condition-incoming {
+  display: block;
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+  border-bottom: 1px solid #49324b;
+}
+.flow-condition-input {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  font-size: 12px;
+  padding: 3px 0;
+}
+.flow-condition-input > span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.flow-condition-input > b {
+  font-size: 17px;
+  font-weight: 600;
+  color: #f2d7eb;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 65%;
+}
+.flow-input-details {
+  font-size: 12px;
+}
+.flow-input-details > div {
+  display: flex;
+  gap: 16px;
+  margin: 6px 0;
+}
+.flow-input-details code {
+  color: #a092a7;
+  margin-left: 8px;
+}
+.flow-input-details dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
