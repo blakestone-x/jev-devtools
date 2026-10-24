@@ -22,11 +22,11 @@ export type FixtureCopy = {
 const plural = (count: number, word: string) =>
   `${count} ${word}${count === 1 ? "" : "s"}`;
 function summary({ built, copied }: CopyResult) {
-  const steps = plural(Object.keys(built.fixture.steps).length, "step");
+  const responses = plural(Object.keys(built.fixture.steps).length, "Jev response");
   return (
     (copied
-      ? `Fixture copied: ${steps}.`
-      : `Clipboard unavailable. Select the JSON below (${steps}).`) +
+      ? `Fixture copied: ${responses}.`
+      : `Clipboard unavailable. Select the JSON below (${responses}).`) +
     (built.missing.length
       ? ` ${plural(built.missing.length, "step")} missing from the fixture.`
       : "")
@@ -34,9 +34,9 @@ function summary({ built, copied }: CopyResult) {
 }
 function partial(status: FlowRun["status"]) {
   return status === "error"
-    ? "Run failed. The fixture has completed steps only."
+    ? "Run failed. The fixture has completed Jev responses only."
     : status === "cancelled"
-      ? "Run cancelled. The fixture has completed steps only."
+      ? "Run cancelled. The fixture has completed Jev responses only."
       : undefined;
 }
 
@@ -100,6 +100,13 @@ export function CopyFixtureReport({ control }: { control: FixtureCopy }) {
           </p>
         )}
       </div>
+      {result && (
+        <p className="muted">
+          Only Jev responses are saved, not every diagram step. Replay needs your
+          flow code and input; conditions, tasks, and flow outputs are computed
+          again.
+        </p>
+      )}
       {result && result.built.missing.length > 0 && (
         <details>
           <summary>Missing steps</summary>
