@@ -339,6 +339,30 @@ Try the [hierarchical classification cookbook](../cookbooks/hierarchical-classif
 
 Unreleased: not in npm 0.4.1 yet.
 
+### One-command playground replay
+
+After clicking **Copy fixture**, run this from the repository root on macOS:
+
+```sh
+npm run replay -- --clipboard
+```
+
+The command builds the local package, selects the flow by its fixture name, and prints the input, outcome and output value. No playground server or API key is needed. It supports the refund, parallel review and synthetic skill-shortlist examples; cookbook and custom flows still need their own definition and input with `replayClient` below. This helper runs local sample tasks and rejects unexpected `fetch` calls.
+
+For a saved fixture (all platforms), or to check an expected outcome:
+
+```sh
+npm run replay -- benchmarks/results/my-fixture.json --expect approve
+# Alternatively, read JSON from stdin:
+pbpaste | npm run replay -- - --expect approve
+```
+
+`--expect` exits with code 1 if the outcome differs. For example, changing the refund fixture's `steps.review.answers.risky.noul` from `0.1` to `0.9` routes to `manual-review` and fails `--expect approve`. Missing answers and partial fixtures also fail with an explanation; failed requests are not replayed as recorded errors.
+
+Fixtures do not include the original input. By default this helper uses `{ "message": "I was charged twice and need a refund." }`. To reproduce your original input, save its JSON to a file and add `--input path/to/input.json` (an object with a string `message`). Run `npm run replay -- --help` for options. The result prints in the terminal; this command does not add a run to the drawer.
+
+### Use the replay client in your own tests
+
 **Copy fixture** in a run's header exports the retained answers of its completed Jev steps as JSON, including steps inside map items and loop iterations. Save it with your tests and run the flow with `replayClient` from `jev-devtools/flow`. Jev calls replay with no network access or API key. Map items and loop iterations replay from their own answers; tasks run again and may call outside services.
 
 ```ts
