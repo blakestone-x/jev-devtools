@@ -15,7 +15,7 @@ Inspect the app's package manager/lockfile, React and Node versions, root compon
 - **React with a Node backend, including Vite:** read [references/react-node.md](references/react-node.md). A browser-only app needs a Node server for Jev; the Vite development-server option is local only.
 - **Other Node frameworks:** use the Web Request/Response or middleware API described in the React/Node reference and verify that framework's routing. Do not assume the Next.js recipe applies to Pages Router. Edge runtimes and cross-process/serverless history aggregation are unsupported.
 
-Install `jev-devtools` using the app's existing package manager (npm: `npm install jev-devtools`; pnpm: `pnpm add jev-devtools`; Yarn: `yarn add jev-devtools`). Install in the workspace(s) that actually import it. It is a regular dependency when application modules import it, even though capture/display are development-only. React 18/19 and Node 22.12+ are required. Do not replace the app's framework or upgrade unrelated dependencies to force compatibility.
+Install `jev-devtools` using the app's existing package manager (npm: `npm install jev-devtools @typesafe-ai/sdk`; pnpm: `pnpm add jev-devtools @typesafe-ai/sdk`; Yarn: `yarn add jev-devtools @typesafe-ai/sdk`). `@typesafe-ai/sdk` is a peer dependency: keep the app's existing SDK version when it satisfies the peer range. Install in the workspace(s) that actually import it. It is a regular dependency when application modules import it, even though capture/display are development-only. React 18/19 and Node 22.12+ are required. Do not replace the app's framework or upgrade unrelated dependencies to force compatibility.
 
 ## Optional connected flow API (0.3.0+)
 
@@ -28,7 +28,7 @@ When asked to build or inspect connected calls, read [references/flows.md](refer
 - Create a shared adapter; the inspector routes and application client must use it in the same Node realm/process. Replace existing `new TypeSafeClient(options)` construction with `inspector.createClient(options)` while preserving keys, transport options, retries, and call semantics. Keep existing `systemOne(...)` inputs and application behavior.
 - Browser and server `endpoint` paths must agree (default `/api/jev-devtools`). Route the base path and its subpaths. The server `origin` must exactly match the browser scheme, hostname, and port. A browser endpoint is a same-origin path, not an absolute backend URL.
 - Keep keys in server environment variables, never `VITE_*` or `NEXT_PUBLIC_*`. Use the host's environment loader and an ignored local env file. If a key is unavailable, complete setup and use the clearly labeled sample verification in [references/verify.md](references/verify.md); report that live inference remains unverified.
-- Preserve authentication and project redaction. Shared/non-loopback access requires a real `authorize(request)` check; do not bypass it with `() => true`. Keep local defaults unless shared access is requested. Separate processes require a different architecture, not extra adapter instances.
+- Preserve authentication and project redaction. Shared/non-loopback access requires a real `authorize(request)` check; do not bypass it with `() => true`. Keep local defaults unless shared access is requested. Without `authorize`, Node middleware accepts only loopback connections; Web Request routes can't check the connection, so their dev server must listen on `127.0.0.1` or set a real `authorize`. Separate processes require a different architecture, not extra adapter instances.
 
 ## Finish and verify
 

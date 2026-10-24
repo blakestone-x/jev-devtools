@@ -9,7 +9,7 @@ The package has no Next.js dependency. `handle(request)` also works with other N
 The first release is experimental and [available on npm](https://www.npmjs.com/package/jev-devtools). Install in your Next.js app:
 
 ```sh
-npm install jev-devtools server-only
+npm install jev-devtools @typesafe-ai/sdk server-only
 ```
 
 To try unpublished local changes instead, run `npm ci && npm run pack:devtools` from this repository, then in your Next.js app:
@@ -125,6 +125,7 @@ Run `npm run verify:nextjs` from the repo root to install a fresh packed archive
 - This is a local development inspector with bounded, in-memory history. Next.js on Vercel or another platform may run routes in separate instances; this setup does **not** provide distributed trace aggregation. Edge runtime is unsupported.
 - **Empty drawer:** check that every call imports the instrumented client, the optional catch-all route uses the same key, and the SDK is externalized (not the whole DevTools package). Calls in a different process cannot appear here.
 - **403:** the configured origin must match scheme, hostname, and port exactly (`localhost` and `127.0.0.1` differ). A non-loopback origin requires an `authorize` callback; a custom session scope must match between capture and inspector routes.
+- **Network access:** `next dev` listens on all interfaces (`0.0.0.0`) by default, and a Route Handler can't see the connection's address. Start it with `--hostname 127.0.0.1`, as the sample app does, or set `authorize`. Otherwise another machine on the network can read captures by sending a matching `Host` header.
 - **404 in production:** expected with the development-only flags above. The browser should also be disabled, so it makes no inspector requests.
 - **Configuration edits ignored during hot reload:** restart the process; the shared adapter deliberately retains its initial options and captured history.
 - **Server-side credentials:** add authentication and project-specific redaction before using any enabled inspector in a shared environment. Arbitrary secrets inside prose are not automatically detected.

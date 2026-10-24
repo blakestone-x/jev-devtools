@@ -117,7 +117,7 @@ A Node backend is required for live Jev calls. The guide includes a local Vite s
 **[Jev DevTools is available on npm](https://www.npmjs.com/package/jev-devtools/v/0.3.0).** This is an experimental release; APIs may change before 1.0.
 
 ```sh
-npm install jev-devtools
+npm install jev-devtools @typesafe-ai/sdk
 ```
 
 <details>
@@ -165,7 +165,7 @@ app.use(inspector.middleware); // At root, before fallback routes.
 // Call inspector.dispose() when shutting down the server.
 ```
 
-Only calls through this client are recorded. Both routes and inspector must share the same adapter instance. History is bounded and in memory, and the browser connects over same-origin SSE, receiving an initial snapshot followed by changed traces. React 18/19 are peer dependencies. Tailwind, shadcn, and the playground are not bundled with the library.
+Only calls through this client are recorded. Both routes and inspector must share the same adapter instance. Without `authorize`, the middleware accepts only loopback connections. Web Request handlers can't see the connection's address, so run those servers on `127.0.0.1` or set `authorize`. History is bounded and in memory, and the browser connects over same-origin SSE, receiving an initial snapshot followed by changed traces. React 18/19 are peer dependencies. Tailwind, shadcn, and the playground are not bundled with the library.
 
 See the [complete integration guide](docs/integration.md) for Next.js, proxies, custom endpoints, authorization, redaction, session scoping, and runtime limits. The adapter currently targets Node, not edge runtimes or distributed/serverless aggregation. Capture and display are both disabled by default.
 
