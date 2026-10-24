@@ -27,11 +27,10 @@ From your React project, install the generated archive:
 npm install /absolute/path/to/jev-devtools/jev-devtools-0.4.0.tgz
 ```
 
-Mount once near the root. No provider, client object, trace props, or application hook is needed:
+Mount once near the root. The drawer loads its own styles; no CSS import, provider, client object, trace props, or application hook is needed:
 
 ```tsx
 import { JevDevtools } from 'jev-devtools';
-import 'jev-devtools/styles.css';
 
 export function Root() {
   return <>
@@ -48,6 +47,28 @@ For the complete Next.js App Router setup, see [the Next.js guide](nextjs.md), i
 | `enabled` | `false` | Explicitly enable the inspector |
 | `endpoint` | `/api/jev-devtools` | Same-origin path to the server adapter |
 | `defaultOpen` | `true` | Start expanded or as the small Jev launcher |
+
+### CSS isolation
+
+The component portals its host directly under `document.body`, even when mounted
+inside a React `<main>` or `<section>`. Global page selectors such as `section`,
+`main > *`, and `button` cannot reach the shadow tree, so no page-specific padding
+override is needed. The drawer supplies its own styles and resets inherited
+typography. No CSS import is needed to use the component.
+
+**Unreleased:** the public stylesheet also scopes connected-flow selectors to
+`.jev-devtools` and namespaces their animation, preventing collisions with host
+classes such as `.flow-step`. The drawer suppresses host pseudo-element
+decorations, explicitly resets text direction, and establishes defaults for its
+internal CSS variables. The host reset lives in the shadow stylesheet, leaving
+`<jev-devtools-root>` free of inline reset declarations. Generic app theme
+variables do not control its hint colors.
+These changes preserve the component API and existing CSS imports.
+
+This is CSS encapsulation, not a separate browser document or a security boundary.
+Page JavaScript can still alter the open shadow tree or remove its host, and
+transforms, filters, or clipping on `html`/`body` can affect a fixed overlay. Avoid
+those styles on the document ancestors; apply app effects to an app wrapper instead.
 
 ## Server setup
 
