@@ -39,12 +39,14 @@ export function flowAnswer(answer?: AnswerView) {
         detail: `${Math.round(answer.noul * 100)}% probability`,
         active: true,
         eyebrow: "P(TRUE)",
+        probability: answer.noul,
       },
       {
         label: "False",
         detail: `${Math.round((1 - answer.noul) * 100)}% probability`,
         active: true,
         eyebrow: "P(FALSE)",
+        probability: 1 - answer.noul,
       },
     ];
   if (answer.type === "box")

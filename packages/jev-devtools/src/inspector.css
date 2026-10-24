@@ -1674,3 +1674,15 @@
   color: #ffd9f3;
   text-decoration: underline;
 }
+
+/* Noul is a probability of true; its two outputs carry p and 1-p.
+   Keep the fill opaque, with readable text even at zero probability. */
+.jev-devtools .lab-noul-output {
+  border-color: rgb(
+    245 243 246 / calc(0.35 + 0.65 * var(--lab-noul-probability, 1))
+  );
+}
+.jev-devtools .lab-noul-output > h3,
+.jev-devtools .lab-noul-output > p {
+  opacity: calc(0.65 + 0.35 * var(--lab-noul-probability, 1));
+}

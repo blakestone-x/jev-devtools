@@ -442,7 +442,7 @@ export function TraceDiagram({
           {outputs.map((output, i) => (
             <article
               key={`${key}-${output.label}`}
-              className={`lab-card lab-output ${output.active ? "" : "lab-idle"} ${enteringDelay(i) !== undefined ? "lab-card-enter" : ""}`}
+              className={`lab-card lab-output ${"probability" in output ? "lab-noul-output" : ""} ${output.active ? "" : "lab-idle"} ${enteringDelay(i) !== undefined ? "lab-card-enter" : ""}`}
               onAnimationEnd={() => {
                 if (entering?.question === key && i === entering.to - 1)
                   setEntering(null);
@@ -453,6 +453,15 @@ export function TraceDiagram({
                 width: 230,
                 minHeight: compact ? 96 : 104,
                 animationDelay: enteringDelay(i),
+                ...("probability" in output &&
+                Number.isFinite(output.probability)
+                  ? {
+                      "--lab-noul-probability": Math.max(
+                        0,
+                        Math.min(1, output.probability),
+                      ),
+                    }
+                  : {}),
               }}
             >
               <span className="lab-eyebrow">{output.eyebrow}</span>
