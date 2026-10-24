@@ -20,7 +20,7 @@ Dates below use UTC and were checked against npm's publication history. The hist
 
 ## Unreleased
 
-- Clarify fixture copy confirmations by counting **Jev responses** instead of diagram steps, and explain that replay requires flow code and input to recompute conditions, tasks and outputs. ([#29](https://github.com/diegoag64/jev-devtools/pull/29))
+- Confirm fixture copying with a brief animated **Copied** button state, respecting reduced-motion preferences. Keep partial-capture warnings and the clipboard fallback visible; document what fixtures contain and how to replay/share them in the flow guide. ([#29](https://github.com/diegoag64/jev-devtools/pull/29))
 
 - Add **Copy fixture** to the Flows run header and `replayClient(fixture)` to `jev-devtools/flow`, so flow routing can be tested from captured answers with no network or API key. Map items and loop iterations are keyed by their request link (`parent-id/index/step-id`); tasks run locally on replay. `flowFixture` builds fixtures from captures in code. Fixture controls are scoped to DevTools; the clipboard fallback uses the drawer theme and keyboard focus styles. The repository's `npm run replay` helper accepts a macOS clipboard fixture, a JSON file or stdin for the refund, parallel and synthetic skill-shortlist examples, with optional input and expected-outcome checks. ([#29](https://github.com/diegoag64/jev-devtools/pull/29))
 
