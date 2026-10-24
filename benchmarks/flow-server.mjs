@@ -36,6 +36,32 @@ const largeChoice = defineJevFlow("large-choice", (flow) => {
   });
   return flow.output("done", checked.answer("eligible").noul);
 });
+const contentFlow = defineJevFlow("structured-content", (flow) => {
+  const result = flow.jev("content", {
+    state: {
+      message: "Root text must not hide sibling properties.",
+      ticket: {
+        message:
+          "A long captured message. ".repeat(30) + "END OF CAPTURED TEXT",
+      },
+      eligibility: 0.94,
+      flagged: false,
+      missing: null,
+      empty: {},
+      items: Array.from({ length: 20 }, (_, index) => ({
+        label: `Item ${index}`,
+        value: index,
+      })),
+    },
+    questions: {
+      eligible: noul({
+        task: "Review the ticket",
+        rules: ["Check eligibility", "Check risk"],
+      }),
+    },
+  });
+  return flow.output("done", result.answer("eligible").noul);
+});
 const scales = new Map(
   [10, 50, 150].map((count) => [
     count,
@@ -78,13 +104,16 @@ const server = createServer((req, res) => {
             }
             if (url.pathname === "/run") {
               const scenario = url.searchParams.get("scenario");
-              const flow = scenario?.startsWith("scale-")
-                ? scales.get(Number(scenario.slice(6)))
-                : scenario === "flow-parallel"
-                  ? parallelFlow
-                  : scenario === "flow-large-choice"
-                    ? largeChoice
-                    : refundFlow;
+              const flow =
+                scenario === "flow-content"
+                  ? contentFlow
+                  : scenario?.startsWith("scale-")
+                    ? scales.get(Number(scenario.slice(6)))
+                    : scenario === "flow-parallel"
+                      ? parallelFlow
+                      : scenario === "flow-large-choice"
+                        ? largeChoice
+                        : refundFlow;
               if (!flow || running.size > 5) throw new Error("Invalid flow");
               const controller = new AbortController();
               running.add(controller);

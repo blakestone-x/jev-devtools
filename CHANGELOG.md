@@ -21,6 +21,7 @@ Changes proposed in [#23](https://github.com/diegoag64/jev-devtools/pull/23); no
 
 ### Added
 
+- Render diagram state and instructions as compact, scrollable property views, with lazy object/array expansion, typed values, paged properties, and expandable long text. Preserve sibling fields and camera position while browsing captured content.
 - Add optional titles and descriptions to every flow step without changing request payloads or outcome IDs. Show explanatory outcome cards, per-lane parallel progress, and a softer zoom-aware grid; untaken cards keep opaque backgrounds. Existing definitions remain compatible.
 - Add the Node `jev-devtools/flow` API for typed input/answer references, sequential Jev calls, terminal branching, named parallel lanes with joins, and named output values. Definitions build without requests; runs preserve SDK retries and propagate failures/cancellation without automatic flow retries.
 - Capture versioned definitions separately from bounded, session-scoped runs, including actual decisions, step timings and request links. Connect complete request diagrams on one shared flow canvas, preserving camera/selection and per-request question/probability controls. Explain parallel waits with named lanes and a “Wait for both checks” marker. Full tabbed request inspection remains available on selection. Existing single-request integrations remain compatible.

@@ -299,6 +299,98 @@ try {
   await classify
     .getByText("Showing 6 of 150 probabilities", { exact: true })
     .waitFor();
+  // Real captured JSON: nesting, scalar types, paging, and gestures inside cards.
+  await page.evaluate(() =>
+    fetch("/run?scenario=flow-content", { method: "POST" }),
+  );
+  await page.waitForTimeout(150);
+  await rows.first().click();
+  await page.selectOption('[aria-label="Flow step"]', "content");
+  const contentRequest = page.getByRole("article", {
+    name: "Request content",
+    exact: true,
+  });
+  const state = contentRequest.getByRole("region", {
+    name: "State properties",
+    exact: true,
+  });
+  await state
+    .getByText("Root text must not hide sibling properties.", { exact: true })
+    .waitFor();
+  await state.getByText("0.94", { exact: true }).waitFor();
+  await state.getByText("false", { exact: true }).waitFor();
+  await state.getByText("null", { exact: true }).waitFor();
+  const contentCamera = await page
+    .locator(".flow-overview-canvas")
+    .getAttribute("style");
+  const ticket = state.getByRole("button", {
+    name: "Expand ticket",
+    exact: true,
+  });
+  await ticket.focus();
+  await page.keyboard.press("Enter");
+  assert.equal(
+    await state
+      .getByRole("button", { name: "Collapse ticket", exact: true })
+      .getAttribute("aria-expanded"),
+    "true",
+  );
+  assert.equal(await state.getByText(/END OF CAPTURED TEXT/).count(), 0);
+  await state.getByRole("button", { name: "Full text", exact: true }).click();
+  await state.getByText(/END OF CAPTURED TEXT/).waitFor();
+  await state.getByRole("button", { name: "Less text", exact: true }).click();
+  await state
+    .getByRole("button", { name: "Collapse ticket", exact: true })
+    .click();
+  await state
+    .getByRole("button", { name: "Expand empty", exact: true })
+    .click();
+  await state.getByText("{} Empty object", { exact: true }).waitFor();
+  await state
+    .getByRole("button", { name: "Expand items", exact: true })
+    .click();
+  assert.equal(
+    await state.getByRole("button", { name: "Expand 19", exact: true }).count(),
+    0,
+  );
+  await state
+    .getByRole("button", { name: "Show 8 more (8 remaining)", exact: true })
+    .click();
+  await state.getByRole("button", { name: "Expand 19", exact: true }).click();
+  await state.getByText("Item 19", { exact: true }).waitFor();
+  await state.evaluate((el) => {
+    el.scrollTop = 0;
+  });
+  await state.hover();
+  await page.mouse.wheel(0, 130);
+  await page.waitForTimeout(200);
+  assert.ok(
+    await state.evaluate((el) => el.scrollTop > 0),
+    "The card scrolls instead of zooming the canvas",
+  );
+  assert.equal(
+    await page.locator(".flow-overview-canvas").getAttribute("style"),
+    contentCamera,
+  );
+  const instructions = contentRequest.getByRole("region", {
+    name: "Question instructions",
+    exact: true,
+  });
+  await instructions.getByText("Review the ticket", { exact: true }).waitFor();
+  await instructions
+    .getByRole("button", { name: "Expand rules", exact: true })
+    .click();
+  await instructions.getByText("Check risk", { exact: true }).waitFor();
+  await page
+    .getByRole("button", { name: "Close Jev DevTools", exact: true })
+    .click();
+  await page
+    .getByRole("button", { name: "Open Jev DevTools", exact: true })
+    .click();
+  await state
+    .getByRole("button", { name: "Collapse items", exact: true })
+    .waitFor();
+  await state.getByText("Item 19", { exact: true }).waitFor();
   assert.deepEqual(errors, []);
   await mkdir("benchmarks/results/flows", { recursive: true });
   await page.screenshot({

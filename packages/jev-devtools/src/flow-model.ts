@@ -1,4 +1,4 @@
-import type { AnswerView, Json, Trace } from "./protocol.js";
+import type { AnswerView, Json } from "./protocol.js";
 export function findImage(value: Json): string | undefined {
   if (!value || typeof value !== "object") return;
   if (
@@ -57,13 +57,4 @@ export function flowAnswer(answer?: AnswerView) {
       },
     ];
   return [];
-}
-export function stateText(trace: Trace): string {
-  const state = trace.request.state;
-  if (typeof state === "string") return state;
-  if (state && typeof state === "object" && !Array.isArray(state)) {
-    for (const key of ["message", "text", "description"])
-      if (typeof state[key] === "string") return state[key] as string;
-  }
-  return JSON.stringify(state, null, 2) ?? "";
 }

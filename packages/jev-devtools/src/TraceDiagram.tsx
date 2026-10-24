@@ -1,7 +1,8 @@
 import { useLayoutEffect, useMemo, useRef, useState } from "react";
 import { useDiagramViewport } from "./useDiagramViewport.js";
 import type { AnswerView, Trace } from "./protocol.js";
-import { findImage, flowAnswer, stateText } from "./flow-model.js";
+import { findImage, flowAnswer } from "./flow-model.js";
+import { DiagramContent } from "./DiagramContent.js";
 import { ChoiceProbabilities } from "./ChoiceProbabilities.js";
 const pct = (v: number) => `${Math.round(v * 100)}%`;
 function Result({
@@ -380,7 +381,7 @@ export function TraceDiagram({
             </text>
           </svg>
           <article
-            className="lab-card"
+            className="lab-card lab-content-card"
             style={{ left: 20, top: 32, width: 240, height: 180 }}
           >
             <span className="lab-eyebrow">
@@ -394,29 +395,24 @@ export function TraceDiagram({
                 alt="Captured image state"
               />
             ) : (
-              <p className="lab-copy" title={stateText(trace)}>
-                {stateText(trace)}
-              </p>
+              <DiagramContent
+                key={trace.id}
+                value={trace.request.state}
+                label="State properties"
+              />
             )}
           </article>
           <article
-            className="lab-card"
+            className="lab-card lab-content-card"
             style={{ left: 20, top: 288, width: 240, height: 180 }}
           >
             <span className="lab-eyebrow">INSTRUCTIONS</span>
             <h3>Question · {question.type}</h3>
-            <p
-              className="lab-copy"
-              title={
-                typeof question.instructions === "string"
-                  ? question.instructions
-                  : JSON.stringify(question.instructions)
-              }
-            >
-              {typeof question.instructions === "string"
-                ? question.instructions
-                : JSON.stringify(question.instructions)}
-            </p>
+            <DiagramContent
+              key={`${trace.id}:${key}`}
+              value={question.instructions}
+              label="Question instructions"
+            />
           </article>
           <article
             className="lab-card lab-answer-card"
