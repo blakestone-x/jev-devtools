@@ -1,4 +1,47 @@
-import { refundFlow, parallelFlow, flowTransport } from "./flows.js";
+import { memoryFlow } from "../../../cookbooks/simple-memory/flow.js";
+import { memorySampleTransport } from "../../../cookbooks/simple-memory/samples.js";
+import {
+  memoryCases,
+  isMemoryCase,
+  type MemoryCase,
+} from "../../../cookbooks/simple-memory/cases.js";
+import { structureFlow } from "../../../cookbooks/structure-recovery/flow.js";
+import { structureSampleTransport } from "../../../cookbooks/structure-recovery/samples.js";
+import {
+  structureCases,
+  isStructureCase,
+  type StructureCase,
+} from "../../../cookbooks/structure-recovery/cases.js";
+import {
+  hierarchyFlow,
+  hierarchyLimitFlow,
+} from "../../../cookbooks/hierarchical-classification/flow.js";
+import { hierarchySampleTransport } from "../../../cookbooks/hierarchical-classification/samples.js";
+import {
+  hierarchyCases,
+  isHierarchyCase,
+  type HierarchyCase,
+} from "../../../cookbooks/hierarchical-classification/cases.js";
+import { sdeFlow } from "../../../cookbooks/sde-cascade/flow.js";
+import { sdeSampleTransport } from "../../../cookbooks/sde-cascade/samples.js";
+import {
+  sdeCases,
+  isSdeCase,
+  type SdeCase,
+} from "../../../cookbooks/sde-cascade/cases.js";
+import { ragFlow } from "../../../cookbooks/rag-passages/flow.js";
+import { ragSampleTransport } from "../../../cookbooks/rag-passages/samples.js";
+import {
+  ragCases,
+  isRagCase,
+  type RagCase,
+} from "../../../cookbooks/rag-passages/cases.js";
+import {
+  refundFlow,
+  parallelFlow,
+  skillShortlistFlow,
+  flowTransport,
+} from "./flows.js";
 import type { IncomingMessage, ServerResponse } from "node:http";
 import type { Plugin } from "vite";
 
@@ -7,6 +50,15 @@ import { makeRequest, sampleTransport } from "./scenarios.ts";
 import { sampleProfiles, type SampleProfile } from "../src/sample-profiles.js";
 import { validStress, type StressOptions } from "../src/stress-options.js";
 import type { Scenario } from "./scenarios.ts";
+import {
+  createSkillSuggestionFlow,
+  defaultModel,
+} from "../../../cookbooks/skill-suggestion/flow.js";
+import { skillSampleTransport } from "../../../cookbooks/skill-suggestion/samples.js";
+import {
+  isSkillCase,
+  skillCases,
+} from "../../../cookbooks/skill-suggestion/cases.js";
 
 const send = (res: ServerResponse, status: number, data: unknown) => {
   res
@@ -18,7 +70,11 @@ const send = (res: ServerResponse, status: number, data: unknown) => {
 };
 const validSession = (value: unknown): value is string =>
   typeof value === "string" && /^[a-f0-9-]{36}$/.test(value);
-export function jevInspectorServer(apiKey?: string): Plugin {
+export function jevInspectorServer(
+  apiKey?: string,
+  cookbookModel = defaultModel,
+): Plugin {
+  const cookbook = createSkillSuggestionFlow(cookbookModel);
   const inspector = createJevDevtools({
     enabled: true,
     origin: "http://127.0.0.1:4182",
@@ -77,6 +133,12 @@ export function jevInspectorServer(apiKey?: string): Plugin {
             runId?: string;
             profile?: SampleProfile;
             stress?: StressOptions;
+            cookbookCase?: string;
+            ragCase?: string;
+            sdeCase?: string;
+            hierarchyCase?: string;
+            structureCase?: string;
+            memoryCase?: string;
           };
           try {
             let text = "";
@@ -112,6 +174,13 @@ export function jevInspectorServer(apiKey?: string): Plugin {
               "error",
               "stress",
               "flow-approve",
+              "flow-functions",
+              "flow-skills",
+              "flow-rag",
+              "flow-sde",
+              "flow-hierarchy",
+              "flow-structure",
+              "flow-memory",
               "flow-manual",
               "flow-other",
               "flow-parallel",
@@ -123,6 +192,25 @@ export function jevInspectorServer(apiKey?: string): Plugin {
             typeof body.message !== "string" ||
             body.message.length > 8000 ||
             (body.scenario === "stress" && !validStress(body.stress)) ||
+            (body.scenario === "flow-memory" &&
+              (!isMemoryCase(body.memoryCase) ||
+                body.message !== memoryCases[body.memoryCase].message)) ||
+            (body.scenario === "flow-structure" &&
+              (!isStructureCase(body.structureCase) ||
+                body.message !== structureCases[body.structureCase].message)) ||
+            (body.scenario === "flow-hierarchy" &&
+              (!isHierarchyCase(body.hierarchyCase) ||
+                body.message !== hierarchyCases[body.hierarchyCase].message)) ||
+            (body.scenario === "flow-sde" &&
+              (!isSdeCase(body.sdeCase) ||
+                body.message !== sdeCases[body.sdeCase].message)) ||
+            (body.scenario === "flow-rag" &&
+              (!isRagCase(body.ragCase) ||
+                body.message !== ragCases[body.ragCase].message)) ||
+            (body.scenario === "flow-skills" &&
+              (!isSkillCase(body.cookbookCase) ||
+                (body.mode === "sample" &&
+                  body.message !== skillCases[body.cookbookCase].message))) ||
             (body.profile !== undefined &&
               (typeof body.profile !== "string" ||
                 !Object.hasOwn(sampleProfiles, body.profile)))
@@ -141,7 +229,8 @@ export function jevInspectorServer(apiKey?: string): Plugin {
           if (
             body.mode === "live" &&
             (["retry", "error", "stress"].includes(body.scenario!) ||
-              body.scenario!.startsWith("flow-"))
+              (body.scenario!.startsWith("flow-") &&
+                body.scenario !== "flow-skills"))
           ) {
             send(res, 400, {
               error:
@@ -159,20 +248,122 @@ export function jevInspectorServer(apiKey?: string): Plugin {
           try {
             if (body.scenario!.startsWith("flow-")) {
               const flow =
-                body.scenario === "flow-parallel" ? parallelFlow : refundFlow;
+                body.scenario === "flow-rag"
+                  ? ragFlow
+                  : body.scenario === "flow-skills"
+                    ? cookbook
+                    : body.scenario === "flow-functions"
+                      ? skillShortlistFlow
+                      : body.scenario === "flow-parallel"
+                        ? parallelFlow
+                        : refundFlow;
               const client = inspector.createClient(
                 {
-                  apiKey: "sample-only",
-                  fetch: flowTransport(body.scenario!),
+                  apiKey: body.mode === "live" ? apiKey : "sample-only",
+                  fetch:
+                    body.scenario === "flow-memory"
+                      ? memorySampleTransport(body.memoryCase as MemoryCase)
+                      : body.scenario === "flow-structure"
+                        ? structureSampleTransport(
+                            body.structureCase as StructureCase,
+                          )
+                        : body.scenario === "flow-hierarchy"
+                          ? hierarchySampleTransport(
+                              body.hierarchyCase as HierarchyCase,
+                            )
+                          : body.scenario === "flow-sde"
+                            ? sdeSampleTransport(body.sdeCase as SdeCase)
+                            : body.scenario === "flow-rag"
+                              ? ragSampleTransport(body.ragCase as RagCase)
+                              : body.scenario === "flow-skills"
+                                ? body.mode === "live"
+                                  ? globalThis.fetch
+                                  : skillSampleTransport(
+                                      body.cookbookCase as keyof typeof skillCases,
+                                    )
+                                : flowTransport(body.scenario!),
                   logLevel: "off",
                   retry: { maxRetries: 0 },
+                  timeout: 120_000,
                 },
-                { label: flow.definition.name, source: "sample" },
+                {
+                  label:
+                    body.scenario === "flow-memory"
+                      ? memoryFlow.definition.name
+                      : body.scenario === "flow-structure"
+                        ? structureFlow.definition.name
+                        : body.scenario === "flow-hierarchy"
+                          ? hierarchyFlow.definition.name
+                          : body.scenario === "flow-sde"
+                            ? sdeFlow.definition.name
+                            : flow.definition.name,
+                  source: body.mode === "live" ? "live" : "sample",
+                },
               );
-              const result = await flow.run(
-                { message: body.message },
-                { client, devtools: inspector, signal: controller.signal },
-              );
+              const result =
+                body.scenario === "flow-memory"
+                  ? await memoryFlow.run(
+                      {
+                        message: body.message,
+                        caseId: body.memoryCase as MemoryCase,
+                      },
+                      {
+                        client,
+                        devtools: inspector,
+                        signal: controller.signal,
+                      },
+                    )
+                  : body.scenario === "flow-structure"
+                    ? await structureFlow.run(
+                        {
+                          message: body.message,
+                          caseId: body.structureCase as StructureCase,
+                        },
+                        {
+                          client,
+                          devtools: inspector,
+                          signal: controller.signal,
+                        },
+                      )
+                    : body.scenario === "flow-hierarchy"
+                      ? await (
+                          body.hierarchyCase === "limit"
+                            ? hierarchyLimitFlow
+                            : hierarchyFlow
+                        ).run(
+                          {
+                            message: body.message,
+                            caseId: body.hierarchyCase as HierarchyCase,
+                          },
+                          {
+                            client,
+                            devtools: inspector,
+                            signal: controller.signal,
+                          },
+                        )
+                      : body.scenario === "flow-sde"
+                        ? await sdeFlow.run(
+                            {
+                              message: body.message,
+                              caseId: body.sdeCase as SdeCase,
+                            },
+                            {
+                              client,
+                              devtools: inspector,
+                              signal: controller.signal,
+                            },
+                          )
+                        : await flow.run(
+                            {
+                              message: body.message,
+                              caseId: body.ragCase as RagCase,
+                            },
+                            {
+                              client,
+                              devtools: inspector,
+                              signal: controller.signal,
+                            },
+                          );
               send(res, 200, { ok: true, flow: result });
               return;
             }

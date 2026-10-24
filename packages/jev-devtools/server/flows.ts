@@ -4,6 +4,7 @@ import type {
   FlowUpdate,
 } from "../src/flow-protocol.js";
 import { capture, type CaptureOptions } from "./recorder.js";
+import type { Json } from "../src/protocol.js";
 /** Independent bounded run store. Definitions are retained only while referenced. */
 export class FlowRecorder {
   private runs = new Map<string, FlowRun>();
@@ -13,6 +14,11 @@ export class FlowRecorder {
   private revisions = new Map<string, number>();
   private revision = 0;
   private listeners = new Set<(sessions: Set<string>) => void>();
+  private itemCaptures = new WeakMap<FlowRun, FlowRun>();
+  private taskCaptures = new WeakMap<
+    object,
+    { data: Json; warnings: string[] }
+  >();
   constructor(private options: CaptureOptions) {}
   subscribe(fn: (sessions: Set<string>) => void) {
     this.listeners.add(fn);
@@ -30,21 +36,32 @@ export class FlowRecorder {
   start(definition: FlowDefinition, run: FlowRun, session: string) {
     if (!this.definitions.has(definition.id)) {
       const stored = structuredClone(definition);
-      for (const node of stored.nodes) {
-        if (node.conditionRule === undefined) continue;
-        try {
-          node.conditionRule = capture(
-            node.conditionRule,
-            new Set(),
-            this.options.redact
-              ? (path, value) =>
-                  this.options.redact!(["conditions", node.id, ...path], value)
-              : undefined,
-          );
-        } catch {
-          node.conditionRule = "[rule capture unavailable]";
+      const redactRules = (
+        definition: FlowDefinition,
+        prefix: string[] = [],
+      ) => {
+        for (const node of definition.nodes) {
+          if (node.itemDefinition)
+            redactRules(node.itemDefinition, [...prefix, node.id, "items"]);
+          if (node.conditionRule === undefined) continue;
+          try {
+            node.conditionRule = capture(
+              node.conditionRule,
+              new Set(),
+              this.options.redact
+                ? (path, value) =>
+                    this.options.redact!(
+                      ["conditions", ...prefix, node.id, ...path],
+                      value,
+                    )
+                : undefined,
+            );
+          } catch {
+            node.conditionRule = "[rule capture unavailable]";
+          }
         }
-      }
+      };
+      redactRules(stored);
       this.definitions.set(definition.id, stored);
       this.definitionRevisions.set(definition.id, ++this.revision);
     }
@@ -61,17 +78,93 @@ export class FlowRecorder {
     this.prune();
     this.notify(sessions);
   }
-  update(run: FlowRun) {
-    if (!this.runs.has(run.id)) return; // Clear/eviction cannot resurrect pending runs.
-    const stored = { ...run };
+  private captureRun(run: FlowRun, prefix: string[] = []): FlowRun {
+    // Child updates are immutable snapshots; unchanged items need no recapture.
+    const previous = prefix.length ? this.itemCaptures.get(run) : undefined;
+    if (previous) return previous;
+    const stored = {
+      ...run,
+      steps: Object.fromEntries(
+        Object.entries(run.steps).map(([id, raw]) => {
+          const step = { ...raw };
+          if (raw.collection)
+            step.collection = {
+              ...raw.collection,
+              items: raw.collection.items.map((item) => ({
+                ...item,
+                ...(item.run
+                  ? {
+                      run: this.captureRun(item.run, [
+                        ...prefix,
+                        "steps",
+                        id,
+                        "items",
+                        String(item.index),
+                      ]),
+                    }
+                  : {}),
+              })),
+            };
+          if (step.data === undefined) return [id, { ...step }];
+          const key = step.data;
+          let captured =
+            key && typeof key === "object"
+              ? this.taskCaptures.get(key)
+              : undefined;
+          if (!captured) {
+            const warnings = new Set<string>();
+            let data: Json;
+            try {
+              data =
+                capture(
+                  step.data,
+                  warnings,
+                  this.options.redact
+                    ? (path, value) =>
+                        this.options.redact!(
+                          [...prefix, "steps", id, "data", ...path],
+                          value,
+                        )
+                    : undefined,
+                ) ?? null;
+            } catch {
+              data = "[capture unavailable]";
+              warnings.add("Task capture unavailable.");
+            }
+            captured = { data, warnings: [...warnings] };
+            if (key && typeof key === "object")
+              this.taskCaptures.set(key, captured);
+          }
+          return [
+            id,
+            {
+              ...step,
+              data: captured.data,
+              captureWarnings: captured.warnings,
+            },
+          ];
+        }),
+      ),
+    };
     if ("value" in stored) {
       try {
-        stored.value = capture(stored.value, new Set(), this.options.redact);
+        stored.value = capture(
+          stored.value,
+          new Set(),
+          this.options.redact
+            ? (path, value) => this.options.redact!([...prefix, ...path], value)
+            : undefined,
+        );
       } catch {
         stored.value = "[capture unavailable]";
       }
     }
-    this.runs.set(run.id, stored);
+    if (prefix.length) this.itemCaptures.set(run, stored);
+    return stored;
+  }
+  update(run: FlowRun) {
+    if (!this.runs.has(run.id)) return; // Clear/eviction cannot resurrect pending runs.
+    this.runs.set(run.id, this.captureRun(run));
     this.revisions.set(run.id, ++this.revision);
     this.notify(new Set([this.sessions.get(run.id)!]));
   }

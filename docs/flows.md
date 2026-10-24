@@ -66,9 +66,80 @@ Definitions are synchronous and make no SDK calls. Plain request/value templates
 
 Question/answer reference types are inferred. `run()` returns `{runId, outcome: string, value?: unknown}` in v1: supplying `defineJevFlow<Ticket>` keeps the input ergonomic, but does not infer a discriminated union of all terminal values. Narrow the returned value in application code.
 
+## Function steps and runtime requests (unreleased experiment)
+
+These additions are available in this working tree, **not in the published 0.3.0 package**. Existing static requests and flow behavior remain supported. They run on Node; never import `/flow` into a browser component.
+
+`task(id, { input, run, timeoutMs? }, display?)` executes a server function after its dependencies. Nested references in `input` resolve to ordinary values. The callback's return type becomes a typed `FlowExpression`, so its fields can feed another task, request, condition, or output. The optional third argument uses the same static `title` and `description` as other steps.
+
+```ts
+const shortlist = flow.task("shortlist", {
+  input: { probabilities: ranking.answer("skills").probabilities, limit: 3 },
+  run: ({ probabilities, limit }) => Object.entries(probabilities)
+    .sort(([, a], [, b]) => b - a)
+    .slice(0, limit)
+    .map(([name]) => name),
+}, {
+  title: "Keep the top skills",
+  description: "Application code sorts the probabilities before another assessment.",
+});
+
+const selection = flow.jev("select", {
+  input: { message: flow.input.get("message"), skills: shortlist },
+  request: ({ message, skills }) => ({
+    state: { message, skills },
+    questions: {
+      selected: choice("Which skill fits best?",
+        Object.fromEntries(skills.map((name) => [name, null]))),
+    },
+  }),
+}, { title: "Assess the shortlist" });
+
+return flow.output("suggestion", selection.answer("selected").choice);
+```
+
+Here `ranking` is an earlier Jev request with a Choice question named `skills`. This is a minimal API illustration, not the complete official skill-suggestion cookbook.
+
+Factory inputs use the same JSON-compatible snapshot contract as tasks. Construct SDK assets inside the factory when needed, rather than passing asset instances through its inputs. A request factory is **synchronous**: return an ordinary SDK request, with no unresolved expressions. Use a preceding task for asynchronous work. The runner makes the SDK call through the supplied client, so retries, request linkage, questions, and answer inspection remain intact. No factory runs during definition. Referenced question names are checked against the generated request before dispatch. Known keys retain inference; genuinely dynamic keys require runtime checking. The factory has no separate diagram node; its resulting Jev request is the visible step. `request.answers` is a typed reference to its complete answer map: pass it to a task when keys such as `fits::<skill>` are generated at runtime. `request.answer("known-key")` still provides individual field references.
+
+Tasks may be synchronous or asynchronous. The second callback argument is `TaskContext`: `{ signal, runId, stepId, executionId }`. A task can call a remote service with ordinary server code:
+
+```ts
+const evaluation = flow.task("external-evaluation", {
+  input: { document: flow.input.get("document") },
+  timeoutMs: 30_000,
+  run: async (input, { signal }) => {
+    const response = await fetch(serviceUrl, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(input),
+      signal,
+    });
+    if (!response.ok) throw new Error("Evaluation failed");
+    return response.json();
+  },
+}, { title: "External evaluation" });
+```
+
+`serviceUrl` and any credentials belong to trusted server configuration. Functions/closures are never serialized to the browser or uploaded for remote execution. Keep Jev calls in `flow.jev()` when they need their own linked request diagram; arbitrary calls hidden inside a task are not automatically modeled as child flow steps.
+
+### Task values, lifetime, and capture
+
+- Inputs and outputs must be JSON-compatible: null, booleans, finite numbers, strings, arrays, and plain objects. Return `null` for no value. Undefined, functions, dates, class instances, BigInt, cycles, and nesting beyond 40 levels fail rather than being silently converted. `Resolved<T>`, `FlowTask`, `FlowRequestFactory`, and `TaskContext` are exported types. JSON validity is also checked at runtime.
+- Each callback receives detached input data. Its output is snapshotted before downstream use. Mutating callback inputs or retaining/mutating a returned object does not rewrite earlier state or captured previews.
+- A timeout must be a positive integer no larger than 2,147,483,647 milliseconds. There is no default timeout or automatic task retry. A timeout fails the step with `TimeoutError`; cancellation records `cancelled`. Dependent steps do not run. Late fulfillment/rejection cannot resurrect a completed, failed, or cancelled run.
+- Abort signals are cooperative. The runner can stop waiting for asynchronous work that ignores a signal, but cannot kill arbitrary JavaScript, undo side effects, or guarantee remote cancellation. CPU-bound work blocks the event loop until it returns; a result returned after its timeout is rejected. Use a worker/service for expensive computation.
+- Task cards show their status, duration, and returned value as typed, collapsible properties. Nested objects and arrays expand on demand; long values and additional properties stay accessible in a bounded scroll area. Select one for expandable inputs/outputs and capture warnings. Conditions referencing task results read the **redacted captured output** in the viewer.
+- Task input/output capture uses the existing size/depth limits and default secret-key redaction. Custom redaction paths start with `steps`, the step ID, `data`, then `input` or `output`. Capture truncation/redaction never changes the value executed or returned. Capture failures suppress the data and do not fail the task. Only error names are recorded; exception messages/stacks remain server-side.
+- The wire format adds an optional task kind/data to version 1. Existing captures remain readable; use the matching updated drawer for function previews. Dynamic fan-out is provided separately by the experimental `map()` API below. Stateful iteration is provided by `loop()` below. These APIs do not add persisted jobs, distributed execution, or automatic deployment.
+
+### Try the local sample
+
+From the repository root run `npm run dev`, open `http://127.0.0.1:4182/`, and select **Flow · Functions + dynamic questions (synthetic)**. Run the sample, open **Jev DevTools → Flows**, and select **Keep the top three skills**. Inspect its output, then the next request's three Choice criteria. Both model responses are synthetic fixtures; no API key or remote call is required. This demonstrates the API, not a faithful port of the official cookbook.
+
 ## Explain steps in the diagram
 
-All four builder methods accept an optional third argument: `{ title, description }`.
+All builder methods accept an optional final display argument: `{ title, description }`. It is the third argument for `jev`, `task`, `if`, `branch`, `parallel`, and `output`, and the fourth for `map` and `loop`.
 Use it to explain the purpose of a request, a condition, a parallel join, or an outcome:
 
 ```ts
@@ -82,7 +153,7 @@ For an output with no value, pass `undefined` as the second argument. The same p
 
 Titles accept 1–120 characters; descriptions accept 1–600. Supplied text must be nonblank and is trimmed and copied when the definition is built. Existing calls and older captures continue to use step IDs when no title is provided. IDs, returned outcome names, SDK requests, and routing behavior are unchanged. This is developer-authored context, not model reasoning or extra instructions sent to Jev.
 
-Cards preview the description; select a step to read its full text below the canvas. Output cards identify the returned outcome versus an untaken route, and show the then/else route. Parallel cards show each lane's recorded status and a completion count; select one for the full lane list when there are more than four.
+Cards preview the description; select a step and open **Show details** in the bottom bar to read its full text. The panel starts collapsed, scrolls independently, and retains its height while switching steps or hiding/reopening it. Drag its top divider vertically, or focus the divider and use Up/Down (Shift for larger steps), Home, or End. Resizing leaves space for the canvas. Output cards identify the returned outcome versus an untaken route, and show the then/else route. Parallel cards show each lane's recorded status and a completion count; select one for the full lane list when there are more than four.
 
 Titles and descriptions are definition metadata and are **not passed through request redaction**. Write static, public-safe explanations; never interpolate user inputs, credentials, or other secrets.
 
@@ -126,7 +197,7 @@ Definition captures contain structural IDs/dependencies and parallel lane names 
 
 ## Drawer and samples
 
-Choose **Flows** after capturing a run. Captured Jev calls render their existing request diagrams together on **one canvas**: state, instructions, the selected question's answer, probabilities and output branches. Each request keeps its question picker, Show More and complete probability table. Long input previews remain bounded; **Inspect request** opens Questions/Context/Transport/Raw for the full captured details.
+Choose **Flows** after capturing a run. Captured Jev calls render their existing request diagrams together on **one canvas**: state, instructions, the selected question's answer, probabilities and output branches. Each request keeps its question picker, Show More and complete probability table. Long input previews remain bounded; expand **Show details**, then **Inspect request** opens Questions/Context/Transport/Raw for the full captured details.
 
 Arrows connect requests, conditions and outcomes in execution order; redundant transitive edges are omitted so they do not cross intervening steps. Parallel paths converge at **Wait for both checks** (or **Wait for all N paths**), showing their lane names. Selecting it explains that downstream calls wait until every lane succeeds, and that the marker does not make another Jev call. Untaken, waiting or evicted requests show an explicit placeholder rather than invented content.
 
@@ -146,7 +217,7 @@ node benchmarks/flows-isolated.mjs
 
 The new-flow scaling suite measures 11/51/151-node linear graphs and 200 retained 11-node runs, opening and keyboard pan CPU in isolated Chromium. It is not a before/after optimization claim. For existing request regressions, use `BENCH_SUITE=rerenders npm run bench:compare -- main` and keep those findings separate. Generated data and screenshots stay in ignored `benchmarks/results/`; report comparisons and limitations in the PR.
 
-V1 has no standalone viewer, generic tasks, arbitrary callbacks at execution time, loops, automatic business actions, durable execution, cross-process coordination, or distributed persistence. A run belongs to one process and its supplied SDK client. Large flow canvases are bounded, not virtualized. They mount the retained request diagrams; CSS content visibility skips offscreen layout/paint where supported while preserving local controls. This uses more DOM and memory than status cards. Only the selected full tabbed inspector mounts; all captured answers remain accessible through each request’s question picker and the Questions tab.
+Published 0.3.0 has no generic tasks, runtime request factories, dynamic maps, returning conditionals, or loops. This unreleased checkout adds those capabilities. Neither version has a standalone viewer, durable execution, cross-process coordination, or distributed persistence. Tasks run application-owned code and may have side effects; the runner does not deploy services or provide rollback. A run belongs to one process and its supplied SDK client. Large flow canvases are bounded, not virtualized. They mount the retained request diagrams; CSS content visibility skips offscreen layout/paint where supported while preserving local controls. This uses more DOM and memory than status cards. Only the selected full tabbed inspector mounts; all captured answers remain accessible through each request’s question picker and the Questions tab.
 
 ### Structured content in request cards
 
@@ -154,8 +225,110 @@ State and instruction objects show their top-level properties, with nested objec
 
 ### Branch rules
 
-Condition cards separate **Incoming value** from **Requirement**, alongside your authored description. For example, `decision.answer("ready").noul.gte(0.9)` shows **Ready: 94%** (using the captured answer) and **At least 90%**. The selected-step details retain the technical rule `combined.ready ≥ 90%` when the request step ID is `combined`. Comparisons preserve their operators and AND/OR/NOT grouping. The condition's recorded decision shows **then** or **else**; the viewer never re-evaluates a rule against potentially redacted snapshots. Selecting the card reveals its full captured rule; the card itself previews three lines.
+Condition cards separate **Incoming value** from **Requirement**, alongside your authored description. For example, `decision.answer("ready").noul.gte(0.9)` shows **Ready: 94%** (using the captured answer) and **At least 90%**. The selected-step details retain the technical rule `combined.ready ≥ 90%` when the request step ID is `combined`. Comparisons preserve their operators and AND/OR/NOT grouping. The condition's recorded decision shows **then** or **else**; the viewer never re-evaluates a rule against potentially redacted snapshots. Selecting the card and opening **Show details** reveals its full captured rule; the card itself previews three lines.
 
 Rule literals now appear in captures, including numeric thresholds and string comparison labels. They use the existing capture limits and `redact` callback, with paths prefixed by `["conditions", stepId]`; a literal's final path segment is `value`. For example, return `"[redacted]"` whenever `path[0] === "conditions" && path.at(-1) === "value"` to hide all rule literals. Redaction/truncation is displayed explicitly and never changes execution. Rules are bounded to 128 expression nodes before capture. Existing integrations and older captures remain supported; old captures show their original rule with hidden literals.
 
 Incoming values are read from linked, retained Jev captures and respect their redaction. Missing or evicted captures, older rule metadata, and references to flow input or parallel aggregate values that are not request answers show **Not captured**; the viewer does not collect extra runtime values or infer them from the chosen route. Duplicate input names include their source step title to distinguish them. The card previews up to three inputs; select it for the complete list and technical references. Compound requirements preserve AND/OR/NOT grouping and use the same readable input names.
+
+## Dynamic collections: `flow.map()` (unreleased experiment)
+
+`map(id, options, buildItem, display?)` runs the same item program over an array produced at runtime. The callback builds a template once; it does not execute application work during definition.
+
+```ts
+const assessed = flow.map("assess-passages", {
+  items: retrieved, // FlowExpression<Passage[]> or an ordinary array
+  input: { query: flow.input.get("query") }, // explicit shared context
+  concurrency: 4, // default 4; 1–16
+  maxItems: 12, // required; 1–64; exceeding it fails without truncating
+}, (item) => {
+  const request = item.jev("assess", {
+    state: {
+      query: item.input.get("context").get("query"),
+      passage: item.input.get("item"),
+    },
+    questions: { relevant: noul("Is the passage relevant to the query?") },
+  });
+  return item.task("result", {
+    input: { passage: item.input.get("item"), relevance: request.answer("relevant").noul },
+    run: (value) => value,
+  });
+});
+// assessed is a typed FlowExpression<Array<{ passage: Passage; relevance: number }>>.
+```
+
+`item.input` contains `{ item, index, context }`; index is zero-based. Pass outer references explicitly through `input`; they cannot be captured directly inside the item builder. Each item receives a detached JSON-compatible snapshot. A template can contain tasks, Jev calls and static parallel lanes, and returns an expression. The runner adds the item-result output. Terminal `output()`/`branch()` calls in the item builder and nested maps are not supported in this first version. Use a task for deterministic routing that returns a value.
+
+Results preserve input order regardless of completion order. An empty list returns `[]` and executes no item steps. The map waits for every item before advancing. A failed item aborts running siblings, blocks queued items, and prevents downstream work; external cancellation marks queued work cancelled. There is no partial-success mode or automatic map/task retry. SDK retries remain governed by the supplied client. Signals are cooperative for remote side effects; cancellation cannot undo work already performed.
+
+Definitions are limited to 256 nodes including item templates; runs permit at most 1,024 expanded nodes including root nodes and item-result nodes. Limits reject excess work rather than silently reducing the list. Concurrency is per map, not a global provider limit across simultaneous flow runs. Stateful iteration uses the separate `loop()` API below. Neither API adds durable or distributed execution.
+
+The collection card shows progress and an item selector. **View Flow** expands the selected item’s complete connected diagram directly below the card, linked by a labeled connector. Changing the selector or using the arrows on either side updates the inline diagram. The arrows wrap between the first and last items and are disabled for a single-item collection; **Hide Flow** collapses it. Parent and item diagrams share one canvas. Opening, switching, or collapsing an item keeps the original step positions and camera unchanged. Expanded wrappers are centered beneath their collection, with a connector to the center of their top edge and navigation arrows outside the frame. Item changes use a short directional fade/slide, disabled for reduced-motion preferences. Use **Fit flow** to bring everything—including previews extending left of the original graph—into view. Item requests have distinct execution IDs and are linked to their parent run using `map-id/index/step-id`. Only started items have a diagram; queued, blocked and cancelled-before-start items retain their status. Older captures remain readable with the matching updated drawer; this optional map metadata extends wire version 1.
+
+Item input/output and result snapshots follow the same capture limits and redaction as other steps. Custom redaction paths are prefixed with `steps`, map ID, `items`, index before child paths. Template conditions are prefixed with `conditions`, map ID, `items`. Inputs never become structural labels. Runtime values stay untruncated; capture failures do not change execution. Clear/eviction still cannot resurrect a run.
+
+Try the [RAG passage cookbook](../cookbooks/rag-passages/README.md) for a twelve-item sample with four concurrent requests and every passage inspectable.
+
+## Returning conditionals: flow.if() (unreleased experiment)
+
+Use `flow.if(id, { when, then, else }, display?)` when one path should produce a value and **both paths continue into shared work**. `flow.branch()` still ends its block with a named outcome. This addition is local to the experimental checkout and is not in npm 0.3.0.
+
+```ts
+const selected = flow.if("choose-extractor", {
+  when: assessment.get("maxFieldProbability").gt(0.7),
+  then: path => path.task("strong", {
+    input: { document: path.input.get("document") },
+    run: ({ document }, { signal }) => extractWithStrongModel(document, signal),
+  }, { title: "Run the stronger extractor" }),
+  else: () => cheapRecord, // An existing in-scope expression is valid too.
+}, {
+  title: "Escalate a flagged field",
+  description: "Use a stronger extractor only when a field flag is above 70%.",
+});
+const formatted = flow.task("format-record", {
+  input: selected,
+  run: record => formatRecord(record),
+});
+return flow.output("final-record", formatted);
+```
+
+This snippet belongs inside a definition with `assessment` and `cheapRecord` references from earlier steps and application-owned `extractWithStrongModel`/`formatRecord` functions. Functions run in your Node process; they may call remote providers with server credentials and the provided signal. The flow API does not transmit executable code to Jev or add a remote job runner.
+
+- Both callbacks define their paths once, synchronously. Only the selected path's **runtime tasks and requests** execute. Put side effects in task callbacks, never in the definition callbacks.
+- Both arms must return a `FlowExpression`. Return a task result, an answer value, an earlier reference, or another `if()` result. Direct `output()` or terminal `branch()` arms are rejected; put the named output after the conditional, or use `branch()` for terminal routing.
+- The result type is the union of the arm values (`FlowExpression<A | B>`). Narrow discriminated unions inside task callbacks as usual. Arm-local references cannot escape into siblings or shared code; use the returned `selected` reference.
+- The diagram shows a condition, both possible paths, and an automatically generated **Selected result** merge card. Only the chosen incoming edge is highlighted. The merge captures JSON-compatible returned values under the ordinary redaction/size limits. If a direct reference cannot be captured as JSON, the viewer reports that limitation without changing the runtime value or stopping execution. A direct-return arm still connects the condition to the merge.
+- The merge is a real counted node with a generated collision-safe ID; do not depend on that ID. Existing 256-definition-node, depth-16 and 1,024-expanded-node limits still apply. Returning conditionals compose with nested conditionals, parallel lanes, and collection item programs.
+- Failure or cancellation prevents the merge and shared continuation. The untaken path stays untaken; no fallback, automatic retry, or error recovery is implied.
+- Numeric expressions now support `.gt(numberOrReference)` for strict greater-than, alongside `.lt()` and `.gte()`. The condition card preserves the actual operator. In the SDE recipe, exactly 0.70 does **not** escalate.
+
+New `if` and `merge` kinds extend the version-1 flow records; use the matching updated server and drawer. Older captured flows remain readable. For four complete no-key samples, see the [SDE cascade cookbook](../cookbooks/sde-cascade/README.md).
+
+## Stateful iteration: flow.loop() (unreleased experiment)
+
+`flow.loop(id, { initial, input, while, maxIterations }, buildIteration, display?)` returns the final state as a typed `FlowExpression<S>`. Available in this checkout, not npm 0.3.0.
+
+```ts
+const final = flow.loop("count", {
+  initial: { count: 0 },
+  input: { increment: 1 },
+  while: state => state.get("count").lt(3),
+  maxIterations: 3,
+}, iteration => iteration.task("advance", {
+  input: iteration.input,
+  run: ({ state, context }) => ({ count: state.count + context.increment }),
+}), { title: "Count up to three" });
+return flow.output("done", final);
+```
+
+The `while` callback builds an inspectable expression **once**, using only its state reference and literal thresholds. It is not an arbitrary runtime predicate. Put computed Boolean state fields in a task when the continuation rule needs application logic. Outer step references cannot be captured by the predicate; include necessary values in the initial state. The body is also built once; execute side effects only in tasks or Jev requests.
+
+Before each iteration, the runner checks the condition against the current state. An initially false condition runs zero iterations and returns the initial state. Each iteration sees `{ state, index, context }` through `iteration.input`; index is zero-based and context resolves the explicit `input` template. Return an expression of the same state type. Each next state is a detached JSON-compatible snapshot. Direct outer references, terminal `output()`/`branch()` bodies and non-JSON states are rejected. Use `if()` within an iteration when paths should rejoin.
+
+`maxIterations` is required, integer 1–64. After the last permitted iteration, the condition is checked again: false means normal completion; true throws exported `FlowLoopLimitError`. The loop records `stopReason: "limit"`, keeps completed iterations inspectable, and blocks shared downstream work. A partial state is not returned as a successful final result. Task/request failures and cancellation also stop iteration. No automatic task retry, fallback, persistence or resume is added; remote side effects still require cooperative cancellation.
+
+An iteration can contain tasks, Jev requests, `if()`, parallel lanes and **one level of `map()`**. Nested loops, loops inside maps and nested maps are unsupported. Pass outer data through `input`. Loop and collection templates count recursively toward the 256-node definition limit. The entire run shares the 1,024-expanded-step budget across sibling loops and all nested item executions; each program invocation reserves its own nodes and a map reserves all its immediate item programs before dispatch. The budget never resets at iteration boundaries. Exceeding it fails explicitly rather than truncating the work. The existing per-map concurrency limit is not a global request-rate limiter.
+
+In the drawer, a **Loop** card shows completed iterations, the continuation rule and its stop reason. Choose **Iteration → View Flow** to reveal that iteration’s complete connected diagram underneath. Previous/next iteration arrows preserve the parent graph and camera. A collection within the selected iteration can expose its own item flow. Initial/latest states and the condition’s captured incoming values are available in Details; each iteration’s returned state is its captured outcome. Captures remain bounded/redacted, so a large state may be truncated in the inspector even though runtime execution uses the full value. Request links include both iteration and item paths and retain distinct execution IDs. New loop metadata extends version-1 records; use the matching updated drawer and server.
+
+Try the [hierarchical classification cookbook](../cookbooks/hierarchical-classification/README.md), including beam recovery, deterministic paths, a zero-iteration leaf, and an intentional iteration-limit failure.
