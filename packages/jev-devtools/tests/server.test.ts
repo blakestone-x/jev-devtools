@@ -1,6 +1,11 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { createServer } from "node:http";
+import {
+  createServer,
+  type IncomingMessage,
+  type ServerResponse,
+} from "node:http";
+import { PassThrough } from "node:stream";
 import { once } from "node:events";
 import { setTimeout as delay } from "node:timers/promises";
 import { createJevDevtools, getJevDevtools } from "../server/index";
@@ -218,6 +223,60 @@ test("Node middleware serves actual HTTP/SSE, delegates unrelated routes, and di
     await once(server, "close");
   }
 });
+test("Node middleware refuses non-loopback peers unless authorize is configured", async () => {
+  const status = async (
+    adapter: ReturnType<typeof createJevDevtools>,
+    remoteAddress: string | undefined,
+  ) => {
+    let code = 0;
+    const res = Object.assign(new PassThrough(), {
+      headersSent: false,
+      writeHead(next: number) {
+        code = next;
+        return res;
+      },
+    });
+    const req = {
+      url: "/api/jev-devtools",
+      method: "GET",
+      headers: { host: "localhost:5199" },
+      socket: { remoteAddress },
+    };
+    await adapter.middleware(
+      req as unknown as IncomingMessage,
+      res as unknown as ServerResponse,
+      () => assert.fail("inspector paths must not be delegated"),
+    );
+    return code;
+  };
+  const local = createJevDevtools({ origin, enabled: true });
+  const authorized = createJevDevtools({
+    origin,
+    enabled: true,
+    authorize: () => true,
+  });
+  const disabled = createJevDevtools({ origin });
+  try {
+    // A spoofed Host header does not make a network peer local.
+    for (const peer of [
+      "192.168.1.20",
+      "10.0.0.5",
+      "::ffff:192.168.1.20",
+      "fe80::1",
+      undefined,
+    ])
+      assert.equal(await status(local, peer), 403, String(peer));
+    for (const peer of ["127.0.0.1", "127.0.0.2", "::1", "::ffff:127.0.0.1"])
+      assert.equal(await status(local, peer), 200, peer);
+    assert.equal(await status(authorized, "192.168.1.20"), 200);
+    assert.equal(await status(disabled, "192.168.1.20"), 404);
+  } finally {
+    local.dispose();
+    authorized.dispose();
+    disabled.dispose();
+  }
+});
+
 test("flow branches preserve the returned choice even when it is not the highest probability", () => {
   const branches = flowAnswer({ ...answer.answers.team, type: "choice" });
   assert.deepEqual(

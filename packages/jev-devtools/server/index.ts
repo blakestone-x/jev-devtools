@@ -13,12 +13,18 @@ export type JevDevtoolsServerOptions = CaptureOptions & {
   enabled?: boolean;
   origin: string;
   endpoint?: string;
-  /** Required for non-loopback origins. Apply your application's authentication. */
+  /**
+   * Required for non-loopback origins. Without it, Node middleware only accepts
+   * loopback connections. Apply your application's authentication.
+   */
   authorize?: (request: Request) => boolean | Promise<boolean>;
   /** Server-derived scope. Defaults to a shared local-development history. */
   getSession?: (request: Request) => string | Promise<string>;
 };
 export type ClientMetadata = { label?: string; source?: "sample" | "live" };
+// Host and Origin are client-controlled, so locality is decided by the socket peer.
+const isLoopback = (address = "") =>
+  address === "::1" || /^(::ffff:)?127\./.test(address);
 const json = (data: unknown, status = 200) =>
   Response.json(data, { status, headers: { "cache-control": "no-store" } });
 
@@ -293,6 +299,19 @@ export function createJevDevtools(options: JevDevtoolsServerOptions) {
       next();
       return;
     }
+    if (
+      enabled() &&
+      !options.authorize &&
+      !isLoopback(req.socket.remoteAddress)
+    ) {
+      res
+        .writeHead(403, {
+          "content-type": "application/json",
+          "cache-control": "no-store",
+        })
+        .end('{"error":"Loopback connections required without authorize"}');
+      return;
+    }
     const abort = new AbortController();
     res.once("close", () => abort.abort());
     try {
@@ -340,6 +359,8 @@ export function createJevDevtools(options: JevDevtoolsServerOptions) {
      * For Node framework routes whose Request URL uses an internal hostname.
      * Require the actual Host header to match the configured public authority;
      * never trust forwarded host/protocol headers. Origin checks still apply.
+     * A Request does not expose the socket peer and any non-browser client can
+     * set Host, so bind the server to loopback or set authorize.
      */
     handleNodeRoute(request: Request): Promise<Response> {
       if (!enabled()) return handle(request);
