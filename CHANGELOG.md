@@ -9,7 +9,7 @@ Dates below use UTC and were checked against npm's publication history. The hist
 | Version | Published (UTC) | Highlights |
 | --- | --- | --- |
 | [Unreleased](#unreleased) | Not published | No changes yet. |
-| [0.3.0](#030--pending-publication) | Pending publication | Connected flow API, complete request diagrams, readable branch requirements, structured content, and bundled AI flow guidance. |
+| [0.3.0](#030--october-24-2026-experimental) | 2026-10-24 | Connected flow API, complete request diagrams, readable branch requirements, structured content, and bundled AI flow guidance. |
 | [0.2.0](#020--october-23-2026-experimental) | 2026-10-23 | Batched updates, changed-trace streaming, frame-coalesced rendering, less work while the drawer is closed, virtualized Questions, compact Choice diagrams, and reuse of unchanged inspector views. |
 | [0.1.3](#013--october-23-2026-experimental) | 2026-10-23 | Isolated drawer styles, diagram pan/zoom, and version-specific npm links. |
 | [0.1.2](#012--october-23-2026-experimental) | 2026-10-23 | Bundled AI setup skill and framework recipes. |
@@ -20,15 +20,14 @@ Dates below use UTC and were checked against npm's publication history. The hist
 
 No changes yet.
 
-## 0.3.0 — Pending publication
+## 0.3.0 — October 24, 2026 (experimental)
 
-Experimental minor release. Includes the flow API and diagrams merged in [#23](https://github.com/diegoag64/jev-devtools/pull/23), plus complete README and bundled agent guidance. Existing root component props, server setup, and single-request calls remain compatible. Flow adoption is optional; `jev-devtools/flow` is a new Node-only entry point. This version is prepared for release, not yet confirmed published.
+Experimental minor release. Includes the flow API and diagrams merged in [#23](https://github.com/diegoag64/jev-devtools/pull/23), plus complete README and bundled agent guidance. Existing root component props, server setup, and single-request calls remain compatible. Flow adoption is optional; `jev-devtools/flow` is a new Node-only entry point. [Published package](https://www.npmjs.com/package/jev-devtools/v/0.3.0) · [Documentation and release preparation #24](https://github.com/diegoag64/jev-devtools/pull/24). Published at 01:36:28 UTC from commit `559cfd3074176e39965365c00267f4c794b0e454`.
 
 ### Documentation
 
 - Add a version-matched, npm-bundled AI flow recipe with a complete parallel-checks/decision/branch example, static titles/descriptions, reference scope, error/cancellation behavior, sample verification, privacy rules, and troubleshooting. Link it from both READMEs, the setup skill, and `llms.txt`.
 - Expand README flow examples and clarify that the custom drawer uses TanStack Virtual internally. Package verification requires the bundled flow instructions.
-
 
 ### Added
 
@@ -122,4 +121,4 @@ Verification uses sample responses through the real SDK. Live inference and brow
 
 ## Registry staging entry
 
-npm also lists `0.0.0-stage`, created on October 23, 2026 during the initial publishing flow. It is a staging placeholder, not a separate feature release. The first public release was `0.1.0`; `latest` pointed to `0.2.0` when this history was checked. Use the exact-version package links above to inspect a specific release.
+npm also lists `0.0.0-stage`, created on October 23, 2026 during the initial publishing flow. It is a staging placeholder, not a separate feature release. The first public release was `0.1.0`; `latest` pointed to `0.3.0` when this history was checked. Use the exact-version package links above to inspect a specific release.
