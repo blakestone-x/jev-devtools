@@ -144,8 +144,10 @@ export const RequestDetail = memo(function RequestDetail({
               {tab === "Context" && (
                 <>
                   <p className="muted">
-                    Captured before dispatch. Known credential fields and email
-                    are redacted; captures are size limited.
+                    Captured before dispatch without changing SDK data. Known
+                    credential fields remain redacted; additional display
+                    masking follows the component prop. Captures are size
+                    limited.
                   </p>
                   {findImage(trace.request.state) && (
                     <img

@@ -3,6 +3,8 @@ import { readFile, mkdir, writeFile } from "node:fs/promises";
 import { join, dirname } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { build } from "vite";
+import { defineJevFlow } from "jev-devtools/flow";
+import { choice } from "@typesafe-ai/sdk";
 import { scenarios, recordedFixture, fixture, invoke } from "./fixtures.mjs";
 const root = dirname(fileURLToPath(import.meta.url));
 const port = Number(process.env.BENCH_PORT || 4190);
@@ -20,6 +22,10 @@ const adapters = new Map();
 const counters = { sent: 0, bytes: 0 };
 const active = new Map();
 const datasets = new Map();
+const redactionFlow = defineJevFlow("display-redaction", (flow) => {
+  const copy = flow.task("email", { input: flow.input, run: (value) => value });
+  return flow.output("done", copy);
+});
 for (const spec of scenarios) {
   const { snapshot } = await recordedFixture(spec);
   const payload = JSON.stringify(snapshot);
@@ -128,7 +134,9 @@ const server = createServer(async (req, res) => {
       res.setHeader("cache-control", "no-store");
       return res.end(JSON.stringify(counters));
     }
-    const match = url.pathname.match(/^\/api\/([a-z-]+)(\/events|\/clear)?$/);
+    const match = url.pathname.match(
+      /^\/api\/([a-z-]+)(\/events|\/clear|\/flows\/events)?$/,
+    );
     if (match && datasets.has(match[1])) {
       const dataset = datasets.get(match[1]);
       if (transportMode === "adapter") {
@@ -175,6 +183,62 @@ const server = createServer(async (req, res) => {
       res.write(`event: snapshot\ndata: ${dataset.payload}\n\n`);
       req.on("close", () => streams.delete(entry));
       return;
+    }
+    if (
+      url.pathname === "/bench/redaction" &&
+      req.method === "POST" &&
+      transportMode === "adapter"
+    ) {
+      if (req.headers.origin !== `http://127.0.0.1:${port}`) {
+        res.writeHead(403);
+        return res.end();
+      }
+      // Independent synthetic capture for the display-prop browser regression;
+      // benchmark workloads and production APIs do not need a test-only hook.
+      const { adapter, client } = adapters.get("small");
+      const state = {
+        email: "browser-personal@example.test",
+        client_secret: "browser-credential-sentinel",
+        customerId: "browser-public-customer",
+      };
+      const requestId = "redaction-structural-keys";
+      const captureClient = adapter.createClient(
+        {
+          apiKey: "sample",
+          logLevel: "off",
+          fetch: async () =>
+            Response.json(
+              {
+                model: "fixture",
+                answers: {
+                  email: {
+                    type: "choice",
+                    choice: "email",
+                    confidence: 0.8,
+                    probabilities: { email: 0.8, phone: 0.2 },
+                  },
+                },
+              },
+              { headers: { "x-typesafe-request-id": requestId } },
+            ),
+        },
+        { source: "sample", label: "Display redaction" },
+      );
+      await invoke(captureClient, {
+        state,
+        questions: {
+          email: choice(
+            { prompt: "Preferred contact method?", ...state },
+            {
+              email: { description: "Email reply", ...state },
+              phone: "Phone reply",
+            },
+          ),
+        },
+      });
+      await redactionFlow.run(state, { client, devtools: adapter });
+      res.setHeader("content-type", "application/json");
+      return res.end(JSON.stringify({ requestId }));
     }
     if (url.pathname === "/bench/pulse" && req.method === "POST") {
       if (req.headers.origin !== `http://127.0.0.1:${port}`) {

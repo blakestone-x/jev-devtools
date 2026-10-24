@@ -107,7 +107,7 @@ export const GET = (request: Request) => inspector.handleNodeRoute(request);
 export const DELETE = (request: Request) => inspector.handleNodeRoute(request);
 ```
 
-The adapter serves configuration at the base path, snapshots at `/events` via SSE, and `DELETE /clear`. The React component manages subscriptions, reconnection, and cleanup. If your frontend and backend use different ports, proxy this path and the application's inference endpoint through the frontend origin. The browser does not support a cross-origin inspector endpoint. Middleware must receive the original path and matching Host; configure proxies accordingly.
+The adapter serves configuration at the base path, snapshots at `/events` via SSE, and `DELETE /clear`. Display redaction is a local component prop; it needs no settings route or write request. The React component manages subscriptions, reconnection, and cleanup. If your frontend and backend use different ports, proxy this path and the application's inference endpoint through the frontend origin. The browser does not support a cross-origin inspector endpoint. Middleware must receive the original path and matching Host; configure proxies accordingly.
 
 Both API routes and inspector endpoints must share the **same in-memory adapter instance/process**. This prototype doesn't aggregate traces across workers, serverless instances, or edge runtimes. Independently tested integrations are React + Vite and the Next.js App Router example (Route Handlers, Server Actions, and Server Components). See [Next.js setup and limitations](nextjs.md).
 
@@ -119,7 +119,35 @@ Default history is shared across local development tabs, bounded to 50 requests.
 
 Host and Origin checks reject cross-origin browser requests. Other HTTP clients can set those headers freely, so without `authorize` the middleware also requires a loopback connection and returns 403 to network peers. `handle` and `handleNodeRoute` receive a Web Request without the connection's address: run those servers on `127.0.0.1` (for example `next dev --hostname 127.0.0.1`) or set `authorize`. A proxy or tunnel that is reachable from the network connects over loopback and passes this check, so it also needs `authorize`. An enabled non-loopback origin requires an `authorize(request)` callback. For a private authenticated environment, apply your existing authentication, and optionally provide `getSession(request)` returning a server-derived user/workspace scope. Then wrap the application's inference handler in `inspector.run(request, () => jev.systemOne(input))` so recording uses the same scope as the inspector's SSE and clear requests. Authentication still belongs to your application; the inspector does not create accounts or infer authorization. Do not derive scopes from an untrusted query parameter. With no `getSession`, all authorized users share the local history.
 
-Credential-named fields are redacted recursively. Custom `redact(path, value)` applies to inputs and responses. Arbitrary secrets in prose are not detected. Captures have depth, collection, image, and text budgets; omitted/truncated data is marked. Request headers/options are not captured. Small PNG/JPEG byte arrays have inline previews; unsupported or large images retain references and sizes.
+### Redaction policy
+
+Known credential fields are **always redacted from the inspection copy** before storing or streaming captures. SDK requests/responses and application runtime values are unchanged. Additional personal-data masking is a display-only component prop, on by default:
+
+```tsx
+// Default: mask supported personal fields in every DevTools view.
+<JevDevtools enabled={import.meta.env.DEV} />
+
+// Inspect those fields while credentials remain permanently redacted.
+<JevDevtools
+  enabled={import.meta.env.DEV}
+  redactAdditionalSensitiveData={false}
+/>
+```
+
+The prop applies to Context, Raw, Questions, request diagrams and flow data, including nested task/collection/loop captures and outcomes. Changing it immediately updates already-retained data as well as future updates without changing capture history, restarting a run, or reconnecting. Each mounted viewer controls its own display; other viewers and server-derived session isolation are unaffected. There is no drawer checkbox, settings endpoint, or extra Next.js route export.
+
+**Display masking is not removal from captured data.** Supported personal fields remain in server capture memory, SSE payloads and browser memory even while visually masked. Use the server-side `redact(path, value)` callback when a value must never reach the browser. Credentials and values removed by that callback cannot be revealed by setting this prop to `false`; older or truncated captures cannot recover absent data either.
+
+Matching uses the complete field name, ignores case, and removes hyphens and underscores. For example, `X-API-Key`, `x_api_key`, and `xApiKey` all match `xapikey`. A matching object's entire value is replaced with `[redacted]`, recursively through arrays and objects. Display masking preserves SDK structure: question IDs, Choice category labels/probabilities, score levels, and asset reference names remain intact even when named `email` or `phone`. Sensitive fields inside their instructions, descriptions, and other content are still masked. This display rule does not undo mandatory credential or custom server redaction.
+
+| Policy | Normalized field names |
+| --- | --- |
+| Always protected credentials | `authorization`, `proxyauthorization`, `cookie`, `cookies`, `setcookie`, `apikey`, `xapikey`, `password`, `passwd`, `passphrase`, `secret`, `clientsecret`, `token`, `accesstoken`, `refreshtoken`, `sessiontoken`, `authtoken`, `xauthtoken`, `xaccesstoken`, `idtoken`, `bearertoken`, `privatekey`, `secretkey` |
+| Display-only sensitive data, default on | `email`, `emailaddress`, `phone`, `phonenumber`, `mobile`, `mobilenumber`, `address`, `postaladdress`, `streetaddress`, `mailingaddress`, `ssn`, `socialsecuritynumber`, `creditcard`, `creditcardnumber`, `cardnumber` |
+
+Names such as `tokenCount`, `sessionId`, `apiKeyName`, and `secretary` remain inspectable. This explicit field-name policy does not detect arbitrary secrets in prose, URLs, image pixels, JSON encoded inside strings, unusual names, or structural labels. Actual HTTP request headers/options are never captured; header-like fields supplied inside captured bodies still follow the mandatory credential policy. Add application-specific `redact(path, value)` rules for other sensitive data. This callback remains active regardless of the component prop, and cannot restore fields removed by the built-in policy. It applies to requests, responses, task data, flow outcomes, and condition literals; static definition metadata must remain public-safe.
+
+Captures have depth, collection, image, and text budgets; omitted/truncated data is marked. Small PNG/JPEG byte arrays have inline previews; unsupported or large images retain references and sizes.
 
 ## Diagrams and request capture
 

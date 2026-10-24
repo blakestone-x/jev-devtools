@@ -32,7 +32,7 @@ The client validates envelope versions, revision continuity, unique IDs and whet
 
 The browser applies and validates every event in arrival order, then publishes the latest accumulated history to React once per animation frame. It does not skip protocol revisions or discard independent traces. Fast pending-to-complete transitions can share one paint; requests still pending at publication remain visible as pending. A 100 ms timeout is a fallback when animation frames are suspended (background browser timer throttling can delay it). Only one latest array is queued, and publication cancels the other scheduled callback. Invalid data discards queued publication before resynchronizing; unmount cancels both publication callbacks and reconnect retries. Connection status updates remain immediate.
 
-Authorization, same-origin enforcement, server-derived session scope, redaction and capture limits are unchanged. No raw SDK options or unredacted request bodies are added to the transport.
+Authorization, same-origin enforcement, server-derived session scope and capture limits remain in force. Known credential fields and custom server-redacted data are removed before delivery; HTTP headers/options are not captured. Additional personal-data display masking is controlled locally by the `redactAdditionalSensitiveData` component prop, so those fields remain present in SSE payloads even while masked in DevTools. Prop changes neither mutate stored stream records nor reconnect the streams. No settings fields, events or write endpoint are added to this protocol. See the [redaction policy](integration.md#redaction-policy).
 
 ## Remaining costs
 
