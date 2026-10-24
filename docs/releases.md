@@ -1,10 +1,17 @@
 # Packaging and releases
 
-## Release 0.3.0 — pending publication
+## Release 0.3.0 — published October 24, 2026
 
-This experimental minor release adds the Node flow API, connected request diagrams, readable condition inputs/requirements, parallel joins and outcomes, and structured content previews. It includes version-matched AI flow instructions in the npm archive. Existing single-request integration is unchanged. See the [0.3.0 changelog](../CHANGELOG.md#030--pending-publication).
+This experimental minor release adds the Node flow API, connected request diagrams, readable condition inputs/requirements, parallel joins and outcomes, and structured content previews. It includes version-matched AI flow instructions in the npm archive. Existing single-request integration is unchanged. See the [0.3.0 changelog](../CHANGELOG.md#030--october-24-2026-experimental).
 
-Prepare and inspect `jev-devtools-0.3.0.tgz` from the merged release commit after all checks pass. Publish that exact archive with `--access public --tag latest`; verify registry version, integrity, timestamp and clean-consumer imports before recording publication. Do not treat this preparation note as confirmation of publication.
+**[jev-devtools@0.3.0](https://www.npmjs.com/package/jev-devtools/v/0.3.0) was published on October 24, 2026 at 01:36:28 UTC**, from commit `559cfd3074176e39965365c00267f4c794b0e454` after [PR #24](https://github.com/diegoag64/jev-devtools/pull/24) and all eight post-merge checks passed. npm's `latest` tag was verified as `0.3.0`.
+
+The inspected and published archive was `jev-devtools-0.3.0.tgz`:
+
+- SHA-256: `35123cdf25cdb4b1b03d375a8f87a93e66b4bd503cbec11754d9452f7c53e86d`
+- Registry integrity: `sha512-6uzhJpwtORlijD0h869Q3+UsApRpg0q7v3yhKjP3spMxmJ1Pn7sIm4WCJyNfwbAhQLa/gzUtWub9xQn+aszHpw==`
+
+The registry integrity matches the inspected archive. Fresh registry-installed React and Next.js consumers passed build, public-export, SSR, development capture/SSE, and disabled-production checks using sample responses. npm reported processing after accepting the upload; publication and `latest` were confirmed from registry metadata after processing completed. Do not republish 0.3.0; use a new version for later changes.
 
 ## Release 0.2.0 — published October 23, 2026
 
