@@ -12,9 +12,16 @@ import { setTimeout as delay } from "node:timers/promises";
 // Server Action protocol, and server reloads. No browser or live inference needed.
 const root = dirname(dirname(fileURLToPath(import.meta.url)));
 const temp = await mkdtemp(join(tmpdir(), "jev-nextjs-"));
-const npm = process.platform === "win32" ? "npm.cmd" : "npm";
+// Node won't spawn npm.cmd without a shell, so Windows runs npm's CLI script directly.
+const npmCli = /npm-cli\.js$/.test(process.env.npm_execpath ?? "")
+  ? process.env.npm_execpath
+  : join(dirname(process.execPath), "node_modules/npm/bin/npm-cli.js");
+const npm = (args, options) =>
+  process.platform === "win32"
+    ? execFileSync(process.execPath, [npmCli, ...args], options)
+    : execFileSync("npm", args, options);
 const packed = JSON.parse(
-  execFileSync(npm, ["pack", "--json", "--pack-destination", temp], {
+  npm(["pack", "--json", "--pack-destination", temp], {
     cwd: join(root, "packages/jev-devtools"),
     encoding: "utf8",
   }),
@@ -31,7 +38,7 @@ const pkg = JSON.parse(await readFile(join(app, "package.json"), "utf8"));
 pkg.dependencies["jev-devtools"] =
   `file:${join(temp, packed[0].filename)}`;
 await writeFile(join(app, "package.json"), JSON.stringify(pkg, null, 2));
-execFileSync(npm, ["install", "--ignore-scripts", "--no-audit", "--no-fund"], {
+npm(["install", "--ignore-scripts", "--no-audit", "--no-fund"], {
   cwd: app,
   stdio: "inherit",
 });
@@ -225,7 +232,7 @@ try {
     "Next dev: route handler, Server Action, Server Component, reload retention, SSE, and clear passed.",
   );
   await stop();
-  execFileSync(npm, ["run", "build"], { cwd: app, env, stdio: "inherit" });
+  npm(["run", "build"], { cwd: app, env, stdio: "inherit" });
   start("start");
   await ready();
   for (const path of ["", "/events", "/clear"]) {

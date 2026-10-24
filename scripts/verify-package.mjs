@@ -6,9 +6,16 @@ import { fileURLToPath } from "node:url";
 import { execFileSync } from "node:child_process";
 const root = dirname(dirname(fileURLToPath(import.meta.url)));
 const temp = await mkdtemp(join(tmpdir(), "jev-consumer-"));
-const npm = process.platform === "win32" ? "npm.cmd" : "npm";
+// Node won't spawn npm.cmd without a shell, so Windows runs npm's CLI script directly.
+const npmCli = /npm-cli\.js$/.test(process.env.npm_execpath ?? "")
+  ? process.env.npm_execpath
+  : join(dirname(process.execPath), "node_modules/npm/bin/npm-cli.js");
+const npm = (args, options) =>
+  process.platform === "win32"
+    ? execFileSync(process.execPath, [npmCli, ...args], options)
+    : execFileSync("npm", args, options);
 const packed = JSON.parse(
-  execFileSync(npm, ["pack", "--json", "--pack-destination", temp], {
+  npm(["pack", "--json", "--pack-destination", temp], {
     cwd: join(root, "packages/jev-devtools"),
     encoding: "utf8",
   }),
@@ -63,8 +70,7 @@ if (process.env.JEV_VERIFY_REACT) {
 }
 pkg.dependencies["jev-devtools"] = `file:${tarball}`;
 await writeFile(join(consumer, "package.json"), JSON.stringify(pkg, null, 2));
-execFileSync(
-  npm,
+npm(
   [
     "install",
     ...(process.env.JEV_VERIFY_OFFLINE === "1" ? ["--offline"] : []),
@@ -83,6 +89,6 @@ execFileSync(
   ],
   { cwd: consumer, stdio: "inherit" },
 );
-execFileSync(npm, ["run", "build"], { cwd: consumer, stdio: "inherit" });
+npm(["run", "build"], { cwd: consumer, stdio: "inherit" });
 console.log(`Independent consumer ready: ${consumer}`);
 console.log(`Installable package: ${tarball}`);
