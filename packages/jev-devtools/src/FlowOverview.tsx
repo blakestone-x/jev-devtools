@@ -5,6 +5,7 @@ import { useDiagramViewport } from "./useDiagramViewport.js";
 import { RequestDetail } from "./JevDevtools.js";
 import { JsonBlock } from "./TraceContent.js";
 import { TraceDiagram } from "./TraceDiagram.js";
+type Lane = { name: string; status: string };
 type Bounds = { x: number; y: number; width: number; height: number };
 const RequestNode = memo(function RequestNode({
   node,
@@ -25,9 +26,10 @@ const RequestNode = memo(function RequestNode({
   onSelect: (id: string) => void;
   onResize: (id: string, height: number) => void;
 }) {
+  const headingHeight = node.description ? 104 : 64;
   const measure = useCallback(
-    (height: number) => onResize(node.id, height + 64),
-    [node.id, onResize],
+    (height: number) => onResize(node.id, height + headingHeight),
+    [node.id, onResize, headingHeight],
   );
   return (
     <article
@@ -38,13 +40,17 @@ const RequestNode = memo(function RequestNode({
     >
       <button
         className="flow-request-heading"
+        style={{ height: headingHeight }}
         aria-label={`Step ${node.id}, jev, ${status}`}
         aria-pressed={selected}
         onClick={() => onSelect(node.id)}
       >
         <span>
           <span className="eyebrow">Jev request</span>
-          <strong>{node.id}</strong>
+          <strong>{node.title ?? node.id}</strong>
+          {node.description && (
+            <span className="flow-request-description">{node.description}</span>
+          )}
         </span>
         <span>
           {status}
@@ -67,7 +73,7 @@ const Card = memo(function Card({
   selected,
   bounds,
   onSelect,
-  dependencies,
+  lanes,
 }: {
   node: FlowNode;
   status: string;
@@ -75,9 +81,20 @@ const Card = memo(function Card({
   selected: boolean;
   bounds: Bounds;
   onSelect: (id: string) => void;
-  dependencies: string[];
+  lanes: Lane[];
 }) {
   const join = node.kind === "parallel";
+  const finished = lanes.filter((lane) => lane.status === "completed").length;
+  const route = [...node.path]
+    .reverse()
+    .find((part) => part.endsWith(":then") || part.endsWith(":else"));
+  const stateLabel =
+    status === "untaken"
+      ? "Not taken"
+      : node.kind === "output" && status === "completed"
+        ? "Returned outcome"
+        : status;
+
   return (
     <button
       className={`flow-step ${selected ? "selected" : ""}`}
@@ -92,23 +109,97 @@ const Card = memo(function Card({
       aria-pressed={selected}
       onClick={() => onSelect(node.id)}
     >
-      <span className="eyebrow">
-        {join
-          ? "Parallel checks"
-          : node.kind === "branch"
-            ? "Condition"
-            : node.kind}
-      </span>
-      <strong>{join ? joinTitle(dependencies.length) : node.id}</strong>
-      {join && (
-        <span className="flow-step-description">
-          {dependencies.join(" + ")}
+      <span className="flow-card-heading">
+        <span className="flow-kind-icon" aria-hidden="true">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.5"
+          >
+            {join ? (
+              <path d="M4 5h4l5 7h7M4 19h4l5-7m4-3 3 3-3 3" />
+            ) : node.kind === "output" ? (
+              <>
+                <rect x="4" y="4" width="16" height="16" rx="4" />
+                <path d="m8 12 3 3 5-6" />
+              </>
+            ) : (
+              <path d="m12 3 9 9-9 9-9-9zM8 12h8" />
+            )}
+          </svg>
         </span>
+        <span className="eyebrow">
+          {join
+            ? "Parallel checks"
+            : node.kind === "branch"
+              ? "Condition"
+              : node.kind}
+        </span>
+        {node.kind === "output" && (
+          <span className="flow-status">{stateLabel}</span>
+        )}
+      </span>
+      <strong>
+        {node.title ?? (join ? joinTitle(lanes.length) : node.id)}
+      </strong>
+      {node.description && (
+        <span className="flow-step-description">{node.description}</span>
       )}
-      <small>
-        {join && status === "completed" ? "All finished · continue" : status}
-        {decision !== undefined ? ` · ${decision ? "then" : "else"}` : ""}
-      </small>
+      {join && (
+        <>
+          <span className="flow-join-summary">
+            {joinTitle(lanes.length)}{" "}
+            <span>
+              {finished}/{lanes.length}
+            </span>
+          </span>
+          <span className="flow-lanes">
+            {lanes.slice(0, 4).map((lane) => (
+              <span
+                className="flow-lane"
+                key={lane.name}
+                data-status={lane.status}
+              >
+                <span>
+                  <span aria-hidden="true">
+                    {lane.status === "completed"
+                      ? "✓"
+                      : lane.status === "error"
+                        ? "!"
+                        : "○"}
+                  </span>{" "}
+                  {lane.name}
+                </span>
+                <small>{lane.status}</small>
+              </span>
+            ))}
+            {lanes.length > 4 && (
+              <small>{lanes.length - 4} more · select to see all checks</small>
+            )}
+          </span>
+        </>
+      )}
+      <span className="flow-card-footer">
+        <code>{node.id}</code>
+        <small>
+          {join
+            ? status === "completed"
+              ? "All finished · continue"
+              : stateLabel
+            : node.kind === "output"
+              ? route?.endsWith(":then")
+                ? "Then route"
+                : route?.endsWith(":else")
+                  ? "Else route"
+                  : "Final outcome"
+              : decision !== undefined
+                ? decision
+                  ? "Condition met · then"
+                  : "Condition not met · else"
+                : stateLabel}
+        </small>
+      </span>
       {node.kind === "jev" && (
         <small>
           {status === "untaken"
@@ -167,6 +258,50 @@ export const FlowOverview = memo(function FlowOverview({
       ]),
     );
   }, [definition]);
+  const parallelLanes = useMemo(
+    () =>
+      new Map(
+        definition.nodes
+          .filter((n) => n.kind === "parallel")
+          .map((node) => [
+            node.id,
+            (node.lanes ?? node.dependencies).map((name) => {
+              const children = node.lanes
+                ? definition.nodes.filter((child) =>
+                    child.path.includes(`${node.id}:${name}`),
+                  )
+                : definition.nodes.filter((child) => child.id === name);
+              const states = children.map(
+                (child) => run.steps[child.id]?.status ?? "waiting",
+              );
+              const status =
+                run.steps[node.id]?.status === "untaken"
+                  ? "untaken"
+                  : states.includes("error")
+                    ? "error"
+                    : states.includes("cancelled")
+                      ? "cancelled"
+                      : states.includes("blocked")
+                        ? "blocked"
+                        : run.steps[node.id]?.status === "completed" ||
+                            (states.length > 0 &&
+                              states.every(
+                                (state) =>
+                                  state === "completed" || state === "untaken",
+                              ))
+                          ? "completed"
+                          : states.some(
+                                (state) =>
+                                  state === "running" || state === "completed",
+                              )
+                            ? "running"
+                            : "waiting";
+              return { name, status };
+            }),
+          ]),
+      ),
+    [definition, run.steps],
+  );
   const layout = useMemo(() => {
     const columns = new Map<string, number>();
     let remaining = [...definition.nodes];
@@ -197,8 +332,16 @@ export const FlowOverview = memo(function FlowOverview({
         const captured =
           node.kind === "jev" &&
           tracesById.has(run.steps[node.id]?.traceId ?? "");
-        const w = captured ? 1120 : 280,
-          h = captured ? (heights[node.id] ?? 640) : 180;
+        const w = captured ? 1120 : 360,
+          h = captured
+            ? (heights[node.id] ?? 640)
+            : node.kind === "parallel"
+              ? 190 +
+                (node.description ? 64 : 0) +
+                Math.min(4, (node.lanes ?? node.dependencies).length) * 32
+              : node.description
+                ? 244
+                : 172;
         const parents = (links.get(node.id) ?? [])
           .map((id) => points.get(id)!)
           .filter(Boolean);
@@ -296,7 +439,8 @@ export const FlowOverview = memo(function FlowOverview({
             <option value="">Select a step</option>
             {definition.nodes.map((n) => (
               <option key={n.id} value={n.id}>
-                {n.id} · {run.steps[n.id]?.status ?? "waiting"}
+                {n.title ? `${n.title} (${n.id})` : n.id} ·{" "}
+                {run.steps[n.id]?.status ?? "waiting"}
               </option>
             ))}
           </select>
@@ -380,7 +524,7 @@ export const FlowOverview = memo(function FlowOverview({
                 selected={selected === n.id}
                 bounds={p}
                 onSelect={setSelected}
-                dependencies={n.lanes ?? n.dependencies}
+                lanes={parallelLanes.get(n.id) ?? []}
               />
             );
           })}
@@ -390,13 +534,14 @@ export const FlowOverview = memo(function FlowOverview({
         {node && step ? (
           <>
             <strong>
-              {node.id} · {step.status}
+              {node.title ?? node.id} · {step.status}
             </strong>
             <span className="muted">
               {step.durationMs !== undefined
                 ? ` · ${Math.round(step.durationMs)} ms`
                 : ""}
             </span>
+            {node.description && <p>{node.description}</p>}
             {node.kind === "parallel" && (
               <p>
                 These paths run at the same time:{" "}
@@ -404,6 +549,15 @@ export const FlowOverview = memo(function FlowOverview({
                 starts only after all finish successfully. This marker waits for
                 their results; it does not make another Jev request.
               </p>
+            )}
+            {node.kind === "parallel" && (
+              <ul className="flow-lane-details">
+                {parallelLanes.get(node.id)?.map((lane) => (
+                  <li key={lane.name}>
+                    {lane.name} · {lane.status}
+                  </li>
+                ))}
+              </ul>
             )}
             {node.condition && (
               <p>

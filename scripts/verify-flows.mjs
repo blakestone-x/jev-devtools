@@ -173,7 +173,45 @@ try {
   await page.waitForTimeout(150);
   await rows.first().click();
   await page.selectOption('[aria-label="Flow step"]', "checks");
-  await page.getByText("Wait for both checks", { exact: true }).waitFor();
+  const checksCard = page.getByRole("button", {
+    name: "Step checks, parallel, completed",
+    exact: true,
+  });
+  await checksCard
+    .getByText("Wait for both checks", { exact: false })
+    .waitFor();
+  await checksCard
+    .getByText("Bring the checks together", { exact: true })
+    .waitFor();
+  assert.equal(await checksCard.locator(".flow-lane").count(), 2);
+  assert.equal(
+    await checksCard
+      .locator(".flow-lane")
+      .filter({ hasText: "completed" })
+      .count(),
+    2,
+  );
+  const returned = page.getByRole("button", {
+    name: "Step ready-output, output, completed",
+    exact: true,
+  });
+  const untaken = page.getByRole("button", {
+    name: "Step review-output, output, untaken",
+    exact: true,
+  });
+  await returned.getByText("Ready for approval", { exact: true }).waitFor();
+  await returned.getByText("Returned outcome", { exact: true }).waitFor();
+  await untaken.getByText("Needs a closer look", { exact: true }).waitFor();
+  await untaken.getByText("Not taken", { exact: true }).waitFor();
+  await page.selectOption('[aria-label="Flow step"]', "ready-output");
+  await page
+    .locator(".flow-selection")
+    .getByText(
+      "Readiness is at least 90%. Return eligibility and risk to the application for its next action.",
+      { exact: true },
+    )
+    .waitFor();
+  await page.selectOption('[aria-label="Flow step"]', "checks");
   await page.getByText("All finished · continue", { exact: true }).waitFor();
   await page
     .getByText("This marker waits for their results", { exact: false })

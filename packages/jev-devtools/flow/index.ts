@@ -7,11 +7,13 @@ import type {
 } from "@typesafe-ai/sdk";
 import type {
   FlowDefinition,
+  FlowDisplay,
   FlowNode,
   FlowRun,
   FlowStep,
 } from "../src/flow-protocol.js";
 export type {
+  FlowDisplay,
   FlowDefinition,
   FlowRun,
   FlowStep,
@@ -239,6 +241,7 @@ export interface FlowBuilder<T> {
   jev<const Q extends Questions>(
     id: string,
     request: Request<Q>,
+    display?: FlowDisplay,
   ): AnswerRefs<Q>;
   /** Terminal decision: each callback must return output() or another branch(). */
   branch(
@@ -248,6 +251,7 @@ export interface FlowBuilder<T> {
       then: (path: FlowBuilder<T>) => FlowExpression<FlowOutcome>;
       else: (path: FlowBuilder<T>) => FlowExpression<FlowOutcome>;
     },
+    display?: FlowDisplay,
   ): FlowExpression<FlowOutcome>;
   parallel<
     const B extends Record<
@@ -257,8 +261,13 @@ export interface FlowBuilder<T> {
   >(
     id: string,
     lanes: B,
+    display?: FlowDisplay,
   ): { [K in keyof B]: ReturnType<B[K]> };
-  output(name: string, value?: unknown): FlowExpression<FlowOutcome>;
+  output(
+    name: string,
+    value?: unknown,
+    display?: FlowDisplay,
+  ): FlowExpression<FlowOutcome>;
 }
 export function defineJevFlow<T>(
   name: string,
@@ -292,7 +301,12 @@ export function defineJevFlow<T>(
         });
         return expr;
       });
-    function add(id: string, kind: FlowNode["kind"], value?: unknown): Step {
+    function add(
+      id: string,
+      kind: FlowNode["kind"],
+      value?: unknown,
+      display?: FlowDisplay,
+    ): Step {
       if (!building) throw new Error("Flow definition is closed");
       if (activeBlock !== token)
         throw new Error("Use the current branch or lane builder for steps");
@@ -301,6 +315,23 @@ export function defineJevFlow<T>(
       if (!/^[a-zA-Z0-9][a-zA-Z0-9_-]{0,79}$/.test(id) || ids.has(id))
         throw new Error(`Invalid or duplicate step ID: ${id}`);
       if (ids.size >= 256) throw new Error("Flows support at most 256 steps");
+      const copy: FlowDisplay = {};
+      if (display !== undefined) {
+        if (!display || typeof display !== "object" || Array.isArray(display))
+          throw new Error("Step display metadata must be an object");
+        for (const [key, max] of [
+          ["title", 120],
+          ["description", 600],
+        ] as const) {
+          const text = display[key];
+          if (text === undefined) continue;
+          if (typeof text !== "string" || !text.trim() || text.length > max)
+            throw new Error(
+              `${key} must be a non-empty string of at most ${max} characters`,
+            );
+          copy[key] = text.trim();
+        }
+      }
       ids.add(id);
       validate(value);
       const dependencies = new Set(previous);
@@ -313,6 +344,7 @@ export function defineJevFlow<T>(
         kind,
         dependencies: [...dependencies],
         path: [...path],
+        ...copy,
       });
       previous = [id];
       available.add(id);
@@ -322,9 +354,9 @@ export function defineJevFlow<T>(
     }
     const builder: FlowBuilder<T> = {
       input,
-      jev(id, request) {
+      jev(id, request, display) {
         const frozen = mapValue(request, (expr) => expr) as Request<Questions>;
-        const step = add(id, "jev", frozen);
+        const step = add(id, "jev", frozen, display);
         step.request = frozen;
         return {
           answer(question: string) {
@@ -363,8 +395,8 @@ export function defineJevFlow<T>(
           },
         };
       },
-      branch(id, paths) {
-        const step = add(id, "branch", paths.when);
+      branch(id, paths, display) {
+        const step = add(id, "branch", paths.when, display);
         step.when = paths.when;
         if (!(paths.when instanceof FlowExpression))
           throw new Error("branch requires a condition expression");
@@ -388,10 +420,10 @@ export function defineJevFlow<T>(
         terminal = true;
         return new FlowExpression<FlowOutcome>({ op: "ref", id }, owner);
       },
-      parallel(id, lanes) {
+      parallel(id, lanes, display) {
         const prior = [...previous],
           base = new Set(available);
-        const step = add(id, "parallel");
+        const step = add(id, "parallel", undefined, display);
         step.lanes = {};
         if (!Object.keys(lanes).length)
           throw new Error("parallel requires at least one lane");
@@ -418,8 +450,8 @@ export function defineJevFlow<T>(
         nodes.find((n) => n.id === id)!.lanes = Object.keys(lanes);
         return refs as never;
       },
-      output(outcome, value) {
-        const step = add(outcome, "output", value);
+      output(outcome, value, display) {
+        const step = add(outcome, "output", value, display);
         step.outcome = outcome;
         step.value = mapValue(value, (e) => e);
         terminal = true;

@@ -1,6 +1,8 @@
 import type { Json } from "./protocol.js";
+/** Authored diagram copy, never instructions for Jev or executable routing logic. */
+export type FlowDisplay = { title?: string; description?: string };
 /** Structural metadata only: literals, inputs, and question content stay in request captures. */
-export type FlowNode = {
+export type FlowNode = FlowDisplay & {
   id: string;
   kind: "jev" | "branch" | "parallel" | "output";
   dependencies: string[];

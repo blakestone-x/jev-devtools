@@ -3,80 +3,182 @@ import { defineJevFlow, all } from "jev-devtools/flow";
 export const refundFlow = defineJevFlow<{ message: string }>(
   "refund-review",
   (flow) => {
-    const triage = flow.jev("triage", {
-      state: flow.input,
-      questions: {
-        category: choice("Is this a refund request?", {
-          refund: null,
-          other: null,
-        }),
+    const triage = flow.jev(
+      "triage",
+      {
+        state: flow.input,
+        questions: {
+          category: choice("Is this a refund request?", {
+            refund: null,
+            other: null,
+          }),
+        },
       },
-    });
-    return flow.branch("refund-request", {
-      when: triage.answer("category").choice.eq("refund"),
-      then: (branch) => {
-        const review = branch.jev("review", {
-          state: {
-            ticket: flow.input,
-            category: triage.answer("category").choice,
-          },
-          questions: {
-            eligible: noul("Is the refund eligible?"),
-            risky: noul("Is this risky?"),
-          },
-        });
-        return branch.branch("approval", {
-          when: all(
-            review.answer("eligible").noul.gte(0.9),
-            review.answer("risky").noul.lt(0.2),
-          ),
-          then: (path) =>
-            path.output("approve", {
-              eligibility: review.answer("eligible").noul,
-            }),
-          else: (path) => path.output("manual-review"),
-        });
+      {
+        title: "Understand the request",
+        description: "Classify the message before choosing a review path.",
       },
-      else: (branch) => branch.output("other"),
-    });
+    );
+    return flow.branch(
+      "refund-request",
+      {
+        when: triage.answer("category").choice.eq("refund"),
+        then: (branch) => {
+          const review = branch.jev(
+            "review",
+            {
+              state: {
+                ticket: flow.input,
+                category: triage.answer("category").choice,
+              },
+              questions: {
+                eligible: noul("Is the refund eligible?"),
+                risky: noul("Is this risky?"),
+              },
+            },
+            {
+              title: "Review the refund",
+              description:
+                "Evaluate eligibility and risk together against the same ticket.",
+            },
+          );
+          return branch.branch(
+            "approval",
+            {
+              when: all(
+                review.answer("eligible").noul.gte(0.9),
+                review.answer("risky").noul.lt(0.2),
+              ),
+              then: (path) =>
+                path.output(
+                  "approve",
+                  {
+                    eligibility: review.answer("eligible").noul,
+                  },
+                  {
+                    title: "Ready for approval",
+                    description:
+                      "Eligibility is at least 90% and risk is below 20%. Return eligibility to the application; no refund is issued here.",
+                  },
+                ),
+              else: (path) =>
+                path.output("manual-review", undefined, {
+                  title: "Needs human review",
+                  description:
+                    "Eligibility or risk did not meet the approval thresholds. Use this outcome to request a closer review.",
+                }),
+            },
+            {
+              title: "Meets the approval thresholds?",
+              description:
+                "Continue only when eligibility is at least 90% and risk is below 20%.",
+            },
+          );
+        },
+        else: (branch) =>
+          branch.output("other", undefined, {
+            title: "Different request type",
+            description:
+              "The message was not classified as a refund. Let the application choose another support path.",
+          }),
+      },
+      {
+        title: "Is this a refund?",
+        description:
+          "Refund requests continue to review. Other messages take a separate outcome.",
+      },
+    );
   },
 );
 export const parallelFlow = defineJevFlow<{ message: string }>(
   "parallel-review",
   (flow) => {
-    const checks = flow.parallel("checks", {
-      eligibility: (lane) =>
-        lane
-          .jev("eligibility", {
-            state: flow.input,
-            questions: { eligible: noul("Eligible?") },
-          })
-          .answer("eligible").noul,
-      risk: (lane) =>
-        lane
-          .jev("risk", {
-            state: flow.input,
-            questions: { risky: noul("Risky?") },
-          })
-          .answer("risky").noul,
-    });
-    const decision = flow.jev("combined", {
-      state: {
-        ticket: flow.input,
-        eligibility: checks.eligibility,
-        risk: checks.risk,
+    const checks = flow.parallel(
+      "checks",
+      {
+        eligibility: (lane) =>
+          lane
+            .jev(
+              "eligibility",
+              {
+                state: flow.input,
+                questions: { eligible: noul("Eligible?") },
+              },
+              {
+                title: "Check eligibility",
+                description:
+                  "Evaluate whether this request qualifies while the risk check runs alongside it.",
+              },
+            )
+            .answer("eligible").noul,
+        risk: (lane) =>
+          lane
+            .jev(
+              "risk",
+              {
+                state: flow.input,
+                questions: { risky: noul("Risky?") },
+              },
+              {
+                title: "Assess risk",
+                description:
+                  "Estimate risk independently using the same ticket context.",
+              },
+            )
+            .answer("risky").noul,
       },
-      questions: { ready: noul("Ready for approval?") },
-    });
-    return flow.branch("ready", {
-      when: decision.answer("ready").noul.gte(0.9),
-      then: (p) =>
-        p.output("ready-output", {
+      {
+        title: "Bring the checks together",
+        description:
+          "Both checks run concurrently. Their results become available to the readiness request only after both finish successfully.",
+      },
+    );
+    const decision = flow.jev(
+      "combined",
+      {
+        state: {
+          ticket: flow.input,
           eligibility: checks.eligibility,
           risk: checks.risk,
-        }),
-      else: (p) => p.output("review-output"),
-    });
+        },
+        questions: { ready: noul("Ready for approval?") },
+      },
+      {
+        title: "Decide readiness",
+        description:
+          "Use the ticket, eligibility and risk together to evaluate readiness for approval.",
+      },
+    );
+    return flow.branch(
+      "ready",
+      {
+        when: decision.answer("ready").noul.gte(0.9),
+        then: (p) =>
+          p.output(
+            "ready-output",
+            {
+              eligibility: checks.eligibility,
+              risk: checks.risk,
+            },
+            {
+              title: "Ready for approval",
+              description:
+                "Readiness is at least 90%. Return eligibility and risk to the application for its next action.",
+            },
+          ),
+        else: (p) =>
+          p.output("review-output", undefined, {
+            title: "Needs a closer look",
+            description:
+              "Readiness is below 90%. Use this outcome to ask for human review before proceeding.",
+          }),
+      },
+      {
+        title: "Ready to proceed?",
+        description:
+          "Use a 90% readiness threshold to choose between approval and a closer review.",
+      },
+    );
   },
 );
 /** Deterministic fixtures, never inference. Delay makes progress/cancellation visible. */

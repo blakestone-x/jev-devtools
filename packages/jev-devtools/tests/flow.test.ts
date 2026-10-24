@@ -605,3 +605,117 @@ test("parallel rejection with an undefined reason is recorded as failure, not ca
     inspector.dispose();
   }
 });
+
+test("authored step context reaches captures without changing requests, routing, or output values", async () => {
+  const display = {
+    title: "Review context",
+    description: "Public explanation for the diagram.",
+  };
+  const inspector = createJevDevtools({ origin, enabled: true });
+  const requests: unknown[] = [];
+  const client = inspector.createClient(
+    options(async (_url, init) => {
+      requests.push(JSON.parse(String(init?.body)));
+      return Response.json({
+        model: "sample",
+        answers: { eligible: { type: "noul", noul: 0.94 } },
+      });
+    }),
+    { source: "sample" },
+  );
+  try {
+    const flow = defineJevFlow<{ ticket: string }>("context", (f) => {
+      const checks = f.parallel(
+        "checks",
+        {
+          eligibility: (lane) =>
+            lane
+              .jev(
+                "evaluate",
+                { state: f.input, questions: { eligible: noul("Eligible?") } },
+                display,
+              )
+              .answer("eligible").noul,
+        },
+        { title: "Gather evidence" },
+      );
+      return f.branch(
+        "route",
+        {
+          when: checks.eligibility.gte(0.9),
+          then: (p) =>
+            p.output(
+              "approved",
+              { probability: checks.eligibility },
+              {
+                title: "Ready for approval",
+                description: "The configured threshold was met.",
+              },
+            ),
+          else: (p) => p.output("review"),
+        },
+        { title: "Check threshold" },
+      );
+    });
+    display.title = "Changed after definition";
+    const result = await flow.run(
+      { ticket: "sample ticket" },
+      { client, devtools: inspector },
+    );
+    assert.equal(result.outcome, "approved");
+    assert.deepEqual(result.value, { probability: 0.94 });
+    const captured = (await history(inspector)) as FlowUpdate;
+    const nodes = captured.definitions[0].nodes;
+    assert.equal(
+      nodes.find((n) => n.id === "evaluate")?.title,
+      "Review context",
+    );
+    assert.equal(
+      nodes.find((n) => n.id === "evaluate")?.description,
+      "Public explanation for the diagram.",
+    );
+    assert.equal(
+      nodes.find((n) => n.id === "checks")?.title,
+      "Gather evidence",
+    );
+    assert.equal(nodes.find((n) => n.id === "route")?.title, "Check threshold");
+    assert.equal(
+      nodes.find((n) => n.id === "approved")?.description,
+      "The configured threshold was met.",
+    );
+    const request = requests[0] as {
+      state: unknown;
+      questions: unknown;
+      title?: string;
+      description?: string;
+    };
+    assert.deepEqual(request.state, { ticket: "sample ticket" });
+    assert.deepEqual(request.questions, {
+      eligible: { type: "noul", instructions: "Eligible?" },
+    });
+    assert.equal(request.title, undefined);
+    assert.equal(request.description, undefined);
+  } finally {
+    inspector.dispose();
+  }
+});
+test("invalid display text is rejected when defining a flow", () => {
+  for (const display of [
+    { title: " " },
+    { title: "x".repeat(121) },
+    { description: "x".repeat(601) },
+    { description: 42 },
+  ]) {
+    assert.throws(
+      () =>
+        defineJevFlow("invalid-copy", (flow) =>
+          flow.output(
+            "done",
+            undefined,
+            display as { title?: string; description?: string },
+          ),
+        ),
+      /must be a non-empty string/,
+    );
+  }
+});

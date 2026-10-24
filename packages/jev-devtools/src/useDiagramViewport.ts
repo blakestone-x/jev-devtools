@@ -40,15 +40,15 @@ export function useDiagramViewport(
         viewport.current.style.backgroundPosition = `${x}px ${y}px`;
         // Thin out the decorative grid at overview zooms instead of packing
         // more dots behind an increasingly small diagram.
-        const grid = 20 * Math.max(scale, 1 / Math.sqrt(scale));
+        const grid = 24 * Math.max(scale, 1 / Math.sqrt(scale));
         viewport.current.style.backgroundSize = `${grid}px ${grid}px`;
         viewport.current.style.setProperty(
           "--diagram-grid-opacity",
-          String(Math.min(1, Math.sqrt(scale))),
+          String(0.45 * Math.min(1, Math.sqrt(scale))),
         );
         viewport.current.style.setProperty(
           "--diagram-grid-weight",
-          String(Math.max(0.6, Math.min(1, Math.sqrt(scale)))),
+          String(Math.max(0.5, Math.min(0.75, Math.sqrt(scale)))),
         );
       }
       setZoom(Math.round(scale * 100));

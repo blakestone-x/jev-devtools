@@ -62,6 +62,26 @@ Definitions are synchronous and make no SDK calls. Plain request/value templates
 
 Question/answer reference types are inferred. `run()` returns `{runId, outcome: string, value?: unknown}` in v1: supplying `defineJevFlow<Ticket>` keeps the input ergonomic, but does not infer a discriminated union of all terminal values. Narrow the returned value in application code.
 
+## Explain steps in the diagram
+
+All four builder methods accept an optional third argument: `{ title, description }`.
+Use it to explain the purpose of a request, a condition, a parallel join, or an outcome:
+
+```ts
+path.output("ready-output", { eligibility: checks.eligibility }, {
+  title: "Ready for approval",
+  description: "Readiness is at least 90%. Return the checks to the application for its next action.",
+});
+```
+
+For an output with no value, pass `undefined` as the second argument. The same pattern works with `jev(id, request, display)`, `branch(id, paths, display)`, and `parallel(id, lanes, display)`. `FlowDisplay` is exported from `jev-devtools/flow`.
+
+Titles accept 1–120 characters; descriptions accept 1–600. Supplied text must be nonblank and is trimmed and copied when the definition is built. Existing calls and older captures continue to use step IDs when no title is provided. IDs, returned outcome names, SDK requests, and routing behavior are unchanged. This is developer-authored context, not model reasoning or extra instructions sent to Jev.
+
+Cards preview the description; select a step to read its full text below the canvas. Output cards identify the returned outcome versus an untaken route, and show the then/else route. Parallel cards show each lane's recorded status and a completion count; select one for the full lane list when there are more than four.
+
+Titles and descriptions are definition metadata and are **not passed through request redaction**. Write static, public-safe explanations; never interpolate user inputs, credentials, or other secrets.
+
 ## Parallel calls and the join
 
 Steps in a block are sequential. Explicit named lanes overlap; their result references become available only after all lanes complete:
