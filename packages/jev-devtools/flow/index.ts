@@ -40,9 +40,11 @@ function freezeAst(ast: Ast, depth = 0): void {
   }
   Object.freeze(ast);
 }
+declare const valueTypeBrand: unique symbol;
 /** Inspectable expression, not an application callback. Use get() for input fields. */
 export class FlowExpression<T> {
-  private declare readonly valueType: T;
+  // Not private: declaration emit drops private member types.
+  declare protected readonly [valueTypeBrand]: T;
   constructor(
     readonly ast: Ast,
     owner?: object,

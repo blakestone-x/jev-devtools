@@ -89,6 +89,34 @@ execFileSync(
   ],
   { cwd: consumer, stdio: "inherit" },
 );
+// Source checks can't see declaration emit, so type-check against the archive.
+const types = join(consumer, "type-tests");
+await cp(
+  join(root, "scripts/fixtures/packed-flow-types.ts"),
+  join(types, "flow.ts"),
+);
+// No skipLibCheck: it would also skip the archive's own declarations.
+await writeFile(
+  join(types, "tsconfig.json"),
+  JSON.stringify({
+    compilerOptions: {
+      target: "ES2022",
+      lib: ["ES2022", "DOM"],
+      module: "ESNext",
+      moduleResolution: "Bundler",
+      strict: true,
+      noEmit: true,
+      types: [],
+    },
+    files: ["flow.ts"],
+  }),
+);
+execFileSync(
+  process.execPath,
+  [join(root, "node_modules/typescript/bin/tsc"), "-p", types],
+  { cwd: consumer, stdio: "inherit" },
+);
+console.log("Packed flow types: passed");
 npm(["run", "build"], { cwd: consumer, stdio: "inherit" });
 console.log(`Independent consumer ready: ${consumer}`);
 console.log(`Installable package: ${tarball}`);
