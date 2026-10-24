@@ -1,4 +1,5 @@
-import { memo, useCallback, useEffect, useRef, useState } from "react";
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { createDisplayRedactor } from "./display-redaction.js";
 import { JevPanel } from "./JevDevtools.js";
 import { JevDrawer } from "./JevDrawer.js";
 import type { Trace } from "./protocol.js";
@@ -28,6 +29,7 @@ function endpointUrl(endpoint: string) {
 export default function ConnectedInspector({
   endpoint = "/api/jev-devtools",
   defaultOpen = true,
+  redactAdditionalSensitiveData = true,
 }: Omit<JevDevtoolsProps, "enabled">) {
   const [open, setOpen] = useState(defaultOpen);
   const [visited, setVisited] = useState(defaultOpen);
@@ -38,6 +40,24 @@ export default function ConnectedInspector({
     flows: emptyFlows,
   });
   const [snapshot, setSnapshot] = useState(latest.current);
+  const [redactor] = useState(createDisplayRedactor);
+  const traces = useMemo(
+    () =>
+      redactAdditionalSensitiveData
+        ? snapshot.traces.map(redactor.trace)
+        : snapshot.traces,
+    [snapshot.traces, redactor, redactAdditionalSensitiveData],
+  );
+  const flows = useMemo(
+    () =>
+      redactAdditionalSensitiveData
+        ? {
+            runs: snapshot.flows.runs.map(redactor.run),
+            definitions: snapshot.flows.definitions.map(redactor.definition),
+          }
+        : snapshot.flows,
+    [snapshot.flows, redactor, redactAdditionalSensitiveData],
+  );
   const toggle = (value: boolean) => {
     visible.current = value;
     setOpen(value);
@@ -116,7 +136,14 @@ export default function ConnectedInspector({
   }, [endpoint]);
   return (
     <JevDrawer open={open} onOpenChange={toggle}>
-      {visited && <RetainedPanel {...snapshot} onClear={clear} />}
+      {visited && (
+        <RetainedPanel
+          traces={traces}
+          flows={flows}
+          connection={snapshot.connection}
+          onClear={clear}
+        />
+      )}
     </JevDrawer>
   );
 }

@@ -16,6 +16,9 @@ export type JevDevtoolsProps = {
   /** Opt in explicitly, normally with import.meta.env.DEV. */
   enabled?: boolean;
   defaultOpen?: boolean;
+  /** Mask supported personal fields in DevTools views only. Defaults to true.
+   * Captures still contain these values; credentials remain server-redacted. */
+  redactAdditionalSensitiveData?: boolean;
 };
 const ConnectedInspector = lazy(() => import("./ConnectedInspector.js"));
 /** SSR-safe entry. No requests or browser globals are accessed while disabled. */

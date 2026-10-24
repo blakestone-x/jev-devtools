@@ -9,8 +9,33 @@ import type {
 } from "@typesafe-ai/sdk";
 import type { Json, Trace } from "../src/protocol.js";
 
-const secretKey =
-  /^(authorization|cookie|set-cookie|api[-_]?key|password|secret|access[-_]?token|refresh[-_]?token)$/i;
+// Whole field names only: tokenCount, sessionId, apiKeyName, etc. stay useful.
+// Keep the documented lists in docs/integration.md aligned with these policies.
+const credentialKeys = new Set([
+  "authorization",
+  "proxyauthorization",
+  "cookie",
+  "cookies",
+  "setcookie",
+  "apikey",
+  "xapikey",
+  "password",
+  "passwd",
+  "passphrase",
+  "secret",
+  "clientsecret",
+  "token",
+  "accesstoken",
+  "refreshtoken",
+  "sessiontoken",
+  "authtoken",
+  "xauthtoken",
+  "xaccesstoken",
+  "idtoken",
+  "bearertoken",
+  "privatekey",
+  "secretkey",
+]);
 const safeMessage = (value: string) =>
   value.replace(/Bearer\s+\S+/gi, "Bearer [redacted]").slice(0, 500);
 export type CaptureOptions = {
@@ -28,7 +53,8 @@ export function capture(
   const seen = new WeakSet<object>();
   let budget = 96_000;
   const visit = (input: unknown, path: string[], depth: number): Json => {
-    if (secretKey.test(path.at(-1) || "")) return "[redacted]";
+    const key = (path.at(-1) ?? "").replace(/[-_]/g, "").toLowerCase();
+    if (credentialKeys.has(key)) return "[redacted]";
     if (redact) input = redact(path, input);
     budget -= 8 + (path.at(-1)?.length ?? 0);
     if (budget <= 0 || depth > 12) {

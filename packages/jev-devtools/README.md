@@ -74,6 +74,8 @@ Only calls through that client are captured. The React component subscribes via 
 
 History is bounded to 50 calls in memory by default. API routes and inspector endpoints must share an adapter instance; distributed processes and edge runtimes are not supported. Without `authorize`, the middleware accepts only loopback connections; Web Request handlers can't see the connection's address, so run those servers on `127.0.0.1`. Captures include bounded/redacted context and answers, not hidden model reasoning.
 
+Known credential fields are always redacted from DevTools captures; SDK and runtime data remain unchanged. The optional `<JevDevtools redactAdditionalSensitiveData={false} />` prop controls **display-only** masking of supported email, phone, postal address, SSN and card-number fields. It defaults to `true` and updates existing views immediately. These additional values still exist in capture/stream/browser memory while masked. Custom server redaction remains active, and neither credentials nor custom-redacted values can be revealed. Headers/options are not captured. See the [exact policy and limitations](https://github.com/diegoag64/jev-devtools/blob/main/docs/integration.md#redaction-policy); arbitrary secrets in prose and unusual field names still need application-specific redaction.
+
 For Next.js App Router, use `getJevDevtools(appKey, optionsFactory)` from `/server` to share an adapter across server reloads, expose `handleNodeRoute` through an optional catch-all Route Handler, and mount the root component in a client boundary. See the [Next.js guide](https://github.com/diegoag64/jev-devtools/blob/main/docs/nextjs.md) and runnable example. No Next dependency is required by this package.
 
 [Full integration guide](https://github.com/diegoag64/jev-devtools/blob/main/docs/integration.md) · [Repository and playground](https://github.com/diegoag64/jev-devtools)
@@ -113,7 +115,7 @@ const result = await review.run({ message: 'Please review my ticket.' }, {
 
 Define once in a Node module and run per request. Use `flow.parallel` for concurrent named lanes; downstream calls wait for every lane to succeed. `flow.branch` is terminal in its block; use `flow.if` when selected values feed shared downstream work. Tasks execute application code on Node with JSON-compatible inputs/results; maps and loops have explicit bounds. Runs have SDK retries and cooperative cancellation, with bounded in-memory inspector history. They do not provide durable or distributed execution. Keep the 0.4.0 server and drawer together to inspect its new step kinds.
 
-Unreleased: not in npm 0.4.0 yet. **Copy fixture** in the drawer saves a run as JSON, and `replayClient(fixture)` from `jev-devtools/flow` replays its Jev calls in tests with no network access or API key; tasks run again.
+Unreleased: not in npm 0.4.1 yet. **Copy fixture** in the drawer saves a run as JSON, and `replayClient(fixture)` from `jev-devtools/flow` replays its Jev calls in tests with no network access or API key; tasks run again.
 
 [Full flow guide](https://github.com/diegoag64/jev-devtools/blob/main/docs/flows.md) · [AI flow recipe](https://github.com/diegoag64/jev-devtools/blob/main/packages/jev-devtools/skills/setup-jev-devtools/references/flows.md)
 
