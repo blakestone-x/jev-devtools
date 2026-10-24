@@ -8,7 +8,7 @@ Dates below use UTC and were checked against npm's publication history. The hist
 
 | Version | Published (UTC) | Highlights |
 | --- | --- | --- |
-| [Unreleased](#unreleased) | Not published | Local experiment: function steps, runtime requests, bounded collections, returning conditionals, bounded loops, and six cookbooks. |
+| [Unreleased](#unreleased) | Not published | Flow API extensions, six cookbooks, and `@typesafe-ai/sdk` as a peer dependency. |
 | [0.3.0](#030--october-24-2026-experimental) | 2026-10-24 | Connected flow API, complete request diagrams, readable branch requirements, structured content, and bundled AI flow guidance. |
 | [0.2.0](#020--october-23-2026-experimental) | 2026-10-23 | Batched updates, changed-trace streaming, frame-coalesced rendering, less work while the drawer is closed, virtualized Questions, compact Choice diagrams, and reuse of unchanged inspector views. |
 | [0.1.3](#013--october-23-2026-experimental) | 2026-10-23 | Isolated drawer styles, diagram pan/zoom, and version-specific npm links. |
@@ -18,7 +18,9 @@ Dates below use UTC and were checked against npm's publication history. The hist
 
 ## Unreleased
 
-Flow API extensions and cookbook demos proposed in [#30](https://github.com/diegoag64/jev-devtools/pull/30); not published to npm.
+- Make `@typesafe-ai/sdk` a peer dependency (`>=0.7.0 <0.8.0`, tested with 0.7.0) instead of a pinned dependency, so `createClient` uses the application's SDK copy. Install it with the package: `npm install jev-devtools @typesafe-ai/sdk`. Applications on another SDK version must move to 0.7.x. ([#28](https://github.com/diegoag64/jev-devtools/pull/28))
+
+Flow API extensions and cookbook demos merged in [#30](https://github.com/diegoag64/jev-devtools/pull/30); not published to npm.
 
 - Preserve the original failure when a map fails inside parallel work; cancelling sibling lanes no longer misreports the run as cancelled.
 

@@ -15,7 +15,7 @@ Inspect the app's package manager/lockfile, React and Node versions, root compon
 - **React with a Node backend, including Vite:** read [references/react-node.md](references/react-node.md). A browser-only app needs a Node server for Jev; the Vite development-server option is local only.
 - **Other Node frameworks:** use the Web Request/Response or middleware API described in the React/Node reference and verify that framework's routing. Do not assume the Next.js recipe applies to Pages Router. Edge runtimes and cross-process/serverless history aggregation are unsupported.
 
-Install `jev-devtools` using the app's existing package manager (npm: `npm install jev-devtools`; pnpm: `pnpm add jev-devtools`; Yarn: `yarn add jev-devtools`). Install in the workspace(s) that actually import it. It is a regular dependency when application modules import it, even though capture/display are development-only. React 18/19 and Node 22.12+ are required. Do not replace the app's framework or upgrade unrelated dependencies to force compatibility.
+Install `jev-devtools` using the app's existing package manager (npm: `npm install jev-devtools @typesafe-ai/sdk`; pnpm: `pnpm add jev-devtools @typesafe-ai/sdk`; Yarn: `yarn add jev-devtools @typesafe-ai/sdk`). `@typesafe-ai/sdk` is a peer dependency: keep the app's existing SDK version when it satisfies the peer range. Install in the workspace(s) that actually import it. It is a regular dependency when application modules import it, even though capture/display are development-only. React 18/19 and Node 22.12+ are required. Do not replace the app's framework or upgrade unrelated dependencies to force compatibility.
 
 ## Optional connected flow API (0.3.0+)
 
