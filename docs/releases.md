@@ -39,7 +39,7 @@ tar -tzf jev-devtools-0.2.0.tgz
 shasum -a 256 jev-devtools-0.2.0.tgz
 ```
 
-The archive must contain only `package.json`, the package README, MIT license, third-party notices, the setup skill and its three Markdown references under `skills/setup-jev-devtools`, and compiled JavaScript, declaration files, and scoped CSS under `lib/src` and `lib/server`. It must not contain playground code, tests, fixtures, source TypeScript, demo media, environment files, or credentials. `verify:package` checks the actual pack file list before installing into an independent React app. `verify:nextjs` checks a separate packed installation with real development and production Next.js servers. Both use sample responses; neither makes live inference calls.
+The archive must contain only `package.json`, the package README, MIT license, third-party notices, the setup skill and its three Markdown references under `skills/setup-jev-devtools`, and compiled JavaScript, declaration files, and scoped CSS under `lib/src`, `lib/server`, and `lib/flow`. It must not contain playground code, tests, fixtures, source TypeScript, demo media, environment files, or credentials. `verify:package` checks the actual pack file list before installing into an independent React app. `verify:nextjs` checks a separate packed installation with real development and production Next.js servers. Both use sample responses; neither makes live inference calls.
 
 Inspect the packed manifest too:
 
@@ -47,7 +47,7 @@ Inspect the packed manifest too:
 tar -xOf jev-devtools-0.2.0.tgz package/package.json
 ```
 
-Confirm the name/version, public access, Node engine, React peers, three public exports, and absence of `private: true`. Save the release commit SHA and archive checksum with the release evidence. Keep the archive unchanged between final inspection and publication. Do not publish from a dirty checkout or use a wildcard that could select an old archive.
+Confirm the name/version, public access, Node engine, React peers, public exports (including the unreleased `/flow` entry point), and absence of `private: true`. Save the release commit SHA and archive checksum with the release evidence. Keep the archive unchanged between final inspection and publication. Do not publish from a dirty checkout or use a wildcard that could select an old archive.
 
 ## First-publish checklist (historical)
 

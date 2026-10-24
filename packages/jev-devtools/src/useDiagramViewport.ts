@@ -38,7 +38,18 @@ export function useDiagramViewport(
         canvas.current.style.transform = `translate(${x}px, ${y}px) scale(${scale})`;
       if (viewport.current) {
         viewport.current.style.backgroundPosition = `${x}px ${y}px`;
-        viewport.current.style.backgroundSize = `${20 * scale}px ${20 * scale}px`;
+        // Thin out the decorative grid at overview zooms instead of packing
+        // more dots behind an increasingly small diagram.
+        const grid = 24 * Math.max(scale, 1 / Math.sqrt(scale));
+        viewport.current.style.backgroundSize = `${grid}px ${grid}px`;
+        viewport.current.style.setProperty(
+          "--diagram-grid-opacity",
+          String(0.45 * Math.min(1, Math.sqrt(scale))),
+        );
+        viewport.current.style.setProperty(
+          "--diagram-grid-weight",
+          String(Math.max(0.5, Math.min(0.75, Math.sqrt(scale)))),
+        );
       }
       setZoom(Math.round(scale * 100));
     });
@@ -52,6 +63,19 @@ export function useDiagramViewport(
   const preserveCamera = useCallback(() => {
     fitted.current = false;
   }, []);
+  const focusArea = useCallback(
+    (area: Point & { width: number; height: number }) => {
+      fitted.current = false;
+      const focused = fitCamera(size.current, area);
+      camera.current = {
+        ...focused,
+        x: focused.x - area.x * focused.scale,
+        y: focused.y - area.y * focused.scale,
+      };
+      paint();
+    },
+    [paint],
+  );
   useEffect(() => {
     if (fitted.current) fit();
   }, [width, height, fit]);
@@ -96,7 +120,7 @@ export function useDiagramViewport(
         event.button !== 0 ||
         pointers.size >= 2 ||
         (event.target as Element).closest(
-          "button, input, select, textarea, a, summary",
+          "button, input, select, textarea, a, summary, [data-diagram-scroll]",
         )
       )
         return;
@@ -138,6 +162,7 @@ export function useDiagramViewport(
       if (!pointers.size) delete el.dataset.panning;
     };
     const wheel = (event: WheelEvent) => {
+      if ((event.target as Element).closest("[data-diagram-scroll]")) return;
       event.preventDefault();
       const units =
         event.deltaMode === 1
@@ -200,5 +225,5 @@ export function useDiagramViewport(
       frame.current = null;
     };
   }, [fit, zoomBy, paint, scene]);
-  return { viewport, canvas, zoom, zoomBy, fit, preserveCamera };
+  return { viewport, canvas, zoom, zoomBy, fit, preserveCamera, focusArea };
 }

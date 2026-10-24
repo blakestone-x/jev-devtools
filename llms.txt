@@ -23,3 +23,5 @@ The skill and references ship in npm at `node_modules/jev-devtools/skills/setup-
 
 - [Repository workflow](https://raw.githubusercontent.com/diegoag64/jev-devtools/main/AGENTS.md): For package contributors, not installation into a consumer app.
 - [Release process](https://raw.githubusercontent.com/diegoag64/jev-devtools/main/docs/releases.md)
+
+- [Connected flow API (unreleased)](docs/flows.md): Node definition/execution, references, branches, parallel joins, and whole-flow inspection.

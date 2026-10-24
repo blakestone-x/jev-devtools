@@ -831,7 +831,11 @@
   min-height: 100px;
   overflow: hidden;
   background-color: #0d0a0f;
-  background-image: radial-gradient(#463449 0.8px, transparent 0.8px);
+  background-image: radial-gradient(
+    rgb(70 52 73 / var(--diagram-grid-opacity, 1))
+      calc(0.8px * var(--diagram-grid-weight, 1)),
+    transparent calc(0.8px * var(--diagram-grid-weight, 1))
+  );
   background-size: 20px 20px;
   border-block: 1px solid #302634;
   cursor: grab;
@@ -889,7 +893,7 @@
   position: absolute;
   border: 1.3px solid #f5f3f6;
   border-radius: 14px;
-  padding: 20px;
+  padding: 16px;
   background: #0d0a0f;
   overflow: hidden;
 }
@@ -900,19 +904,20 @@
     500 10px ui-monospace,
     monospace;
   letter-spacing: 1px;
-  margin: 0 0 10px;
+  margin: 0 0 7px;
 }
 .jev-devtools .lab-card h3 {
-  font-size: 18px;
-  font-weight: 500;
-  line-height: 1.25;
-  margin: 0 0 16px;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.3;
+  letter-spacing: -0.2px;
+  margin: 0 0 10px;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
 }
 .jev-devtools .lab-card p {
-  font-size: 15px;
+  font-size: 13px;
   line-height: 1.4;
   margin: 10px 0;
 }
@@ -1143,6 +1148,7 @@
 }
 .jev-devtools .lab-choice-table-scroll {
   overflow: auto;
+  overscroll-behavior: contain;
   min-height: 0;
   flex: 1;
 }
@@ -1263,4 +1269,491 @@
   .jev-devtools .lab-branch-enter {
     animation: none;
   }
+}
+
+/* Connected requests share one camera and one opt-in full request detail. */
+.whole-flow {
+  min-width: 0;
+  overflow: auto;
+}
+.flow-overview-viewport {
+  position: relative;
+  min-height: 240px;
+  flex: 1 0 260px;
+  overflow: hidden;
+  touch-action: none;
+  cursor: grab;
+  background-image: radial-gradient(
+    rgb(83 67 87 / var(--diagram-grid-opacity, 1))
+      calc(1px * var(--diagram-grid-weight, 1)),
+    transparent calc(1px * var(--diagram-grid-weight, 1))
+  );
+  background-size: 20px 20px;
+}
+.flow-overview-viewport[data-panning] {
+  cursor: grabbing;
+}
+.flow-overview-canvas {
+  position: absolute;
+  transform-origin: 0 0;
+}
+.flow-connections {
+  position: absolute;
+  inset: 0;
+  color: #c0b8c4;
+  pointer-events: none;
+}
+.flow-step {
+  position: absolute;
+  width: 220px;
+  min-height: 98px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  text-align: left;
+  padding: 14px;
+  border: 1px solid #736476;
+  border-radius: 12px;
+  background: #151017;
+  color: inherit;
+}
+.flow-step strong {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 100%;
+}
+.flow-step-description {
+  overflow-wrap: anywhere;
+  font-size: 12px;
+}
+.flow-step.flow-request {
+  display: block;
+  padding: 0;
+  background: #0d0a0f;
+  /* Skip offscreen paint/layout while preserving each question/expansion state. */
+  content-visibility: auto;
+  contain-intrinsic-size: auto 640px;
+}
+.flow-request-heading {
+  width: 100%;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  text-align: left;
+  padding: 12px 20px;
+  border: 0;
+  border-bottom: 1px solid #342a38;
+  border-radius: 12px 12px 0 0;
+  background: transparent;
+  color: inherit;
+}
+.flow-request-heading .eyebrow {
+  display: block;
+  margin-bottom: 4px;
+}
+.jev-devtools .lab-flow-embedded {
+  width: 1120px;
+  display: block;
+}
+.jev-devtools .lab-flow-surface {
+  position: relative;
+  width: 1120px;
+}
+.jev-devtools .lab-flow-surface[hidden] {
+  display: none;
+}
+.jev-devtools .lab-flow-embedded .lab-flow-canvas {
+  will-change: auto;
+}
+.jev-devtools .lab-flow-embedded .lab-choice-browser {
+  height: 520px;
+}
+.flow-step.selected {
+  outline: 2px solid #e551ba;
+  outline-offset: 3px;
+}
+.flow-step[data-status="completed"] {
+  border-color: #e551ba;
+}
+.flow-step[data-status="running"] {
+  border-color: #e551ba;
+  background: #2b1728;
+}
+.flow-step[data-status="untaken"],
+.flow-step[data-status="blocked"] {
+  color: #948797;
+  border-color: #403746;
+  background: #151017;
+}
+.flow-step[data-status="error"] {
+  border-color: #f17c78;
+}
+.flow-step[data-status="cancelled"] {
+  border-style: dashed;
+}
+.flow-selection {
+  padding: 12px 20px;
+  border-top: 1px solid #342a38;
+}
+.flow-selection p {
+  margin: 6px 0;
+  overflow-wrap: anywhere;
+}
+.flow-request-detail {
+  min-height: 450px;
+  border-top: 1px solid #534357;
+}
+.flow-request-detail > .request-detail {
+  min-height: 450px;
+}
+
+.flow-card-heading,
+.flow-card-footer,
+.flow-join-summary,
+.flow-lane {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  width: 100%;
+}
+.flow-card-heading {
+  justify-content: flex-start;
+}
+.flow-kind-icon {
+  width: 26px;
+  height: 26px;
+  color: #e551ba;
+  flex-shrink: 0;
+}
+.flow-kind-icon svg {
+  width: 100%;
+  height: 100%;
+}
+.flow-card-heading .eyebrow {
+  font-size: 10px;
+}
+.flow-status {
+  margin-left: auto;
+  font-size: 10px;
+  border-radius: 20px;
+  padding: 4px 8px;
+  background: #342031;
+  color: #f0b7e0;
+}
+.flow-step[data-status="untaken"] .flow-status {
+  background: #241e28;
+  color: #948797;
+}
+.flow-step[data-status="untaken"] .flow-kind-icon {
+  color: #948797;
+}
+.flow-step > strong {
+  white-space: normal;
+  font-size: 18px;
+  line-height: 1.25;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow-wrap: anywhere;
+}
+.flow-step-description {
+  line-height: 1.5;
+  color: #b9aebf;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.flow-card-footer {
+  margin-top: auto;
+  padding-top: 10px;
+  border-top: 1px solid #342a38;
+  font-size: 10px;
+  color: #a092a7;
+}
+.flow-card-footer code {
+  max-width: 45%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.flow-card-footer small {
+  text-align: right;
+}
+.flow-join-summary {
+  margin-top: 4px;
+  font-size: 11px;
+  color: #c9b9cd;
+}
+.flow-join-summary > span {
+  color: #ef9ed9;
+  font-variant-numeric: tabular-nums;
+}
+.flow-lanes {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 100%;
+}
+.flow-lane {
+  border-radius: 5px;
+  background: #211923;
+  padding: 6px 8px;
+  font-size: 11px;
+  min-height: 28px;
+}
+.flow-lane > span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.flow-lane > span > span {
+  color: #ef9ed9;
+  margin-right: 4px;
+}
+.flow-lane small {
+  color: #b9aebf;
+}
+.flow-lane-details {
+  padding-left: 18px;
+  font-size: 12px;
+}
+.flow-request-heading > span:first-child {
+  min-width: 0;
+  max-width: 80%;
+}
+.flow-request-description {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  font-size: 12px;
+  line-height: 1.5;
+  color: #b9aebf;
+  margin-top: 5px;
+  overflow-wrap: anywhere;
+}
+
+/* Structured context stays within the card; its gestures never move the camera. */
+.jev-devtools .lab-content-card {
+  display: flex;
+  flex-direction: column;
+  padding: 14px;
+}
+.jev-devtools .lab-content-card h3 {
+  font-size: 14px;
+  margin-bottom: 8px;
+  flex-shrink: 0;
+}
+.jev-devtools .lab-content-card .lab-eyebrow {
+  font-size: 9px;
+  margin-bottom: 5px;
+  flex-shrink: 0;
+}
+.jev-devtools .diagram-content {
+  min-height: 0;
+  flex: 1;
+  overflow: auto;
+  overscroll-behavior: contain;
+  touch-action: pan-y;
+  scrollbar-width: thin;
+  scrollbar-color: #514256 transparent;
+  padding-right: 4px;
+  font-size: 12px;
+  line-height: 1.5;
+  color: #d5cdd9;
+  cursor: auto;
+  user-select: text;
+}
+.jev-devtools .diagram-content:focus-visible {
+  outline: 1px solid #e551ba;
+  outline-offset: -1px;
+  border-radius: 3px;
+}
+.jev-devtools .diagram-property {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+  padding: 5px 0;
+  border-bottom: 1px solid #261e2a;
+}
+.jev-devtools .diagram-property-text {
+  display: block;
+}
+.jev-devtools .diagram-property-key {
+  font:
+    10px/1.5 ui-monospace,
+    monospace;
+  color: #c8a8c8;
+  overflow-wrap: anywhere;
+  min-width: 0;
+}
+.jev-devtools .diagram-property-text > .diagram-property-key {
+  display: block;
+  margin-bottom: 2px;
+}
+.jev-devtools .diagram-text-value {
+  display: block;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.jev-devtools .diagram-text-preview {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.jev-devtools .diagram-value-number {
+  color: #a6d6ca;
+  font:
+    11px/1.5 ui-monospace,
+    monospace;
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}
+.jev-devtools .diagram-value-boolean {
+  color: #c4b1ed;
+  font:
+    11px/1.5 ui-monospace,
+    monospace;
+}
+.jev-devtools .diagram-value-empty {
+  color: #9c8ca4;
+  font:
+    10px/1.5 ui-monospace,
+    monospace;
+}
+.jev-devtools .diagram-property-disclosure {
+  width: 100%;
+  display: flex;
+  align-items: baseline;
+  gap: 5px;
+  padding: 6px 0;
+  border: 0;
+  border-bottom: 1px solid #261e2a;
+  border-radius: 0;
+  background: transparent;
+  text-align: left;
+  color: inherit;
+}
+.jev-devtools .diagram-property-disclosure:hover {
+  background: #211723;
+}
+.jev-devtools .diagram-property-caret {
+  color: #ab8aab;
+  flex-shrink: 0;
+}
+.jev-devtools .diagram-property-type {
+  color: #9c8ca4;
+  font:
+    10px/1.5 ui-monospace,
+    monospace;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+.jev-devtools .diagram-property-children {
+  margin-left: 4px;
+  padding-left: 9px;
+  border-left: 1px solid #49324b;
+}
+.jev-devtools .diagram-content-toggle {
+  display: block;
+  padding: 3px 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: #e9a4d7;
+  font-size: 10px;
+  text-align: left;
+}
+.jev-devtools .diagram-content-toggle:hover {
+  color: #ffd9f3;
+  text-decoration: underline;
+}
+
+/* Noul is a probability of true; its two outputs carry p and 1-p.
+   Keep the fill opaque, with readable text even at zero probability. */
+.jev-devtools .lab-noul-output {
+  border-color: rgb(
+    245 243 246 / calc(0.35 + 0.65 * var(--lab-noul-probability, 1))
+  );
+}
+.jev-devtools .lab-noul-output > h3,
+.jev-devtools .lab-noul-output > p {
+  opacity: calc(0.65 + 0.35 * var(--lab-noul-probability, 1));
+}
+
+.flow-condition-rule {
+  display: block;
+  padding: 10px 12px;
+  border: 1px solid #49324b;
+  border-radius: 6px;
+  background: #211723;
+  width: 100%;
+}
+.flow-condition-label {
+  display: block;
+  font-size: 10px;
+  color: #ba9dbe;
+  margin-bottom: 5px;
+}
+.flow-condition-rule code {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+  font:
+    12px/1.6 ui-monospace,
+    monospace;
+  color: #f2d7eb;
+}
+
+.flow-condition-incoming {
+  display: block;
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+  border-bottom: 1px solid #49324b;
+}
+.flow-condition-input {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  font-size: 12px;
+  padding: 3px 0;
+}
+.flow-condition-input > span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.flow-condition-input > b {
+  font-size: 17px;
+  font-weight: 600;
+  color: #f2d7eb;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 65%;
+}
+.flow-input-details {
+  font-size: 12px;
+}
+.flow-input-details > div {
+  display: flex;
+  gap: 16px;
+  margin: 6px 0;
+}
+.flow-input-details code {
+  color: #a092a7;
+  margin-left: 8px;
+}
+.flow-input-details dd {
+  margin: 0;
+  overflow-wrap: anywhere;
 }

@@ -1,6 +1,6 @@
 # Changelog
 
-User-facing changes, newest first. **Unreleased** means merged into `main` but not published to npm. Open PRs are not release entries; see [work in progress](https://github.com/diegoag64/jev-devtools/pulls).
+User-facing changes, newest first. **Unreleased** means not published to npm. On `main`, these changes are merged; on feature branches, they are proposed changes awaiting review. See [work in progress](https://github.com/diegoag64/jev-devtools/pulls).
 
 Dates below use UTC and were checked against npm's publication history. The historical entries were reconstructed from the release PRs and merged changes. Versions remain experimental before 1.0.
 
@@ -8,7 +8,7 @@ Dates below use UTC and were checked against npm's publication history. The hist
 
 | Version | Published (UTC) | Highlights |
 | --- | --- | --- |
-| [Unreleased](#unreleased) | Not published | No additional changes yet. |
+| [Unreleased](#unreleased) | Not published | Connected Jev flow definitions, execution, and whole-flow inspection. |
 | [0.2.0](#020--october-23-2026-experimental) | 2026-10-23 | Batched updates, changed-trace streaming, frame-coalesced rendering, less work while the drawer is closed, virtualized Questions, compact Choice diagrams, and reuse of unchanged inspector views. |
 | [0.1.3](#013--october-23-2026-experimental) | 2026-10-23 | Isolated drawer styles, diagram pan/zoom, and version-specific npm links. |
 | [0.1.2](#012--october-23-2026-experimental) | 2026-10-23 | Bundled AI setup skill and framework recipes. |
@@ -17,7 +17,19 @@ Dates below use UTC and were checked against npm's publication history. The hist
 
 ## Unreleased
 
-No additional changes yet.
+Changes proposed in [#23](https://github.com/diegoag64/jev-devtools/pull/23); not included in npm 0.2.0.
+
+### Added
+
+- Separate condition cards into named incoming values and plain-language requirements (for example, Ready: 94% / At least 90%). Read values only from retained, redacted request captures; keep technical references in the selected-step details.
+- Show executable branching rules on condition cards, including exact thresholds, comparisons, and AND/OR/NOT grouping. Noul thresholds display as percentages; the recorded decision identifies the taken route. Rule literals use bounded capture and the configured redaction callback.
+- Weight Noul True/False output-card borders and text by their respective probabilities, with minimum visibility for near-zero values and opaque backgrounds. Equal probabilities receive equal emphasis.
+- Render diagram state and instructions as compact, scrollable property views, with lazy object/array expansion, typed values, paged properties, and expandable long text. Preserve sibling fields and camera position while browsing captured content.
+- Add optional titles and descriptions to every flow step without changing request payloads or outcome IDs. Show explanatory outcome cards, per-lane parallel progress, and a softer zoom-aware grid; untaken cards keep opaque backgrounds. Existing definitions remain compatible.
+- Add the Node `jev-devtools/flow` API for typed input/answer references, sequential Jev calls, terminal branching, named parallel lanes with joins, and named output values. Definitions build without requests; runs preserve SDK retries and propagate failures/cancellation without automatic flow retries.
+- Capture versioned definitions separately from bounded, session-scoped runs, including actual decisions, step timings and request links. Connect complete request diagrams on one shared flow canvas, preserving camera/selection and per-request question/probability controls. Explain parallel waits with named lanes and a “Wait for both checks” marker. Full tabbed request inspection remains available on selection. Existing single-request integrations remain compatible.
+- Add sample-only refund outcomes, parallel checks, failure and cancellation playground scenarios, execution/UI checks, and local-only flow scaling tooling. No distributed/durable execution, loops, or automatic business actions. See [the flow guide](docs/flows.md) for v1 limits.
+- Make diagram background dots sparser, smaller and softer when zooming out, keeping connected flows readable at overview scale. ([#23](https://github.com/diegoag64/jev-devtools/pull/23))
 
 ## 0.2.0 — October 23, 2026 (experimental)
 

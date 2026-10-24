@@ -25,6 +25,7 @@ export type Trace = {
   version: 1;
   id: string;
   session: string;
+  flow?: { runId: string; stepId: string; executionId: string };
   label: string;
   source: "sample" | "live";
   startedAt: number;
