@@ -1,10 +1,10 @@
 # Jev DevTools
 
-[![npm version 0.2.0](https://img.shields.io/badge/npm-v0.2.0-E551BA?labelColor=0D0A0F&logo=npm)](https://www.npmjs.com/package/jev-devtools/v/0.2.0)
+[![npm version 0.3.0](https://img.shields.io/badge/npm-v0.3.0-E551BA?labelColor=0D0A0F&logo=npm)](https://www.npmjs.com/package/jev-devtools/v/0.3.0)
 
 A React drawer and Node adapter for inspecting TypeSafe Jev requests with animated diagrams. Includes request history, context, questions, typed answers, transport attempts, and raw snapshots.
 
-**Experimental 0.1.x.** React 18/19 and Node 22.12+ are supported. APIs may change before 1.0. Verification uses sample responses through the real TypeSafe SDK, not live inference.
+**Experimental (pre-1.0).** React 18/19 and Node 22.12+ are supported. APIs may change before 1.0. Verification uses sample responses through the real TypeSafe SDK, not live inference.
 
 [Changelog and release history](https://github.com/diegoag64/jev-devtools/blob/main/CHANGELOG.md) — published versions and unreleased work.
 
@@ -44,7 +44,7 @@ To try unpublished local changes instead:
 npm ci
 npm run pack:devtools
 # From the consuming app:
-npm install /absolute/path/to/jev-devtools-0.2.0.tgz
+npm install /absolute/path/to/jev-devtools-0.3.0.tgz
 ```
 
 Mount once:
@@ -81,6 +81,46 @@ For Next.js App Router, use `getJevDevtools(appKey, optionsFactory)` from `/serv
 
 MIT for project code. See bundled LICENSE and THIRD_PARTY_NOTICES.txt for original design attribution and TypeSafe branding.
 
-## Connected flows (unreleased)
+## Connected Jev flows
 
-The next release adds `jev-devtools/flow`: define Jev calls, branches, parallel joins, and named outcomes once, then inspect their connected request diagrams on one shared canvas. Each request retains its question and probability controls; parallel checks show per-lane progress, and optional titles and descriptions explain requests, routes, and outcomes. Existing single-request setup remains unchanged. [API guide and sample flows](https://github.com/diegoag64/jev-devtools/blob/main/docs/flows.md). Not available in npm 0.2.0.
+New in **0.3.0**: define calls, conditions, parallel checks, and named outcomes with `jev-devtools/flow`. The drawer connects each request's complete diagram on one canvas. Condition cards show the incoming value and its requirement; optional titles and descriptions explain each step. Existing single-request integrations need no changes.
+
+On the server, reuse the instrumented `jev` client and `inspector` from the setup above:
+
+```ts
+import { defineJevFlow } from 'jev-devtools/flow';
+
+const review = defineJevFlow<{ message: string }>('review', (flow) => {
+  const decision = flow.jev('readiness', {
+    state: flow.input,
+    questions: { ready: { type: 'noul', instructions: 'Is this ready for review?' } },
+  }, { title: 'Assess readiness' });
+
+  return flow.branch('route', {
+    when: decision.answer('ready').noul.gte(0.9), // Your application's policy.
+    then: (path) => path.output('ready', { probability: decision.answer('ready').noul }, {
+      title: 'Ready for review', description: 'Return readiness to the application.',
+    }),
+    else: (path) => path.output('manual-review', undefined, { title: 'Needs manual review' }),
+  }, { title: 'Require at least 90% readiness' });
+});
+
+const result = await review.run({ message: 'Please review my ticket.' }, {
+  client: jev,
+  devtools: inspector,
+});
+// Handle result.outcome in your app. The flow does not execute business actions.
+```
+
+Define once in a Node module and run per request. Use `flow.parallel` for concurrent named lanes; downstream calls wait for every lane to succeed. Branches are terminal in their block. Runs are in-process, with bounded inspector history, SDK retries, and cancellation support; they are not durable workflows.
+
+[Full flow guide](https://github.com/diegoag64/jev-devtools/blob/main/docs/flows.md) · [AI flow recipe](https://github.com/diegoag64/jev-devtools/blob/main/packages/jev-devtools/skills/setup-jev-devtools/references/flows.md)
+
+To have your coding agent add a flow after installation:
+
+```text
+Read node_modules/jev-devtools/skills/setup-jev-devtools/SKILL.md and references/flows.md.
+Build a flow for the scenario I describe using the shared server client/inspector.
+Preserve my routing policies, add clear step titles/descriptions, and verify with
+labeled samples before using live inference. Ask for any missing decision rules.
+```

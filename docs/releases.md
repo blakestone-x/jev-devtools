@@ -1,5 +1,11 @@
 # Packaging and releases
 
+## Release 0.3.0 — pending publication
+
+This experimental minor release adds the Node flow API, connected request diagrams, readable condition inputs/requirements, parallel joins and outcomes, and structured content previews. It includes version-matched AI flow instructions in the npm archive. Existing single-request integration is unchanged. See the [0.3.0 changelog](../CHANGELOG.md#030--pending-publication).
+
+Prepare and inspect `jev-devtools-0.3.0.tgz` from the merged release commit after all checks pass. Publish that exact archive with `--access public --tag latest`; verify registry version, integrity, timestamp and clean-consumer imports before recording publication. Do not treat this preparation note as confirmation of publication.
+
 ## Release 0.2.0 — published October 23, 2026
 
 This minor release adds compact Choice diagrams with progressive branch reveal and a complete probability table, virtualizes Questions, and reduces repeated work in transport and rendering. It includes batching, changed-trace streaming, frame-coalesced browser updates, suspended rendering while closed, and memoized unchanged views. Public component props and server setup APIs are unchanged; no integration migration is required. See the [0.2.0 changelog](../CHANGELOG.md#020--october-23-2026-experimental) for behavior and tradeoffs.
@@ -35,19 +41,19 @@ npm run verify:drawer
 git diff --check
 npm pack --dry-run --json -w jev-devtools
 npm run pack:devtools
-tar -tzf jev-devtools-0.2.0.tgz
-shasum -a 256 jev-devtools-0.2.0.tgz
+tar -tzf jev-devtools-0.3.0.tgz
+shasum -a 256 jev-devtools-0.3.0.tgz
 ```
 
-The archive must contain only `package.json`, the package README, MIT license, third-party notices, the setup skill and its three Markdown references under `skills/setup-jev-devtools`, and compiled JavaScript, declaration files, and scoped CSS under `lib/src`, `lib/server`, and `lib/flow`. It must not contain playground code, tests, fixtures, source TypeScript, demo media, environment files, or credentials. `verify:package` checks the actual pack file list before installing into an independent React app. `verify:nextjs` checks a separate packed installation with real development and production Next.js servers. Both use sample responses; neither makes live inference calls.
+The archive must contain only `package.json`, the package README, MIT license, third-party notices, the setup skill and its four Markdown references under `skills/setup-jev-devtools`, and compiled JavaScript, declaration files, and scoped CSS under `lib/src`, `lib/server`, and `lib/flow`. It must not contain playground code, tests, fixtures, source TypeScript, demo media, environment files, or credentials. `verify:package` checks the actual pack file list before installing into an independent React app. `verify:nextjs` checks a separate packed installation with real development and production Next.js servers. Both use sample responses; neither makes live inference calls.
 
 Inspect the packed manifest too:
 
 ```sh
-tar -xOf jev-devtools-0.2.0.tgz package/package.json
+tar -xOf jev-devtools-0.3.0.tgz package/package.json
 ```
 
-Confirm the name/version, public access, Node engine, React peers, public exports (including the unreleased `/flow` entry point), and absence of `private: true`. Save the release commit SHA and archive checksum with the release evidence. Keep the archive unchanged between final inspection and publication. Do not publish from a dirty checkout or use a wildcard that could select an old archive.
+Confirm the name/version, public access, Node engine, React peers, public exports (including the `/flow` entry point), and absence of `private: true`. Save the release commit SHA and archive checksum with the release evidence. Keep the archive unchanged between final inspection and publication. Do not publish from a dirty checkout or use a wildcard that could select an old archive.
 
 ## First-publish checklist (historical)
 

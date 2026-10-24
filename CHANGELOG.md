@@ -8,7 +8,8 @@ Dates below use UTC and were checked against npm's publication history. The hist
 
 | Version | Published (UTC) | Highlights |
 | --- | --- | --- |
-| [Unreleased](#unreleased) | Not published | Connected Jev flow definitions, execution, and whole-flow inspection. |
+| [Unreleased](#unreleased) | Not published | No changes yet. |
+| [0.3.0](#030--pending-publication) | Pending publication | Connected flow API, complete request diagrams, readable branch requirements, structured content, and bundled AI flow guidance. |
 | [0.2.0](#020--october-23-2026-experimental) | 2026-10-23 | Batched updates, changed-trace streaming, frame-coalesced rendering, less work while the drawer is closed, virtualized Questions, compact Choice diagrams, and reuse of unchanged inspector views. |
 | [0.1.3](#013--october-23-2026-experimental) | 2026-10-23 | Isolated drawer styles, diagram pan/zoom, and version-specific npm links. |
 | [0.1.2](#012--october-23-2026-experimental) | 2026-10-23 | Bundled AI setup skill and framework recipes. |
@@ -17,7 +18,17 @@ Dates below use UTC and were checked against npm's publication history. The hist
 
 ## Unreleased
 
-Changes proposed in [#23](https://github.com/diegoag64/jev-devtools/pull/23); not included in npm 0.2.0.
+No changes yet.
+
+## 0.3.0 — Pending publication
+
+Experimental minor release. Includes the flow API and diagrams merged in [#23](https://github.com/diegoag64/jev-devtools/pull/23), plus complete README and bundled agent guidance. Existing root component props, server setup, and single-request calls remain compatible. Flow adoption is optional; `jev-devtools/flow` is a new Node-only entry point. This version is prepared for release, not yet confirmed published.
+
+### Documentation
+
+- Add a version-matched, npm-bundled AI flow recipe with a complete parallel-checks/decision/branch example, static titles/descriptions, reference scope, error/cancellation behavior, sample verification, privacy rules, and troubleshooting. Link it from both READMEs, the setup skill, and `llms.txt`.
+- Expand README flow examples and clarify that the custom drawer uses TanStack Virtual internally. Package verification requires the bundled flow instructions.
+
 
 ### Added
 

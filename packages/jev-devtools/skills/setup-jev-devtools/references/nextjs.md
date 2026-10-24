@@ -49,7 +49,7 @@ export const GET = (request: Request) => inspector.handleNodeRoute(request);
 export const DELETE = (request: Request) => inspector.handleNodeRoute(request);
 ```
 
-Use the **optional** catch-all `[[...path]]`, which covers config at the base path as well as `/events` and `/clear`. Keep streams out of caches/proxy buffering. Match Host to the configured origin; `localhost` and `127.0.0.1` differ. For Next `basePath` or a custom endpoint, align server `endpoint`, client `endpoint`, and the externally visible route path.
+Use the **optional** catch-all `[[...path]]`, which covers config at the base path as well as `/events`, `/flows/events`, and `/clear`. Keep streams out of caches/proxy buffering. Match Host to the configured origin; `localhost` and `127.0.0.1` differ. For Next `basePath` or a custom endpoint, align server `endpoint`, client `endpoint`, and the externally visible route path.
 
 ## Root client boundary and CSS
 
