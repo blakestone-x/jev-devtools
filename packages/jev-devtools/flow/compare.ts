@@ -62,6 +62,7 @@ async function observe<T>(
   options: FlowRunOptions,
 ): Promise<Side> {
   const bodies = new Map<string, unknown>();
+  const captures: Promise<unknown>[] = [];
   let latest: FlowRun | undefined;
   const user = options.devtools;
   const devtools: FlowObserver = {
@@ -93,16 +94,21 @@ async function observe<T>(
               : undefined,
           );
           // A separate subscriber; the runner awaits the original result unchanged.
-          void Promise.resolve(result).then(
-            (body) => bodies.set(stepId, body),
+          const capture = Promise.resolve(result).then(
+            // Observers may retain the result and mutate it on later run updates.
+            (body) => bodies.set(stepId, structuredClone(body)),
             () => undefined, // The runner reports the failure.
           );
+          // Handle snapshot failures now, then surface them after successful execution.
+          void capture.catch(() => {});
+          captures.push(capture);
           return result;
         },
       };
     },
   };
   const result = await flow.run(input, { ...options, devtools });
+  await Promise.all(captures);
   return {
     outcome: result.outcome,
     ...(result.value !== undefined ? { value: result.value } : {}),

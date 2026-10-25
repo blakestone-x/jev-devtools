@@ -10,7 +10,9 @@ import {
   type Fetch,
 } from "@typesafe-ai/sdk";
 import {
+  compareWithFixture,
   defineJevFlow,
+  formatComparison,
   replayClient,
   type FlowFixture,
   type FlowRunOptions,
@@ -726,6 +728,49 @@ test("comparison capture stays complete and accurate when a recording observer f
       });
     });
   }
+});
+
+test("late observer response mutation cannot hide answer drift or rewrite the live fixture", async () => {
+  const flow = defineJevFlow<null>("retained-response", (f) => {
+    f.jev("ask", { state: "sample", questions: { score: noul("Score?") } });
+    return f.output("done");
+  });
+  let retained: ReturnType<typeof noulBody> | undefined;
+  let mutations = 0;
+  let calls = 0;
+  const comparison = await compareWithFixture(flow, null, {
+    version: 1,
+    flow: "retained-response",
+    steps: { ask: noulBody("score", 0.1) },
+  }, {
+    client: liveClient(async () => {
+      calls++;
+      return Response.json(noulBody("score", 0.9));
+    }),
+    devtools: {
+      startFlow: () => ({
+        request(_link, _onTrace, callback) {
+          const result = callback();
+          void Promise.resolve(result).then((body) => {
+            retained = body as ReturnType<typeof noulBody>;
+          });
+          return result;
+        },
+        update(run) {
+          if (run.status === "success" && retained) {
+            retained.answers.score.noul = 0.1;
+            mutations++;
+          }
+        },
+      }),
+    },
+  });
+  assert.equal(calls, 1);
+  assert.equal(mutations, 1, "the observer mutated the actual response after execution");
+  assert.equal(comparison.changed, false, "only the answer differs");
+  assert.deepEqual(comparison.answers, [noulChange("ask", "score", 0.1, 0.9, true)]);
+  assert.equal(formatComparison(comparison), "ask.score.noul: 0.10 -> 0.90 (+0.80)");
+  assert.deepEqual(comparison.liveFixture.steps, { ask: noulBody("score", 0.9) });
 });
 
 test("liveFixture holds the live responses, round-trips through JSON and replays to the live outcome", async () => {

@@ -20,7 +20,7 @@ Dates below use UTC and were checked against npm's publication history. The hist
 
 ## Unreleased
 
-- Add `compareWithFixture` and `formatComparison` to `jev-devtools/flow`: compare a live client's run with a saved fixture, print the differences for CI logs, and get the live run back as a new fixture. Map items and loop iterations are reported under their composed ids; a step that ran on only one side sets `changed`. Recording observer failures and mutations cannot corrupt the comparison or its live fixture. Tasks run on both sides. ([#32](https://github.com/diegoag64/jev-devtools/pull/32))
+- Add `compareWithFixture` and `formatComparison` to `jev-devtools/flow`: compare a live client's run with a saved fixture, print the differences for CI logs, and get the live run back as a new fixture. Map items and loop iterations are reported under their composed ids; a step that ran on only one side sets `changed`. Recording observer failures and mutations to run snapshots cannot corrupt the comparison; captured response snapshots also prevent later observer mutations from hiding answer drift or rewriting the live fixture. Tasks run on both sides. ([#32](https://github.com/diegoag64/jev-devtools/pull/32))
 
 - Confirm fixture copying with a brief animated **Copied** button state, respecting reduced-motion preferences. Keep partial-capture warnings and the clipboard fallback visible; clear stale feedback and fallback JSON when the display projection changes, including after pending clipboard operations. Document what fixtures contain and how to replay/share them in the flow guide. ([#29](https://github.com/diegoag64/jev-devtools/pull/29))
 

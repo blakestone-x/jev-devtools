@@ -447,6 +447,6 @@ for (const { name, input, fixture } of savedCases) {
 }
 ```
 
-Recording observer failures or mutations do not change comparison results: the comparison captures the actual client response and keeps its run snapshots separate from the observer's copies.
+Recording observer failures or mutations to run snapshots do not change comparison results. The comparison copies each resolved client response on capture, so an observer that retains a response cannot rewrite the captured answers or live fixture during later run updates.
 
 Save `comparison.liveFixture` to update the case. It is the fixture `flowFixture` builds from the live run, item steps included, with unredacted, untruncated responses, so review it before committing it.
