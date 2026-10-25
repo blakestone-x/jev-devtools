@@ -339,6 +339,16 @@ Try the [hierarchical classification cookbook](../cookbooks/hierarchical-classif
 
 Unreleased: not in npm 0.4.1 yet.
 
+### Copy a fixture from DevTools
+
+Open **Flows**, select a finished run, then click **Copy fixture** in the run header. On success the button briefly animates and says **Copied**, then returns to **Copy fixture** after two seconds. Reduced-motion preferences disable the animation. If clipboard access is unavailable, a read-only JSON field appears for manual copying; focusing it selects the JSON. Copying is disabled while a run is pending or has no completed Jev requests.
+
+A fixture saves the responses of completed Jev requests, not every diagram node. One response can contain several answers. For example, the refund flow records two entries: `triage` holds its category answer, and `review` holds both eligibility and risk. Conditions, tasks and flow outputs are recomputed when you replay the flow. This tests your application logic against known answers; it does not test model quality or new prompts.
+
+Warnings about failed/cancelled runs, missing responses and capture issues remain visible so you know when an export is partial. Only successful captured responses are included; see the limitations below before relying on a fixture as a complete reproduction.
+
+Changing the displayed capture data or masking settings clears previous copy feedback and fallback JSON. Click **Copy fixture** again to export the current view. A clipboard operation already in progress cannot restore the old fallback or replace a newer copy result; data already sent to the system clipboard is not retracted.
+
 ### One-command playground replay
 
 After clicking **Copy fixture**, run this from the repository root on macOS:
@@ -364,6 +374,8 @@ Fixtures do not include the original input. By default this helper uses `{ "mess
 ### Use the replay client in your own tests
 
 **Copy fixture** in a run's header exports the retained answers of its completed Jev steps as JSON, including steps inside map items and loop iterations. Save it with your tests and run the flow with `replayClient` from `jev-devtools/flow`. Jev calls replay with no network access or API key. Map items and loop iterations replay from their own answers; tasks run again and may call outside services.
+
+The fixture does not contain the flow code, a diagram, or the original input. When sharing a fixture, also share the flow implementation (ideally its Git commit) and input. The `flow` name is an identifier checked during execution, not a file path or code download; `version: 1` identifies the fixture format, not the code revision. You explicitly import the implementation and call its `run()` method; the playground helper adds a small lookup of its three supported flow definitions by name. Each Jev call is then matched to `steps` by its step ID, such as `triage` or `review`. The diagram comes from the flow definition and run events, not from reconstructing code out of the fixture.
 
 ```ts
 import { readFileSync } from "node:fs";
@@ -434,5 +446,7 @@ for (const { name, input, fixture } of savedCases) {
     console.log(`${name}\n${formatComparison(comparison)}`);
 }
 ```
+
+Recording observer failures or mutations do not change comparison results: the comparison captures the actual client response and keeps its run snapshots separate from the observer's copies.
 
 Save `comparison.liveFixture` to update the case. It is the fixture `flowFixture` builds from the live run, item steps included, with unredacted, untruncated responses, so review it before committing it.

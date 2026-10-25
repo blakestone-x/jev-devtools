@@ -1875,7 +1875,31 @@
 .jev-devtools .flow-fixture-button {
   display: block;
   margin: 6px 0 0 auto;
+  /* Keep the header still when the shorter confirmation replaces the label. */
+  min-width: 96px;
   font-size: 11px;
+  transition: background-color 160ms ease, border-color 160ms ease;
+}
+.jev-devtools .flow-fixture-button[data-copied] {
+  border-color: #e551ba;
+  background: #382035;
+  animation: jev-fixture-copied 200ms ease-out;
+}
+@keyframes jev-fixture-copied {
+  from {
+    transform: scale(0.96);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .jev-devtools .flow-fixture-button {
+    transition: none;
+  }
+  .jev-devtools .flow-fixture-button[data-copied] {
+    animation: none;
+  }
 }
 .jev-devtools .flow-fixture {
   display: flex;

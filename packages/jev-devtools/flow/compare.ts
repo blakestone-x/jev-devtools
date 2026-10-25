@@ -8,6 +8,7 @@ import type {
 import type { FlowFixture } from "../src/flow-fixture.js";
 import type { FlowObserver, FlowOutcome, FlowRunOptions } from "./index.js";
 import { replayClient } from "./replay.js";
+import { observeRequest } from "./runtime.js";
 
 type AnswerValue = string | number | boolean | null;
 /** One scalar answer field of a jev step both sides ran; delta is set when both sides and their difference are finite. Answer drift never sets FixtureComparison.changed on its own. */
@@ -68,7 +69,7 @@ async function observe<T>(
       latest = run;
       let inner: ReturnType<FlowObserver["startFlow"]>;
       try {
-        inner = user?.startFlow(definition, run);
+        inner = user?.startFlow(structuredClone(definition), structuredClone(run));
       } catch {
         /* Recording cannot stop execution. */
       }
@@ -76,18 +77,24 @@ async function observe<T>(
         update(next: FlowRun) {
           latest = next;
           try {
-            inner?.update(next);
+            // Recording consumers cannot alter the comparison's private snapshot.
+            inner?.update(structuredClone(next));
           } catch {
             /* Best effort capture. */
           }
         },
         request(link, onTrace, callback) {
-          const result = inner
-            ? inner.request(link, onTrace, callback)
-            : callback();
+          const stepId = link.stepId;
+          // Capture the runner's result even if recording skips, throws or substitutes it.
+          const result = observeRequest(
+            callback,
+            inner
+              ? (callOnce) => inner.request({ ...link }, onTrace, callOnce)
+              : undefined,
+          );
           // A separate subscriber; the runner awaits the original result unchanged.
           void Promise.resolve(result).then(
-            (body) => bodies.set(link.stepId, body),
+            (body) => bodies.set(stepId, body),
             () => undefined, // The runner reports the failure.
           );
           return result;

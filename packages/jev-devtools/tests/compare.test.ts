@@ -14,6 +14,7 @@ import {
   replayClient,
   type FlowFixture,
   type FlowRunOptions,
+  type FlowObserver,
 } from "../flow/index.js";
 import { createJevDevtools } from "../server/index.js";
 import { flowFixture } from "../src/flow-fixture.js";
@@ -673,6 +674,57 @@ test("devtools records only the live run, linked to its traces, and liveFixture 
     assert.deepEqual(norm(comparison.liveFixture), norm(built.fixture));
   } finally {
     inspector.dispose();
+  }
+});
+
+test("comparison capture stays complete and accurate when a recording observer fails or mutates its arguments", async (t) => {
+  const api = await compareApi();
+  for (const mode of ["before", "after", "reject", "replace", "skip", "mutate-update", "mutate-link"] as const) {
+    await t.test(mode, async () => {
+      const calls: string[] = [];
+      const devtools: FlowObserver = {
+        startFlow() {
+          return {
+            update(run) {
+              if (mode === "mutate-update") {
+                run.steps.approval.decision = false;
+                run.steps.review.status = "error";
+              }
+            },
+            request<T>(link: { stepId: string }, _onTrace: (id: string) => void, callback: () => T): T {
+              if (mode === "before") throw new Error("Recording failed before dispatch");
+              if (mode === "skip") return undefined as T;
+              if (mode === "mutate-link") link.stepId = "wrong-step";
+              const result = callback();
+              if (mode === "after") throw new Error("Recording failed after dispatch");
+              if (mode === "reject") return Promise.reject(new Error("Recording rejected")) as T;
+              if (mode === "replace") return Promise.resolve(triageBody("other")) as T;
+              return result;
+            },
+          };
+        },
+      };
+      const comparison = await api.compareWithFixture(refundFlow(), {}, refundFixture(), {
+        client: liveClient(refundLive(triageBody("refund"), reviewBody(0.92, 0.2), calls)),
+        devtools,
+      });
+      assert.deepEqual(calls, ["triage", "review"], "each live request executes exactly once");
+      assert.deepEqual(comparison.outcome, { recorded: "approve", live: "approve", changed: false });
+      assert.deepEqual(comparison.decisions, [
+        { stepId: "refund-request", recorded: true, live: true, changed: false },
+        { stepId: "approval", recorded: true, live: true, changed: false },
+      ]);
+      assert.deepEqual(comparison.steps, { onlyRecorded: [], onlyLive: [] });
+      assert.deepEqual(norm(comparison.answers.filter((a) => a.stepId === "review")), norm([
+        noulChange("review", "eligible", 0.94, 0.92, true),
+        noulChange("review", "risky", 0.1, 0.2, true),
+      ]));
+      assert.deepEqual(comparison.liveFixture, {
+        version: 1,
+        flow: "refund",
+        steps: { triage: triageBody("refund"), review: reviewBody(0.92, 0.2) },
+      });
+    });
   }
 });
 
